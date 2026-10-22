@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>大观园试才题对额 · 文字游园</title>
+<link rel="preload" as="image" href="./bg0.webp" fetchpriority="high">
+<link rel="preload" as="image" href="./npc3_panic.webp">
+<link rel="preload" as="image" href="./npc1_stern.webp">
+<link rel="preconnect" href="https://q12630.github.io" crossorigin>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+:root{
+  --ink:#080706;--ink2:#14110b;--paper:#e8dcc0;--paper2:#d8c9a6;
+  --gold:#d9b45c;--gold-d:#a8843c;--gold-l:#f2dc9a;
+  --red:#b8402f;--red-d:#7a241c;--jade:#8fae86;--mute:#8d8a78;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --pw:clamp(104px,14vw,160px);
+}
+body{background:radial-gradient(ellipse at 50% 30%,#17130c 0%,#0b0907 55%,#040302 100%);font-family:var(--serif);color:var(--paper);display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none}
+button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer}
+::selection{background:var(--red);color:#fff}
+.screen{position:fixed;inset:0;z-index:10;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s;display:flex;align-items:center;justify-content:center}
+.screen.on{opacity:1;visibility:visible;z-index:30}
+#crt{position:fixed;inset:0;pointer-events:none;z-index:900;background:repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0 1px,rgba(0,0,0,0) 1px 3px);opacity:.32}
+#crt::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 48%,rgba(0,0,0,.5) 100%)}
+.tools{position:fixed;top:12px;right:14px;z-index:120;display:flex;gap:8px;align-items:center}
+.tool{font-size:11px;letter-spacing:.12em;color:#e6d3a4;border:1px solid rgba(217,180,92,.42);background:rgba(8,7,5,.72);padding:6px 11px;box-shadow:0 0 0 1px rgba(0,0,0,.6);transition:background .15s,color .15s,border-color .15s}
+.tool:hover{background:#7a241c;color:#fff6d8;border-color:var(--gold)}
+.tool.on{background:#7a241c;color:#fff6d8;border-color:var(--gold)}
+.seg{display:flex;border:1px solid rgba(217,180,92,.42);background:rgba(8,7,5,.72)}
+.seg button{font-size:11px;padding:6px 9px;color:#a99a78;letter-spacing:.04em}
+.seg button.on{background:#7a241c;color:#fff6d8}
+.seg button+button{border-left:1px solid rgba(217,180,92,.28)}
+#scrTitle{background:#050403;overflow:hidden}
+#titleCv{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;object-fit:cover}
+.title-veil{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 38%,rgba(0,0,0,0) 30%,rgba(3,3,2,.72) 100%),linear-gradient(180deg,rgba(4,3,2,.55) 0%,rgba(4,3,2,0) 25%,rgba(4,3,2,0) 70%,rgba(4,3,2,.85) 100%)}
+.title-poem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
+.title-poem.on{opacity:1}
+.title-poem p{writing-mode:vertical-rl;text-orientation:upright;font-size:clamp(16px,2.6vh,26px);letter-spacing:.34em;line-height:2.4;color:#cfc0a0;text-shadow:0 0 24px rgba(0,0,0,.9);opacity:0;transform:translateY(10px);transition:opacity 1.1s ease,transform 1.4s ease}
+.title-poem p.on{opacity:1;transform:translateY(0)}
+.title-poem .tp-2{margin-right:2.2em}
+.title-main{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:clamp(18px,4vw,64px);opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.title-main.on{opacity:1}
+.t-col{display:flex;flex-direction:column;align-items:center;gap:clamp(10px,1.6vh,18px)}
+.t-vertical{display:flex;flex-direction:column;align-items:center;font-size:clamp(30px,6.4vh,62px);line-height:1.22;color:#f3e2b4;text-shadow:0 0 2px #000,3px 3px 0 rgba(0,0,0,.85),0 0 34px rgba(217,180,92,.42)}
+.t-vertical span{display:block;opacity:0;transform:translateY(-14px) scale(1.06);transition:opacity .5s ease,transform .55s cubic-bezier(.2,1.2,.4,1);filter:blur(2px)}
+.t-vertical span.on{opacity:1;transform:none;filter:none}
+.t-divider{width:1px;height:clamp(160px,34vh,300px);background:linear-gradient(180deg,transparent,rgba(217,180,92,.55),transparent);opacity:0;transition:opacity 1s ease .5s}
+.title-main.on .t-divider{opacity:1}
+.t-side{display:flex;flex-direction:column;align-items:flex-start;gap:14px;opacity:0;transform:translateX(-10px);transition:opacity 1s ease .7s,transform 1s ease .7s}
+.title-main.on .t-side{opacity:1;transform:none}
+.t-seal{width:clamp(46px,6.4vh,60px);height:clamp(46px,6.4vh,60px);border:2px solid #c14a38;color:#d9695a;background:rgba(120,30,24,.22);border-radius:4px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(13px,1.8vh,16px);line-height:1.15;letter-spacing:.06em;box-shadow:inset 0 0 14px rgba(184,64,47,.28),0 0 18px rgba(184,64,47,.18);transform:rotate(-3deg) scale(1.6);opacity:0}
+.t-seal.stamp{animation:sealStamp .5s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes sealStamp{0%{transform:rotate(-3deg) scale(1.6);opacity:0}55%{transform:rotate(-3deg) scale(.94);opacity:1}75%{transform:rotate(-3deg) scale(1.04)}100%{transform:rotate(-3deg) scale(1);opacity:1}}
+.t-sub{font-size:clamp(12px,1.75vh,15px);letter-spacing:.26em;color:#e6d2a2;line-height:1.95;text-shadow:0 2px 10px rgba(0,0,0,.9)}
+.t-sub .dim{color:#8b8471;letter-spacing:.2em}
+.title-prompt{position:absolute;left:0;right:0;bottom:clamp(28px,7vh,64px);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;transition:opacity 1s ease}
+.title-prompt.on{opacity:1}
+.tp-btn{font-size:clamp(11px,1.6vh,14px);letter-spacing:.44em;color:#e8d3a0;padding:9px 26px 9px 32px;border:1px solid rgba(217,180,92,.45);background:rgba(10,8,6,.5);animation:promptPulse 2.4s ease-in-out infinite}
+.tp-btn:hover{color:#fff6dc;border-color:var(--gold);background:rgba(122,36,28,.32)}
+@keyframes promptPulse{0%,100%{box-shadow:0 0 0 rgba(217,180,92,0)}50%{box-shadow:0 0 22px rgba(217,180,92,.28)}}
+.tp-note{font-size:10px;letter-spacing:.26em;color:#7d7767}
+.title-skip{position:absolute;right:22px;bottom:20px;z-index:5;font-size:10px;letter-spacing:.24em;color:#6f6a58;border:1px solid rgba(160,140,90,.25);padding:5px 10px}
+.title-skip:hover{color:#c9b183;border-color:rgba(217,180,92,.6)}
+#scrPrologue{background:radial-gradient(ellipse at 50% 30%,#1a150d 0%,#0a0806 70%)}
+.pro{width:min(96vw,1060px);max-height:94vh;display:flex;flex-direction:column;border:1px solid rgba(217,180,92,.28);background:linear-gradient(180deg,rgba(20,17,11,.96),rgba(12,10,7,.98));box-shadow:0 30px 90px rgba(0,0,0,.85),inset 0 0 80px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.pro::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);opacity:.6}
+.pro-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 26px 12px;border-bottom:1px solid rgba(217,180,92,.16);flex:none}
+.ph-l{display:flex;align-items:center;gap:14px}
+.ph-seal{width:38px;height:38px;border:2px solid var(--red);color:#d06a58;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:inset 0 0 12px rgba(184,64,47,.3)}
+.ph-t{font-size:clamp(14px,2.2vh,18px);letter-spacing:.28em;color:#f0dfb4}
+.ph-s{font-size:10px;letter-spacing:.22em;color:#7d7767;margin-top:4px}
+.ph-r{font-size:10px;letter-spacing:.2em;color:#6f6a58}
+.pro-body{flex:1 1 auto;overflow-y:auto;padding:16px 30px 8px;scrollbar-width:thin;scrollbar-color:#5a4a26 transparent;scroll-behavior:smooth}
+.pro-body::-webkit-scrollbar{width:6px}
+.pro-body::-webkit-scrollbar-thumb{background:#5a4a26}
+.pro-text{font-size:clamp(14px,1.95vh,17px);line-height:2.05;color:#cfc3a6;letter-spacing:.04em;text-align:justify}
+.pro-text+.pro-text{margin-top:10px}
+.pro-text em{font-style:normal;color:#e6cf93}
+.pro-quote{margin:14px 0;padding:10px 18px;border-left:2px solid var(--red);background:rgba(184,64,47,.06);color:#c9b995;font-size:14px;line-height:2;letter-spacing:.04em}
+.pro-sec-t{display:flex;align-items:center;gap:12px;margin:16px 0 10px;font-size:11px;letter-spacing:.34em;color:#a8956a}
+.pro-sec-t::before{content:'';width:18px;height:1px;background:var(--gold-d);opacity:.7}
+.pro-sec-t::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(217,180,92,.28),transparent)}
+.pro-rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+.rule{border:1px dashed rgba(217,180,92,.24);padding:10px 12px;font-size:12px;line-height:1.9;color:#a09a86}
+.rule b{display:block;color:#d9b45c;font-weight:normal;letter-spacing:.14em;font-size:12px;margin-bottom:4px}
+.pro-tips{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.tip{border:1px solid rgba(217,180,92,.22);padding:6px 12px;font-size:11.5px;color:#a99f88;letter-spacing:.04em}
+.tip b{color:#e6cf93;font-weight:normal}
+.pro-foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 26px 14px;border-top:1px solid rgba(217,180,92,.14)}
+.pf-hint{font-size:11px;letter-spacing:.2em;color:#7d7767}
+.pf-hint b{color:#b8402f;font-weight:normal;animation:blink 1.4s step-end infinite}
+.btn-main{position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em;color:#f6e6b8;background:var(--red-d);border:1px solid #d9a86a;box-shadow:0 0 0 2px #060504,3px 3px 0 rgba(0,0,0,.6);transition:background .15s,color .15s,transform .08s}
+.btn-main:hover{background:#9a3024;color:#fff8e0;transform:translate(-1px,-1px);box-shadow:0 0 0 2px #060504,4px 4px 0 rgba(0,0,0,.6)}
+.btn-ghost{padding:9px 20px;font-size:12px;letter-spacing:.2em;color:#b9a77f;border:1px solid rgba(217,180,92,.3);background:rgba(10,8,6,.4)}
+.btn-ghost:hover{color:#f0dfb0;border-color:var(--gold)}
+.pro-page{display:none}
+.pro-page.on{display:block}
+#scrMap{background:radial-gradient(ellipse at 50% 35%,#1a1710 0%,#0d0b08 60%,#060504 100%)}
+.map-wrap{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px}
+.map-top{width:min(94vw,1240px,calc(64vh * 1.7778));display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+.mt-l{display:flex;align-items:center;gap:12px}
+.mt-seal{width:30px;height:30px;border:1px solid #9b3a30;border-radius:3px;color:#c25a4a;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1.1;box-shadow:inset 0 0 10px rgba(180,60,40,.25)}
+.mt-t{font-size:clamp(13px,1.9vh,18px);letter-spacing:.3em;color:#e3cf9c;text-shadow:0 0 18px rgba(200,160,70,.35)}
+.mt-s{font-size:9.5px;letter-spacing:.22em;color:#7d7b6c;margin-top:3px}
+.scroll{position:relative;width:min(94vw,1240px,calc(64vh * 1.7778));aspect-ratio:16/9;filter:drop-shadow(0 24px 60px rgba(0,0,0,.9));flex:none}
+.paper{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 50% 0 50%);background:#c9d8e0;border-radius:2px}
+.paper::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse 62% 52% at 72% 20%,rgba(255,238,190,.18),transparent 72%),radial-gradient(ellipse at 50% 52%,transparent 52%,rgba(45,32,14,.5) 100%);box-shadow:inset 0 0 70px rgba(30,20,5,.55)}
+.paper::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background-image:repeating-linear-gradient(0deg,rgba(120,90,50,.045) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(120,90,50,.032) 0 1px,transparent 1px 4px);mix-blend-mode:multiply}
+#cv{display:block;width:100%;height:100%;image-rendering:pixelated}
+.rod{position:absolute;top:50%;width:14px;height:106%;transform:translate(-50%,-50%);border-radius:8px;background:linear-gradient(90deg,#20140c 0%,#5a3d22 22%,#8a6338 46%,#a87d47 54%,#4a3220 78%,#1c1109 100%);box-shadow:0 0 22px rgba(0,0,0,.9),inset 0 0 8px rgba(0,0,0,.7);z-index:6}
+.rod::before,.rod::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:22px;height:10px;border-radius:4px;background:linear-gradient(90deg,#6d5222,#d9b45c 40%,#f0d894 50%,#a8843c 70%,#5a431c);box-shadow:0 0 10px rgba(220,180,90,.35)}
+.rod::before{top:-7px}.rod::after{bottom:-7px}
+#rodL,#rodR{left:50%}
+.placard{position:absolute;left:50%;top:20%;z-index:11;pointer-events:none;opacity:0;transform:translate(-50%,-50%);will-change:transform,opacity}
+.placard.show{animation:placardIn .24s steps(5,end) forwards}
+@keyframes placardIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.55,1.55)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.1,1)}72%{opacity:1;transform:translate(-50%,-50%) scale(.96,1)}100%{opacity:1;transform:translate(-50%,-50%) scale(1,1)}}
+.placard.hide{animation:placardOut .16s steps(3,end) forwards}
+@keyframes placardOut{0%{opacity:1;transform:translate(-50%,-50%) scale(1,1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.62,1.45)}}
+.placard-inner{position:relative;display:flex;align-items:center;gap:11px;padding:8px 20px 8px 10px;background:#17130c;border:2px solid #d9b45c;box-shadow:0 0 0 2px #060504,0 0 0 4px #7a5c22,6px 6px 0 rgba(0,0,0,.55),inset 0 0 0 1px rgba(240,215,150,.12)}
+.placard-no{flex:none;width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:#b8402f;border:2px solid #d9a86a;box-shadow:0 0 0 2px #060504;color:#fbeecb;font-size:12px;line-height:1}
+.placard-name{font-size:clamp(14px,2vh,24px);letter-spacing:.26em;color:#f6e6b8;text-shadow:2px 2px 0 #000,0 0 16px rgba(217,180,92,.45);white-space:nowrap;padding-left:.26em}
+.dialog{position:absolute;left:2.2%;top:3.4%;width:min(47%,470px);z-index:9;pointer-events:none;opacity:0;filter:drop-shadow(0 10px 22px rgba(0,0,0,.7))}
+.dialog.show{animation:dlgIn .22s steps(5,end) both}
+@keyframes dlgIn{0%{opacity:0;transform:translate(-14px,-10px) scale(.9)}60%{opacity:1;transform:translate(2px,1px) scale(1.012)}100%{opacity:1;transform:translate(0,0) scale(1)}}
+.dialog.hide{animation:dlgOut .16s steps(3,end) both}
+@keyframes dlgOut{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-10px,-6px) scale(.94)}}
+.dlg-inner{position:relative;background:#14110b;border:2px solid #c9a54a;box-shadow:0 0 0 2px #060504,0 0 0 4px #6e5322,inset 0 0 0 1px rgba(240,215,150,.14),inset 0 0 30px rgba(0,0,0,.85);padding:0 11px 10px;overflow:hidden}
+.dlg-bar{display:flex;align-items:center;justify-content:space-between;margin:0 -11px 7px;padding:2px 11px;background:#7a241c;border-bottom:2px solid #060504;box-shadow:inset 0 -1px 0 rgba(240,215,150,.3)}
+.dlg-bar-t{font-size:9px;letter-spacing:.3em;color:#f6e8c4;text-shadow:1px 1px 0 rgba(0,0,0,.7)}
+.dlg-step{font-size:8.5px;letter-spacing:.12em;color:#e8cf9a;opacity:.9}
+.dlg-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.dlg-no{flex:none;width:16px;height:16px;display:flex;align-items:center;justify-content:center;background:#b8402f;border:1px solid #d9a86a;color:#fbeecb;font-size:9.5px;line-height:1}
+.dlg-name{font-size:clamp(12px,1.3vw,15px);letter-spacing:.1em;color:#f4e2b0;text-shadow:1px 1px 0 rgba(0,0,0,.8)}
+.dlg-plaque{font-size:clamp(10px,1.05vw,12px);color:#d0aa55;letter-spacing:.04em;line-height:1.65;margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed rgba(200,165,90,.26)}
+.dlg-text{font-size:clamp(11.5px,1.12vw,13.5px);line-height:1.78;color:#a6a698;letter-spacing:.02em;min-height:4.6em;text-align:justify}
+.dlg-foot{display:flex;align-items:center;gap:6px;margin-top:7px;min-height:14px}
+.dlg-tri{font-size:7px;color:#d9b45c;animation:triBlink .9s steps(1) infinite}
+@keyframes triBlink{0%,49%{opacity:1}50%,100%{opacity:.12}}
+.dlg-hint{font-size:9.5px;letter-spacing:.14em;color:#6f7064}
+.dlg-enter{margin-left:auto;font-size:9.5px;letter-spacing:.14em;color:#f6e6b8;background:#7a241c;border:1px solid #d9a86a;padding:2px 7px;cursor:pointer;box-shadow:0 0 0 1px #060504,1px 1px 0 rgba(0,0,0,.6)}
+.dlg-enter:hover{background:#9a3024;color:#fff6d8}
+.dialog.enterable{pointer-events:auto}
+.map-bottom{width:min(94vw,1240px,calc(64vh * 1.7778));display:flex;align-items:center;justify-content:space-between;gap:14px}
+.dots{display:flex;gap:6px}
+.dot{width:9px;height:9px;background:#2a2416;border:1px solid #6e5322;cursor:pointer;padding:0}
+.dot.on{background:#e8c95a;border-color:#f6e6b8;box-shadow:0 0 8px rgba(232,201,90,.85)}
+.dot.done{background:#7fa878;border-color:#b8d0a8}
+.dot.lock{opacity:.4;cursor:not-allowed}
+.mb-r{display:flex;align-items:center;gap:10px}
+.map-prog{font-size:11px;letter-spacing:.16em;color:#8d8a78}
+.map-prog b{color:#d9b45c;font-weight:normal}
+.final-btn{padding:8px 18px;font-size:12px;letter-spacing:.24em;color:#f6e6b8;background:#7a241c;border:1px solid #d9a86a;box-shadow:0 0 0 2px #060504,2px 2px 0 rgba(0,0,0,.6);animation:finalPulse 2s ease-in-out infinite}
+@keyframes finalPulse{0%,100%{box-shadow:0 0 0 2px #060504,2px 2px 0 rgba(0,0,0,.6),0 0 0 rgba(217,180,92,0)}50%{box-shadow:0 0 0 2px #060504,2px 2px 0 rgba(0,0,0,.6),0 0 18px rgba(217,180,92,.7)}}
+.final-btn:hover{background:#9a3024}
+.mp-info{display:none;width:96vw;border:2px solid #c9a54a;background:rgba(10,9,6,.94);box-shadow:0 0 0 2px #060504;padding:10px 12px 12px}
+.mpi-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mpi-no{width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:#b8402f;border:1px solid #d9a86a;color:#fbeecb;font-size:11px}
+.mpi-name{font-size:14px;letter-spacing:.14em;color:#f4e2b0}
+.mpi-step{margin-left:auto;font-size:9px;color:#8d8a78;letter-spacing:.1em}
+.mpi-plaque{font-size:10px;color:#d0aa55;line-height:1.7;padding-bottom:6px;margin-bottom:6px;border-bottom:1px dashed rgba(200,165,90,.25)}
+.mpi-text{font-size:11px;line-height:1.8;color:#a6a698;margin-bottom:10px}
+.mpi-btn{width:100%;padding:8px;background:#7a241c;color:#f6e6b8;border:1px solid #d9a86a;font-size:12px;letter-spacing:.2em}
+#scrRpg{background:#000;overflow:hidden}
+.rpg-bg{position:absolute;inset:0;background-color:#0b0c0e;background-size:cover;background-position:center;image-rendering:pixelated}
+.rpg-bg.night{filter:brightness(.52) saturate(.72) hue-rotate(-6deg)}
+.rpg-bg.night::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(18,28,64,.48),rgba(8,12,26,.62) 70%,rgba(4,6,14,.75))}
+#scrRpg.ending .rpg-chars,#scrRpg.ending .rpg-dialog,#scrRpg.ending .rpg-tip,#scrRpg.ending .rpg-top,#scrRpg.ending .rpg-choices{opacity:0;transition:opacity .45s;pointer-events:none}
+.rpg-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(0,0,0,0) 45%,rgba(0,0,0,.5) 100%),linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+.rpg-chars{position:absolute;inset:0;z-index:2;pointer-events:none}
+.rpg-char{position:absolute;bottom:0;height:clamp(280px,60vh,700px);width:auto;max-width:44vw;object-fit:contain;image-rendering:pixelated;opacity:0;transform:translateY(26px);transition:transform .35s ease,opacity .35s ease,filter .35s ease;filter:brightness(.72) saturate(.85);will-change:transform}
+.rpg-char.left{left:3%}
+.rpg-char.right{right:3%}
+.rpg-char.active{opacity:1;transform:translateY(0)}
+.rpg-char.speaking{opacity:1;transform:translateY(-10px) scale(1.03);filter:brightness(1.08) saturate(1) drop-shadow(0 0 26px rgba(255,220,150,.42));z-index:3}
+.rpg-top{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;pointer-events:none}
+.rt-l{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.rt-no{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#b8402f;border:1px solid #d9a86a;color:#fbeecb;font-size:13px;box-shadow:0 0 0 2px rgba(0,0,0,.7)}
+.rt-t{font-size:14px;letter-spacing:.22em;color:#f0e0b4;text-shadow:1px 1px 0 #000}
+.rt-s{font-size:10px;letter-spacing:.16em;color:#c9b183;opacity:.8;margin-top:2px}
+.rpg-choices{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:6;display:none;flex-direction:column;gap:11px;width:min(80%,720px)}
+.rpg-choices.show{display:flex}
+.rpg-choice{background:rgba(9,8,6,.94);border:3px solid #c9a54a;color:#e8dcc0;font-size:clamp(14px,1.85vh,18px);line-height:1.6;padding:11px 20px;text-align:left;letter-spacing:.03em;box-shadow:0 0 0 2px #060504,4px 4px 0 rgba(0,0,0,.6);transition:background .12s,color .12s,transform .1s,box-shadow .1s;animation:choiceIn .22s steps(4,end) both;display:flex;gap:12px;align-items:flex-start}
+.rpg-choice .ck{flex:none;color:#d9b45c;font-size:12px;letter-spacing:.1em;border:1px solid rgba(217,180,92,.4);width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.rpg-choice:hover{background:#7a241c;color:#fff6d8;transform:translate(-2px,-2px);box-shadow:0 0 0 2px #060504,6px 6px 0 rgba(0,0,0,.6),0 0 20px rgba(217,180,92,.4)}
+.rpg-choice:hover .ck{border-color:#f6e6b8;color:#f6e6b8}
+@keyframes choiceIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
+.rpg-dialog{position:absolute;left:50%;bottom:4.2%;transform:translateX(-50%);width:88%;max-width:1000px;min-height:176px;background:linear-gradient(180deg,rgba(12,11,8,.95),rgba(6,6,5,.97));border:3px solid #c9a54a;padding:22px 30px 18px;box-shadow:0 0 0 3px #060504,inset 0 0 26px rgba(0,0,0,.85),0 16px 40px rgba(0,0,0,.6);z-index:4;cursor:pointer}
+.rpg-dialog::before{content:'';position:absolute;inset:-3px;pointer-events:none;background:linear-gradient(#f0d894,#f0d894) 0 0/5px 5px no-repeat,linear-gradient(#f0d894,#f0d894) 100% 0/5px 5px no-repeat,linear-gradient(#f0d894,#f0d894) 0 100%/5px 5px no-repeat,linear-gradient(#f0d894,#f0d894) 100% 100%/5px 5px no-repeat;opacity:.6}
+.rpg-name{position:absolute;top:-22px;left:22px;background:#7a241c;color:#f6e6b8;padding:4px 22px;font-size:clamp(16px,2.1vh,20px);letter-spacing:.14em;border:2px solid #d9a86a;box-shadow:2px 2px 0 rgba(0,0,0,.8),0 0 0 2px #060504;white-space:nowrap}
+.rpg-text{font-size:clamp(17px,2.35vh,21px);line-height:1.95;letter-spacing:.04em;color:#eee2c8;text-shadow:1px 1px 2px #000;min-height:3.2em;text-align:justify;white-space:pre-line}
+.rpg-text .term{border-bottom:1px dashed rgba(217,180,92,.85);color:#f6e2b0;cursor:pointer;padding-bottom:1px}
+.rpg-text .term:hover{color:#fff6d8;background:rgba(184,64,47,.28)}
+.rpg-next{position:absolute;bottom:10px;right:16px;font-size:12px;letter-spacing:.2em;color:#c9a54a;animation:blink 1.1s step-end infinite;display:none}
+@keyframes blink{50%{opacity:0}}
+.rpg-tip{position:absolute;left:50%;bottom:calc(4.2% + 176px + 10px);transform:translateX(-50%);font-size:11px;letter-spacing:.14em;color:#a99b7a;background:rgba(6,6,5,.7);border:1px solid rgba(217,180,92,.22);padding:3px 10px;z-index:5;opacity:0;transition:opacity .4s}
+.rpg-tip.on{opacity:1}
+.intro-card{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;background:rgba(4,3,2,.55)}
+.intro-card.show{opacity:1;visibility:visible;pointer-events:auto}
+.intro-inner{display:flex;align-items:center;gap:22px;background:rgba(10,10,9,.95);border:3px solid #c9a54a;padding:18px 28px;max-width:min(90vw,640px);box-shadow:0 0 0 3px #060504,0 0 40px rgba(217,180,92,.35);transform:scale(.85) translateY(10px);transition:transform .35s cubic-bezier(.2,1.4,.5,1)}
+.intro-card.show .intro-inner{transform:none}
+.intro-img{width:120px;height:150px;object-fit:contain;image-rendering:pixelated;background:#15110c;border:2px solid #d9a86a;flex:none}
+.intro-txt{display:flex;flex-direction:column;gap:6px}
+.intro-name{font-size:26px;color:#f6e6b8;letter-spacing:.18em;text-shadow:2px 2px 0 #000}
+.intro-role{font-size:13px;color:#c9a54a;letter-spacing:.1em}
+.intro-desc{font-size:14px;color:#c8c4b4;line-height:1.75;max-width:380px}
+.intro-hint{margin-top:6px;font-size:11px;color:#c9a54a;letter-spacing:.14em;animation:blink 1.2s step-end infinite}
+.gloss{position:fixed;left:50%;bottom:clamp(180px,26vh,260px);transform:translate(-50%,10px);z-index:760;width:min(88vw,440px);background:linear-gradient(160deg,#f2e8cc,#e2d4b0);color:#3a3020;border:1px solid #b09a6c;box-shadow:0 18px 50px rgba(0,0,0,.7),0 0 0 3px rgba(6,5,4,.8);padding:14px 18px 16px;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s}
+.gloss.on{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.gloss-w{font-size:22px;letter-spacing:.1em;color:#2f2718;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.gloss-py{font-size:13px;color:#a8342a;letter-spacing:.06em;font-family:"Times New Roman",serif}
+.gloss-cat{display:inline-block;font-size:10px;letter-spacing:.1em;color:#8a6c42;border:1px solid rgba(138,108,66,.45);padding:1px 6px;margin-left:auto}
+.gloss-d{font-size:14px;line-height:1.9;color:#4a3d29;margin-top:8px;letter-spacing:.02em}
+.gloss-scene{margin-top:8px;font-size:12.5px;line-height:1.85;color:#5a4a2e;padding:7px 10px;background:rgba(168,52,42,.07);border-left:2px solid #a8342a}
+.gloss-scene b{color:#a8342a;font-weight:normal;letter-spacing:.08em}
+.gloss-x{position:absolute;right:10px;top:8px;font-size:12px;color:#8a6c42;padding:4px}
+.gloss-tip{margin-top:6px;font-size:11px;color:#8a6c42;letter-spacing:.04em}
+.term{border-bottom:1px dashed rgba(217,180,92,.85);color:#f6e2b0;cursor:pointer;padding-bottom:1px;font-style:normal}
+.term:hover{color:#fff6d8;background:rgba(184,64,47,.22)}
+.pro-text .term,.pro-quote .term,.dlg-text .term,.mpi-text .term{color:#a8342a;border-bottom-color:rgba(168,52,42,.6)}
+.pro-text .term:hover,.pro-quote .term:hover,.dlg-text .term:hover,.mpi-text .term:hover{background:rgba(168,52,42,.12);color:#7a241c}
+.ov{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;background:rgba(4,3,2,.86);padding:16px}
+.ov.on{opacity:1;visibility:visible}
+.lesson-panel{width:min(96vw,960px);max-height:92vh;overflow:auto;background:radial-gradient(ellipse at 20% 10%,rgba(255,246,214,.5),transparent 60%),linear-gradient(160deg,#efe4c8,#ddceac 70%,#cfbe98);color:#3b3122;border:1px solid #b09a6c;box-shadow:0 30px 90px rgba(0,0,0,.8),inset 0 0 60px rgba(120,90,40,.18);padding:22px 26px 18px;position:relative;transform:scale(.96) translateY(8px);transition:transform .45s cubic-bezier(.2,1.2,.4,1)}
+.ov.on .lesson-panel{transform:none}
+.lesson-panel::before{content:'';position:absolute;inset:7px;border:1px solid rgba(120,90,40,.25);pointer-events:none}
+.ls-head{display:flex;align-items:center;gap:14px;padding-bottom:12px;border-bottom:2px solid rgba(120,90,40,.35)}
+.ls-seal{width:44px;height:44px;flex:none;background:#a8342a;color:#f7e9c8;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 0 rgba(0,0,0,.25);transform:rotate(-2deg)}
+.ls-kicker{font-size:10px;letter-spacing:.4em;color:#8a6c42}
+.ls-kind{font-size:15px;letter-spacing:.22em;color:#4a3b26;margin-top:3px}
+.ls-head-note{margin-left:auto;font-size:10px;letter-spacing:.16em;color:#8a6c42;text-align:right;line-height:1.7}
+.lesson-grid{display:grid;grid-template-columns:auto 1fr;gap:26px;padding:18px 0 10px}
+.lesson-poem{writing-mode:vertical-rl;text-orientation:upright;height:min(46vh,320px);padding:14px 20px;border:1px solid rgba(120,90,40,.35);background:linear-gradient(90deg,rgba(255,255,255,.28),rgba(255,255,255,.08));font-size:clamp(14px,2vh,18px);line-height:1.5;letter-spacing:.14em;color:#332a1c;box-shadow:inset 0 0 30px rgba(120,90,40,.1)}
+.lesson-poem .lsp-col{margin-left:22px}
+.lesson-poem .lsp-hi{color:#a8342a;font-weight:700}
+.lesson-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+.ls-title{font-size:clamp(16px,2.4vh,21px);letter-spacing:.1em;color:#2f2718}
+.ls-by{font-size:11px;letter-spacing:.18em;color:#8a6c42;margin-top:-4px}
+.ls-explain{font-size:clamp(12.5px,1.7vh,14.5px);line-height:2;color:#3f3423;letter-spacing:.03em;border-left:3px solid #a8342a;padding:6px 12px;background:rgba(168,52,42,.05)}
+.ls-gloss{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ls-gloss li{font-size:clamp(11.5px,1.55vh,13.5px);line-height:1.9;color:#4a3d29;display:flex;gap:8px}
+.ls-gloss b{flex:none;color:#a8342a;font-weight:400;letter-spacing:.06em;border:1px solid rgba(168,52,42,.45);padding:0 6px;height:21px;line-height:21px;font-size:11px;background:rgba(168,52,42,.06)}
+.ls-why{font-size:clamp(11.5px,1.55vh,13.5px);line-height:1.95;color:#4a3d29;padding:9px 12px;border:1px dashed rgba(120,90,40,.45);background:rgba(255,255,255,.16)}
+.ls-why b{color:#a8342a;font-weight:400;letter-spacing:.08em}
+.ls-link{margin-top:8px;font-size:clamp(11.5px,1.55vh,13.5px);line-height:1.95;color:#4a3d29;padding:9px 12px;border-left:3px solid #c9a54a;background:rgba(201,165,74,.1)}
+.ls-link b{color:#a8342a;font-weight:normal;letter-spacing:.08em}
+.ls-tip{font-size:12px;letter-spacing:.14em;color:#8a6c42;text-align:right}
+.lesson-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid rgba(120,90,40,.3);padding-top:12px}
+.ls-endtag{font-size:12px;letter-spacing:.2em;color:#a8342a}
+.ls-endtag small{display:block;font-size:10px;letter-spacing:.08em;color:#7d6a4c;margin-top:4px}
+.ls-btn{padding:9px 24px;background:#a8342a;color:#fbeed0;font-size:13px;letter-spacing:.18em;box-shadow:0 2px 0 #6d1f19;border:1px solid #7d2a22}
+.ls-btn:hover{background:#8d281f}
+.game-panel{width:min(94vw,780px);max-height:92vh;overflow:auto;background:linear-gradient(180deg,rgba(18,15,10,.98),rgba(8,7,5,.99));border:2px solid #c9a54a;box-shadow:0 0 0 3px #060504,0 30px 80px rgba(0,0,0,.9);padding:24px 28px 20px;position:relative;transform:scale(.96);transition:transform .4s cubic-bezier(.2,1.2,.4,1)}
+.ov.on .game-panel{transform:none}
+.g-head{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(217,180,92,.22);padding-bottom:10px;margin-bottom:14px}
+.g-badge{width:36px;height:36px;background:#7a241c;border:1px solid #d9a86a;color:#f6e6b8;display:flex;align-items:center;justify-content:center;font-size:15px}
+.g-title{font-size:17px;letter-spacing:.18em;color:#f2dfa8}
+.g-sub{font-size:11px;color:#9a927e;letter-spacing:.06em;margin-top:3px}
+.g-q{font-size:clamp(18px,2.8vh,24px);letter-spacing:.16em;color:#f6e6b8;text-align:center;margin:14px 0 6px;line-height:1.9}
+.g-q .blank{display:inline-block;width:1.5em;height:1.1em;vertical-align:-0.12em;border-bottom:3px solid #c9a54a;margin:0 8px}
+.g-qs{font-size:12px;color:#9a927e;text-align:center;letter-spacing:.06em;margin-bottom:14px}
+.g-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.g-opt{padding:14px 8px;border:2px solid #c9a54a;background:rgba(9,8,6,.9);color:#e8dcc0;font-size:24px;letter-spacing:.1em;box-shadow:0 0 0 2px #060504,3px 3px 0 rgba(0,0,0,.6);transition:all .12s}
+.g-opt:hover{background:#7a241c;color:#fff6d8}
+.g-opt.right{background:#2f5a34;border-color:#8fd0a8;color:#eaffef}
+.g-opt.wrong{background:#5a2320;border-color:#d98a8a;color:#ffd9d9}
+.g-opt.long{font-size:15px;line-height:1.6;letter-spacing:.02em;text-align:left;padding:14px 16px}
+.g-fb{margin-top:14px;font-size:13px;line-height:1.9;color:#c8bda0;min-height:3em;border-top:1px dashed rgba(217,180,92,.24);padding-top:10px}
+.g-fb b{color:#e8c95a;font-weight:normal}
+.g-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}
+.g-score{font-size:12px;letter-spacing:.1em;color:#9a927e}
+.g-score b{color:#e8c95a;font-weight:normal}
+.g-btn{padding:9px 22px;background:#7a241c;color:#f6e6b8;border:1px solid #d9a86a;font-size:13px;letter-spacing:.16em}
+.g-btn:hover{background:#9a3024}
+.g-btn:disabled{opacity:.35;cursor:not-allowed}
+.match-board{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.m-col{display:flex;flex-direction:column;gap:9px}
+.m-col-t{font-size:11px;letter-spacing:.24em;color:#a8956a;text-align:center;margin-bottom:2px}
+.m-card{padding:10px 12px;border:2px solid #8a7440;background:rgba(9,8,6,.9);color:#e0d3b4;font-size:14px;letter-spacing:.06em;text-align:center;transition:all .12s;line-height:1.5}
+.m-card:hover{border-color:#d9b45c;background:#221a10}
+.m-card.sel{border-color:#e8c95a;background:#4a2a18;color:#ffeec2;box-shadow:0 0 14px rgba(232,201,90,.35)}
+.m-card.done{border-color:#7fa878;background:#1f3324;color:#bfe0c4;opacity:.85;cursor:default}
+.m-card.err{animation:shake .32s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.wp-search{display:flex;gap:6px;margin:2px 0 10px}
+.wp-search input{flex:1;min-width:0;background:rgba(9,8,6,.92);border:1px solid rgba(217,180,92,.35);color:#eee2c8;font-family:inherit;font-size:13px;letter-spacing:.04em;padding:9px 12px;outline:none;border-radius:0}
+.wp-search input:focus{border-color:#d9b45c;box-shadow:0 0 0 2px rgba(217,180,92,.15)}
+.wp-search input::placeholder{color:#6f6a58}
+.wp-clear{width:38px;flex:none;border:1px solid rgba(217,180,92,.35);background:rgba(9,8,6,.92);color:#a8956a;font-size:12px}
+.wp-clear:hover{color:#f6e6b8;border-color:#d9b45c}
+.wp-list{max-height:54vh;overflow:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:#5a4a26 transparent}
+.wp-list::-webkit-scrollbar{width:5px}
+.wp-list::-webkit-scrollbar-thumb{background:#5a4a26}
+.wp-cat{border-bottom:1px solid rgba(217,180,92,.14)}
+.wp-cat-h{width:100%;display:flex;align-items:center;gap:9px;padding:10px 4px;text-align:left}
+.wp-cat-arrow{font-size:9px;color:#8a7a58;transition:transform .2s;flex:none;width:10px}
+.wp-cat.open .wp-cat-arrow{transform:rotate(90deg)}
+.wp-cat-t{font-size:12px;letter-spacing:.26em;color:#c9a54a}
+.wp-cat-h:hover .wp-cat-t{color:#f6e6b8}
+.wp-cat-n{margin-left:auto;font-size:10px;letter-spacing:.06em;color:#7d7767}
+.wp-cat-body{display:none;padding:0 0 8px}
+.wp-cat.open .wp-cat-body{display:block}
+.wp-cat.force-open .wp-cat-body{display:block}
+.wp-cat.force-open .wp-cat-arrow{transform:rotate(90deg)}
+.gloss-item{padding:8px 6px 8px 14px;border-bottom:1px dashed rgba(217,180,92,.1);cursor:pointer}
+.gloss-item:hover{background:rgba(217,180,92,.06)}
+.gi-head{display:flex;align-items:baseline;gap:8px}
+.gi-head b{font-size:14.5px;color:#f6e6b8;font-weight:normal;letter-spacing:.04em}
+.gi-head .py{font-size:10.5px;color:#c06a5a;font-family:"Times New Roman",serif}
+.gi-more{margin-left:auto;font-size:12px;color:#8a7a58;transition:transform .2s;line-height:1}
+.gloss-item.open .gi-more{transform:rotate(45deg);color:#d9b45c}
+.gi-body{display:none;margin-top:6px}
+.gloss-item.open .gi-body{display:block}
+.gi-d{font-size:12.5px;line-height:1.8;color:#b9b09a}
+.gi-scene{margin-top:5px;font-size:12px;line-height:1.75;color:#a8956a;border-left:2px solid rgba(168,52,42,.6);padding-left:8px}
+.gi-scene b{color:#c06a5a;font-weight:normal;margin-right:6px;letter-spacing:.06em}
+.wp-empty{text-align:center;color:#7d7767;font-size:12.5px;padding:26px 0;letter-spacing:.1em}
+.ending-panel{width:min(92vw,720px);max-height:90vh;overflow:auto;background:linear-gradient(180deg,rgba(18,15,10,.98),rgba(8,7,5,.99));border:2px solid #c9a54a;box-shadow:0 0 0 3px #060504,0 30px 80px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.7);padding:30px 34px 24px;position:relative;text-align:center;transform:scale(.95);transition:transform .5s cubic-bezier(.2,1.2,.4,1)}
+.ov.on .ending-panel{transform:none}
+.en-kicker{font-size:10px;letter-spacing:.44em;color:#a8843c;margin-bottom:8px}
+.en-title{font-size:clamp(22px,4vh,34px);letter-spacing:.24em;color:#f2dfa8;font-weight:400;text-shadow:0 0 30px rgba(217,180,92,.35),3px 3px 0 rgba(0,0,0,.8);padding-left:.24em}
+.en-rule{width:60%;height:1px;margin:16px auto;background:linear-gradient(90deg,transparent,rgba(217,180,92,.6),transparent)}
+.en-text{font-size:clamp(13.5px,1.9vh,16px);line-height:2.05;color:#c2b697;letter-spacing:.03em;text-align:justify;white-space:pre-line}
+.en-stats{display:flex;justify-content:center;gap:22px;margin-top:16px;flex-wrap:wrap;font-size:11px;letter-spacing:.14em;color:#8d8a78}
+.en-stats b{color:#d9b45c;font-weight:normal;font-size:14px;letter-spacing:.06em}
+.en-btns{display:flex;justify-content:center;gap:14px;margin-top:22px;flex-wrap:wrap}
+.en-seal{position:absolute;right:22px;bottom:20px;width:52px;height:52px;border:2px solid #b8402f;border-radius:3px;color:#c9553f;display:flex;align-items:center;justify-content:center;font-size:22px;transform:rotate(-8deg);opacity:.85;box-shadow:inset 0 0 16px rgba(184,64,47,.25)}
+#toast{position:fixed;left:50%;top:11%;transform:translate(-50%,-8px);z-index:880;background:rgba(10,8,6,.94);border:1px solid #c9a54a;color:#f0dfb4;padding:8px 20px;font-size:12.5px;letter-spacing:.14em;box-shadow:0 0 0 2px #060504,0 10px 26px rgba(0,0,0,.6);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s,visibility .3s;pointer-events:none}
+#toast.on{opacity:1;visibility:visible;transform:translate(-50%,0)}
+@media (max-width:820px){
+  .pro-rules{grid-template-columns:1fr}
+  .lesson-grid{grid-template-columns:1fr;gap:16px}
+  .lesson-poem{height:auto;max-height:none}
+  .title-main{gap:20px}
+  .map-top,.map-bottom,.scroll{width:96vw}
+  .map-top{flex-wrap:wrap;gap:8px}
+  .mt-t{font-size:13px;letter-spacing:.16em}
+  .mt-s{font-size:9px}
+  .dialog{display:none}
+  .placard{top:12%}
+  .rpg-char{height:clamp(240px,46vh,520px);max-width:46vw}
+  .rpg-char.left{left:0}
+  .rpg-char.right{right:0}
+  .rpg-dialog{width:94%;padding:16px 16px 14px;min-height:150px}
+  .rpg-text{font-size:clamp(15px,2.6vh,18px);line-height:1.85}
+  .rpg-name{font-size:15px;top:-18px;left:12px;padding:3px 14px}
+  .rpg-choices{width:92%;top:40%}
+  .rpg-choices .rpg-choice{font-size:14px}
+  .rpg-tip{display:none}
+  .g-opts{grid-template-columns:1fr;gap:8px}
+  .g-opt{font-size:17px;padding:12px 14px}
+  .g-opt.long{font-size:14px}
+  .intro-inner{gap:14px;padding:14px}
+  .intro-img{width:86px;height:108px}
+  .intro-name{font-size:20px}
+  .intro-desc{font-size:12px}
+  .tools{top:8px;right:8px;gap:4px}
+  .tool{font-size:10px;padding:5px 8px}
+  .seg button{font-size:10px;padding:5px 7px}
+  .mp-info{display:block}
+  .gloss{width:94vw;bottom:auto;top:50%;transform:translate(-50%,-50%) scale(.96)}
+  .gloss.on{transform:translate(-50%,-50%) scale(1)}
+  .wp-list{max-height:48vh}
+}
+@media (max-height:620px){
+  .rpg-dialog{min-height:140px;padding-top:12px;padding-bottom:10px}
+  .rpg-text{font-size:15px;line-height:1.7}
+  .title-prompt{bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div id="crt"></div>
+<div class="tools" id="tools">
+  <div class="seg" id="segLang">
+    <button data-lang="s" class="on">简</button><button data-lang="t">繁</button>
+  </div>
+  <button class="tool" id="btnAudio">♪ 声音</button>
+  <button class="tool" id="btnWords">字词</button>
+</div>
+
+<!-- ==================== 开场 ==================== -->
+<div class="screen on" id="scrTitle">
+  <canvas id="titleCv" width="480" height="270"></canvas>
+  <div class="title-veil"></div>
+  <div class="title-poem" id="titlePoem">
+    <p id="tp1">滿紙荒唐言　一把辛酸淚</p>
+    <p id="tp2" class="tp-2">都云作者癡　誰解其中味</p>
+  </div>
+  <div class="title-main" id="titleMain">
+    <div class="t-col"><div class="t-vertical" id="tVert"></div></div>
+    <div class="t-divider"></div>
+    <div class="t-side">
+      <div class="t-seal" id="tSeal">石頭<br>記</div>
+      <div class="t-sub">
+        <div id="tSub1">紅樓夢 · 第十七回</div>
+        <div class="dim" id="tSub2">大觀園試才題對額</div>
+        <div style="margin-top:10px" id="tSub3">游 园 试 才 · 文 字 冒 险</div>
+        <div class="dim" style="margin-top:2px" id="tSub4">九 处 景 致 · 一 场 考 较</div>
+      </div>
+    </div>
+  </div>
+  <div class="title-prompt" id="titlePrompt">
+    <button class="tp-btn" id="startBtn">點 擊 入 園</button>
+    <div class="tp-note" id="tpNote">鼠标点击 / 空格键 · 约十五分钟</div>
+  </div>
+  <button class="title-skip" id="skipPoem">跳 過</button>
+</div>
+
+<!-- ==================== 序 ==================== -->
+<div class="screen" id="scrPrologue">
+  <div class="pro">
+    <div class="pro-head">
+      <div class="ph-l">
+        <div class="ph-seal">序</div>
+        <div>
+          <div class="ph-t" id="phT">大观园试才题对额</div>
+          <div class="ph-s" id="phS">红楼梦 · 第十七回 · 游园试才</div>
+        </div>
+      </div>
+      <div class="ph-r" id="phR">石头记 · 卷一</div>
+    </div>
+    <div class="pro-body" id="proBody">
+      <div class="pro-page on" data-page="0">
+        <p class="pro-text reveal" data-i18n>秦钟新丧，我心里像压着一块石头，笑也笑不出来。</p>
+        <p class="pro-text reveal" data-i18n>偏偏这时，父亲传下话来：园子修成了，要入园查验景致、预拟匾额对联。我躲不及，被他撞个正着。</p>
+        <p class="pro-text reveal" data-i18n>父亲素来知道我不好八股经书，却有几分别样的才情。他便命我跟在身后，当场考较。</p>
+        <div class="pro-quote reveal" data-i18n>
+          「今日游园，看到景物，你便说出自己的想法，不许敷衍胡闹。」<br>
+          <span style="color:#9c8f70;font-size:12.5px">—— 父亲说完，一众清客相公齐齐看向我。</span>
+        </div>
+      </div>
+      <div class="pro-page" data-page="1">
+        <div class="pro-sec-t reveal" data-i18n>这 一 回 怎 么 玩</div>
+        <div class="pro-text reveal" data-i18n>大观园是贾府为迎贵妃贾元春回家省亲修的园子。你跟着父亲走遍九处景致，每处题一块匾、拟一副对联。说得好，众人叹服；说错了，父亲罚你当场抄书。</div>
+        <div class="pro-text reveal" data-i18n>不用背诗，只要看清眼前的景，讲出你的道理。不认得的词，点一下带虚线的字；右上角「字词」里也能按类查、按词搜。</div>
+        <div class="pro-rules reveal">
+          <div class="rule"><b data-i18n>一 · 选择即命运</b><span data-i18n>答得好，众人叹服；答得差，父亲的脸就沉下来。</span></div>
+          <div class="rule"><b data-i18n>二 · 说错要学</b><span data-i18n>胡乱应对会被罚抄书。抄懂了词义，这一轮才算过。</span></div>
+          <div class="rule"><b data-i18n>三 · 九景之后</b><span data-i18n>九处走遍，匾额拟定，大观园静待贵妃省亲。</span></div>
+        </div>
+        <div class="pro-tips reveal">
+          <div class="tip" data-i18n><b>简 / 繁</b>　右上角切换繁体。</div>
+          <div class="tip" data-i18n><b>字词</b>　生词、人物、典故都在一处，可折叠、可搜索。</div>
+          <div class="tip" data-i18n><b>声音</b>　能听见水声、风声和鸟叫。</div>
+        </div>
+      </div>
+    </div>
+    <div class="pro-foot">
+      <div class="pf-hint" id="proHint">点 击 继 续 <b>▼</b></div>
+      <button class="btn-main" id="proBtn">然 后 呢 ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 卷轴路线 ==================== -->
+<div class="screen" id="scrMap">
+  <div class="map-wrap">
+    <div class="map-top">
+      <div class="mt-l">
+        <div class="mt-seal">石头<br>记</div>
+        <div>
+          <div class="mt-t" id="mapTitle">大观园试才题对额</div>
+          <div class="mt-s" id="mapSub">游园路线 · 第十七回</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll" id="scroll">
+      <div class="paper" id="paper"><canvas id="cv" width="480" height="270"></canvas></div>
+      <div class="rod" id="rodL"></div>
+      <div class="rod" id="rodR"></div>
+      <div class="placard" id="placard">
+        <div class="placard-inner">
+          <span class="placard-no" id="pno">壹</span>
+          <span class="placard-name" id="pname"></span>
+        </div>
+      </div>
+      <div class="dialog" id="dialog">
+        <div class="dlg-inner">
+          <div class="dlg-bar">
+            <span class="dlg-bar-t">游　览　志</span>
+            <span class="dlg-step" id="cstep">一 / 九</span>
+          </div>
+          <div class="dlg-head">
+            <span class="dlg-no" id="cno">壹</span>
+            <span class="dlg-name" id="cname"></span>
+          </div>
+          <div class="dlg-plaque" id="cplaque"></div>
+          <div class="dlg-text" id="ctext"></div>
+          <div class="dlg-foot">
+            <span class="dlg-tri">▼</span>
+            <span class="dlg-hint" id="chint">可进入此景</span>
+            <button class="dlg-enter" id="enterBtn">进 入 此 景 ▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mp-info" id="mpInfo">
+      <div class="mpi-head">
+        <span class="mpi-no" id="mpiNo">壹</span>
+        <span class="mpi-name" id="mpiName">翠嶂假山</span>
+        <span class="mpi-step" id="mpiStep">一 / 九</span>
+      </div>
+      <div class="mpi-plaque" id="mpiPlaque"></div>
+      <div class="mpi-text" id="mpiText"></div>
+      <button class="mpi-btn" id="mpiBtn">进 入 此 景 ▶</button>
+    </div>
+    <div class="map-bottom">
+      <div class="mb-l"><div class="dots" id="dots"></div></div>
+      <div class="mb-r">
+        <div class="map-prog" id="mapProg">已题 <b>0</b> / 9</div>
+        <button class="tool" id="freeBtn">自由模式</button>
+        <button class="tool" id="reviewBtn">温 故 · 小 考</button>
+        <button class="final-btn" id="finalBtn" style="display:none">终 章 ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== RPG ==================== -->
+<div class="screen" id="scrRpg">
+  <div class="rpg-bg" id="rpgBg"></div>
+  <div class="rpg-chars">
+    <img class="rpg-char left" id="charL" alt="">
+    <img class="rpg-char right" id="charR" alt="">
+  </div>
+  <div class="rpg-top">
+    <div class="rt-l">
+      <div class="rt-no" id="rpgNo">壹</div>
+      <div>
+        <div class="rt-t" id="rpgTitle">翠嶂假山</div>
+        <div class="rt-s" id="rpgSub">第一站 · 曲径通幽处</div>
+      </div>
+    </div>
+  </div>
+  <div class="rpg-choices" id="rpgChoices"></div>
+  <div class="rpg-tip" id="rpgTip">点带虚线的字，可查拼音和解释</div>
+  <div class="rpg-dialog" id="rpgDialog">
+    <div class="rpg-name" id="rpgName">旁白</div>
+    <div class="rpg-text" id="rpgText"></div>
+    <div class="rpg-next" id="rpgNext">▼ 点击继续</div>
+  </div>
+  <div class="intro-card" id="introCard">
+    <div class="intro-inner">
+      <img class="intro-img" id="icImg" alt="">
+      <div class="intro-txt">
+        <div class="intro-name" id="icName"></div>
+        <div class="intro-role" id="icRole"></div>
+        <div class="intro-desc" id="icDesc"></div>
+        <div class="intro-hint">▼ 点击继续</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 词条卡 ==================== -->
+<div class="gloss" id="gloss">
+  <button class="gloss-x" id="glossX">✕</button>
+  <div class="gloss-w"><span id="glW"></span><span class="gloss-py" id="glPy"></span><span class="gloss-cat" id="glCat"></span></div>
+  <div class="gloss-d" id="glD"></div>
+  <div class="gloss-scene" id="glScene"></div>
+  <div class="gloss-tip" id="glTip"></div>
+</div>
+
+<!-- ==================== 学习惩罚 ==================== -->
+<div class="ov" id="ovLesson">
+  <div class="lesson-panel">
+    <div class="ls-head">
+      <div class="ls-seal">補</div>
+      <div>
+        <div class="ls-kicker">知 识 点 学 习 · 当 场 抄 录</div>
+        <div class="ls-kind" id="lsKind">诗 · 唐</div>
+      </div>
+      <div class="ls-head-note">父亲命人取来纸笔<br>「抄不明白，不许走」</div>
+    </div>
+    <div class="lesson-grid">
+      <div class="lesson-poem" id="lsPoem"></div>
+      <div class="lesson-side">
+        <div class="ls-title" id="lsTitle"></div>
+        <div class="ls-by" id="lsBy"></div>
+        <div class="ls-explain" id="lsExplain"></div>
+        <ul class="ls-gloss" id="lsGloss"></ul>
+        <div class="ls-why" id="lsWhy"></div>
+        <div class="ls-link" id="lsLink"></div>
+        <div class="ls-tip" id="lsTip"></div>
+      </div>
+    </div>
+    <div class="lesson-foot">
+      <div class="ls-endtag">【 学 习 惩 罚 结 局 】
+        <small>知识点学习完毕，本轮考察到此为止。</small>
+      </div>
+      <button class="ls-btn" id="lsBtn">记 下 了 · 接 受 小 考</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 小游戏 / 字词面板 ==================== -->
+<div class="ov" id="ovGame">
+  <div class="game-panel">
+    <div class="g-head">
+      <div class="g-badge" id="gBadge">考</div>
+      <div>
+        <div class="g-title" id="gTitle">补字填空</div>
+        <div class="g-sub" id="gSub">父亲说：既抄过了，我且考你一考。</div>
+      </div>
+    </div>
+    <div id="gBody"></div>
+    <div class="g-foot">
+      <div class="g-score" id="gScore"></div>
+      <button class="g-btn" id="gNext">下 一 题 ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 结局 ==================== -->
+<div class="ov" id="ovEnd">
+  <div class="ending-panel">
+    <div class="en-kicker" id="enKicker">第 十 七 回 · 终</div>
+    <h2 class="en-title" id="enTitle">圆 满 结 局</h2>
+    <div class="en-rule"></div>
+    <p class="en-text" id="enText"></p>
+    <div class="en-stats" id="enStats"></div>
+    <div class="en-btns">
+      <button class="btn-ghost" id="enRetry">重 来 此 景</button>
+      <button class="btn-main" id="enBack">回 到 卷 轴</button>
+    </div>
+    <div class="en-seal" id="enSeal">完</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   0. 基础工具
+   ========================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
+const lerp  = (a,b,t)=> a+(b-a)*t;
+const rnd   = n => { const x = Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+function hex2rgb(h){ h=h.replace('#',''); if(h.length===3) h=h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
+function mix(a,b,t){ const A=hex2rgb(a),B=hex2rgb(b); return `rgb(${Math.round(lerp(A[0],B[0],t))},${Math.round(lerp(A[1],B[1],t))},${Math.round(lerp(A[2],B[2],t))})`; }
+
+/* =========================================================
+   1. 像素绘图基元
+   ========================================================= */
+let CUR = null;
+const W = 480, H = 270;
+function R(x,y,w,h,c){ if(!c) return; x=Math.round(x);y=Math.round(y);w=Math.round(w);h=Math.round(h); if(w<=0||h<=0) return; CUR.fillStyle=c; CUR.fillRect(x,y,w,h); }
+function PX(x,y,c){ R(x,y,1,1,c); }
+function ELL(cx,cy,rx,ry,c){ cx=Math.round(cx);cy=Math.round(cy);rx=Math.max(.5,rx);ry=Math.max(.5,ry); for(let y=-Math.round(ry);y<=Math.round(ry);y++){ const t=1-(y*y)/(ry*ry); if(t<=0) continue; const w=Math.round(rx*Math.sqrt(t)); R(cx-w,cy+y,w*2+1,1,c); } }
+function DISC(cx,cy,r,c){ ELL(cx,cy,r,r,c); }
+function vgrad(y0,y1,c0,c1,steps=22){ const n=Math.max(1,steps); for(let i=0;i<n;i++){ R(0,y0+(y1-y0)*i/n,W,Math.ceil((y1-y0)/n)+1,mix(c0,c1,i/(n-1))); } }
+function ridge(offset,baseY,amp,freq,color,amp2=0.5,freq2=0.021){ for(let x=0;x<W;x++){ const wx=x+offset; const y=baseY-(Math.sin(wx*freq)*amp+Math.sin(wx*freq2+1.7)*amp*amp2); R(x,y,1,H-y,color); } }
+function mist(y,h,alpha=0.5,c='#f2eee0'){ CUR.globalAlpha=alpha; for(let i=0;i<h;i++){ CUR.globalAlpha=alpha*(1-i/h); R(0,y+i,W,1,c); } CUR.globalAlpha=1; }
+function roof(cx,baseY,w,h,main,dark,light,ridgeCol){ cx=Math.round(cx);baseY=Math.round(baseY);w=Math.round(w);h=Math.max(3,Math.round(h)); const taper=p=>w*(1-0.30*Math.pow(p,1.5)); for(let i=0;i<h;i++){ const p=h>1?i/(h-1):1,ww=Math.round(taper(p)); R(cx-ww/2,baseY-h+i,ww,1,main); } for(let i=0;i<h-2;i++){ const p=i/(h-1),ww=Math.round(taper(p)); for(let x=cx-ww/2+4;x<cx+ww/2-3;x+=7) R(x,baseY-h+i,1,1,dark); } R(cx-w/2-3,baseY-3,w+6,2,dark); R(cx-w/2-3,baseY-4,w+6,1,light); R(cx-w/2-3,baseY-1,w+6,1,'rgba(0,0,0,.35)'); for(const s of [-1,1]){ R(cx+s*(w/2)-2,baseY-5,4,3,main); R(cx+s*(w/2+2)-1,baseY-7,3,3,main); R(cx+s*(w/2+4)-1,baseY-10,2,4,ridgeCol||dark); } const tw=Math.round(w*0.32); R(cx-tw/2,baseY-h-2,tw,2,ridgeCol||dark); R(cx-tw/2,baseY-h-3,tw,1,light); R(cx-2,baseY-h-7,4,5,ridgeCol||dark); }
+function lantern(x,y,s=1,c='#c0453a'){ R(x-1,y-3,2,3,'#3a2a1a'); ELL(x,y+3*s,3*s,4*s,c); R(x-2,y+1*s,5,1,mix(c,'#ffffff',.4)); R(x-1,y+7*s,2,2,'#e0b050'); }
+
+/* =========================================================
+   4. 卷轴地图
+   ========================================================= */
+const NUM_CN = ['一','二','三','四','五','六','七','八','九'];
+const GY = 200, WORLD_W = 3200;
+const stations = [
+  {no:'壹',name:'翠嶂假山',sub:'曲径通幽处',plaque:'题　「曲径通幽处」',text:'进门一座翠嶂挡住满园景致，山顶一块镜面白石，专留题字。清客先说「叠翠」「锦嶂」，父亲转头看我。',x:240,draw:st1},
+  {no:'贰',name:'沁芳亭',sub:'绕堤柳借三篙翠',plaque:'匾　沁芳　　联　绕堤柳借三篙翠，隔岸花分一脉香',text:'溪水从花木深处流出，石桥上一座亭子。父亲嫌「泻玉」粗陋，等我另拟一名。',x:580,draw:st2},
+  {no:'叁',name:'有凤来仪',sub:'潇湘馆',plaque:'匾　有凤来仪　　联　宝鼎茶闲烟尚绿，幽窗棋罢指犹凉',text:'千百竿翠竹遮天蔽日，后院梨花芭蕉，一道清泉绕屋而过。此处将来是贵妃可能到的地方。',x:920,draw:st3},
+  {no:'肆',name:'杏帘在望',sub:'稻香村',plaque:'匾　杏帘在望　　联　新涨绿添浣葛处，好云香护采芹人',text:'黄泥矮墙，茅草屋舍，几百株杏花开得如火。清客说「杏花村」，父亲却摇头。',x:1260,draw:st4},
+  {no:'伍',name:'蓼汀花溆',sub:'武陵源之辨',plaque:'题　蓼汀花溆（后改为「花溆」）',text:'石洞里流出泉水，藤萝垂挂，落花浮在水面。清客说「武陵源」「秦人旧舍」，我听着不妥。',x:1600,draw:st5},
+  {no:'陆',name:'蘅芷清芬',sub:'蘅芜苑',plaque:'匾　蘅芷清芬　　联　吟成豆蔻才犹艳，睡足荼蘼梦也香',text:'院中无高大树木，遍地奇花异草，藤蔓缠满山石廊柱，香气幽幽。父亲命我也拟一联。',x:1940,draw:st6},
+  {no:'柒',name:'省亲正殿',sub:'玉石牌坊',plaque:'宝玉至此心神恍惚，一时未能成句',text:'巍峨大殿，白玉栏杆，一座玉石牌坊立在面前。我心头恍惚，仿佛梦里见过，竟想不出一个字。',x:2280,draw:st7},
+  {no:'捌',name:'沁芳闸',sub:'水闸',plaque:'「沁芳闸」——父亲偏不用「沁芳」二字',text:'大桥横跨水面，水从桥下奔涌如帘，这是全园的水闸。父亲问名，我说「沁芳闸」。',x:2620,draw:st8},
+  {no:'玖',name:'红香绿玉',sub:'怡红院',plaque:'匾　红香绿玉（省亲时改为「怡红快绿」）',text:'粉墙绿柳，一边芭蕉，一边西府海棠。屋内雕梁隔扇，机关精巧，走进去容易迷路。',x:2960,draw:st9}
+];
+
+const IXC = {
+  skyTop:'#5f9ccb',sky1:'#7cb2d8',sky2:'#9dc8e4',sky3:'#c0dced',sky4:'#dceaf1',
+  skyHor:'#f2f0e2',hill1:'#9dbccc',hill2:'#7ba1b8',hill3:'#5c859e',
+  midTree:'#7fa88c',midTree2:'#6d987c',grass:'#6d9c4a',grassD:'#537a35',grassL:'#8bb85e',
+  path:'#c0ac86',pathD:'#a48f6c',roof:'#4a5568',roofD:'#2f3846',roofL:'#6b7a8e',roofG:'#3c4a54',roofGL:'#5d7078',
+  wall:'#e8e2d0',wallD:'#cdc5b0',wallP:'#f0dcd4',brick:'#c2c4bc',brickD:'#a4a69e',
+  pillar:'#9c3d33',pillarL:'#b8514a',gold:'#d4a843',goldL:'#efd27a',
+  stone:'#b8b8ac',stoneD:'#8e8e82',stoneL:'#d2d2c6',
+  jade:'#5e8a5a',jadeL:'#7fb078',jadeD:'#3f6340',bamboo:'#4e7d44',bambooL:'#6fa35c',bambooD:'#2f5230',
+  peach:'#e89aac',peachL:'#f7c4d0',water:'#7fb8cc',waterD:'#5a95ad',waterL:'#c8ecf6',
+  clay:'#c2a470',clayD:'#9c8250',thatch:'#c9ab6a',thatchD:'#a4884a'
+};
+function ixDisc(cx,cy,r,color){ if(r<=0) return; CUR.fillStyle=color; cx=Math.round(cx);cy=Math.round(cy);r=Math.round(r); for(let y=-r;y<=r;y++){ const w=Math.floor(Math.sqrt(Math.max(0,r*r-y*y))); CUR.fillRect(cx-w,cy+y,w*2+1,1); } }
+function ixRoof(cx,baseY,w,h,main,dark,light,ridgeCol){ cx=Math.round(cx);baseY=Math.round(baseY);w=Math.round(w);h=Math.round(h); if(h<3) h=3; for(let i=0;i<h;i++){ const p=h>1?i/(h-1):1; const ww=Math.round(w*(0.99-0.50*Math.pow(p,0.70))); const y=baseY-h+i; R(cx-ww/2,y,ww,1,main); if(i%2===1){ for(let x=cx-ww/2+2;x<cx+ww/2-1;x+=3) R(x,y,1,1,dark); } } const tw=Math.round(w*0.44); R(cx-tw/2,baseY-h,tw,2,ridgeCol||dark); R(cx-tw/2,baseY-h-1,tw,1,light); const half=Math.round(w/2); R(cx-half-2,baseY-4,4,2,main); R(cx-half-4,baseY-6,3,3,main); R(cx-half-5,baseY-8,2,3,ridgeCol||dark); R(cx+half-2,baseY-4,4,2,main); R(cx+half+1,baseY-6,3,3,main); R(cx+half+3,baseY-8,2,3,ridgeCol||dark); R(cx-half,baseY-1,w,1,light); }
+function ixRockMass(cx,gy,w,h,seed){ let s=seed*3571+17; const rr=()=>{ s=(s*9301+49297)%233280; return s/233280; }; const n=10; for(let i=0;i<n;i++){ const bw=w*(0.26+rr()*0.46); const bh=h*(0.24+rr()*0.52); const bx=cx-w/2+rr()*(w-bw); const by=gy-bh-rr()*h*0.36; const c=rr()>0.5?IXC.stone:IXC.stoneD; R(bx,by,bw,bh,c); R(bx,by,bw,2,IXC.stoneL); R(bx,by,1,bh,IXC.stoneL); R(bx+bw-1,by,1,bh,'#767670'); if(rr()>0.35){ const mx=bx+rr()*(bw*0.55); R(mx,by+2,Math.max(2,bw*0.30),2,IXC.jade); if(rr()>0.5) R(mx+1,by+4,2,1,IXC.jadeL); } } }
+function ixWillow(x,gy,h,t){ R(x,gy-h,2,h,'#6a5a3e'); R(x,gy-h,1,h,'#87724e'); const sway=Math.sin(t*0.0018+x*0.05)*1.4; for(let i=0;i<7;i++){ const bx=x-13+i*4.2; const len=14+((i*7)%16); for(let k=0;k<len;k++){ const off=Math.sin(t*0.0016+k*0.22+i)*1.1*sway; R(bx+off+k*0.10,gy-h+5+k,1,1,k<4?IXC.jadeL:IXC.bamboo); } } }
+function ixBambooClump(x,gy,hBase,n,t){ for(let i=0;i<n;i++){ const bx=x+(i-n/2)*4+((i*13)%3); const bh=hBase+((i*29)%22); const sway=Math.sin(t*0.0012+bx*0.06)*1.2; const tx=bx+sway*0.5; for(let y=0;y<bh;y++){ const px=bx+sway*(y/bh)*0.9; R(px,gy-y,2,1,y%8===0?IXC.bambooD:IXC.bamboo); if(y%8===0) R(px,gy-y,3,1,IXC.bambooD); } for(let k=0;k<3;k++){ const ly=gy-bh+6+k*7; R(tx-5+sway,ly,5,1,IXC.bambooL); R(tx+2,ly+2,5,1,IXC.bambooL); } } }
+function ixBlossom(x,gy,r,hh,c1,c2,c3){ R(x-2,gy-hh*0.58,4,hh*0.58,'#6b5236'); R(x-8,gy-hh*0.58,7,2,'#6b5236'); R(x+1,gy-hh*0.52,7,2,'#6b5236'); ixDisc(x,gy-hh*0.80,r,c1); ixDisc(x-r*0.72,gy-hh*0.64,r*0.66,c1); ixDisc(x+r*0.74,gy-hh*0.66,r*0.62,c1); ixDisc(x-r*0.28,gy-hh*0.96,r*0.58,c2); ixDisc(x+r*0.34,gy-hh*0.90,r*0.50,c2); ixDisc(x-r*0.55,gy-hh*0.80,r*0.32,c3||c2); ixDisc(x+r*0.58,gy-hh*0.78,r*0.28,c3||c2); }
+function ixBanana(x,gy,h){ R(x,gy-h,2,h,'#4e7d44'); for(let i=0;i<5;i++){ const side=i%2?1:-1; const yy=gy-h+i*5; R(x+(side>0?2:-10),yy,10,3,i%2?'#6fa35c':'#5e8a52'); R(x+(side>0?2:-10),yy,10,1,'#8cbf78'); } }
+function ixStoneRail(x0,x1,y){ R(x0,y,x1-x0,2,'#eef0e8'); R(x0,y+2,x1-x0,1,'#c8ccc0'); for(let x=x0;x<=x1;x+=8){ R(x,y-4,3,6,'#e8ece2'); R(x,y-4,3,1,'#ffffff'); R(x+1,y-7,1,3,'#dfe4d8'); } }
+function ixWaterWave(x0,x1,y0,y1,t){ for(let x=x0;x<x1;x+=1){ const yy=y0+Math.round(Math.sin(x*0.09+t*0.0016)*1.3); if(yy>=y0&&yy<y1){ CUR.fillStyle='rgba(200,236,246,.42)'; CUR.fillRect(x,yy,1,1); } } }
+
+function st1(cx,gy,t){
+  const rx=cx-96;
+  ixRockMass(rx,gy,84,82,5); ixRockMass(rx-14,gy,44,56,9); ixRockMass(rx+16,gy,40,62,13);
+  for(let k=0;k<46;k++){ const py=gy-k; const px=rx-4+Math.sin(k*0.16)*9+Math.sin(k*0.07)*4; R(px,py,4,1,'#d6d2c2'); if(k%6<3) R(px+1,py,2,1,'#e8e4d4'); }
+  for(let i=0;i<12;i++){ const vx=rx-40+(i*37)%80; const vh=10+(i*13)%20; R(vx,gy-58+(i*7)%14,1,vh,IXC.jade); R(vx-1,gy-58+(i*7)%14,3,1,IXC.jadeL); }
+  const mx=rx-26,my=gy-88;
+  R(mx-1,my-1,23,17,'#8e8e82'); R(mx,my,21,15,'#f4f0e0'); R(mx,my,21,2,'#ffffff'); R(mx,my,2,15,'#ffffff');
+  R(mx+4,my+4,12,1,'#8a8676'); R(mx+4,my+7,9,1,'#8a8676'); R(mx+4,my+10,11,1,'#8a8676'); R(mx+2,my+13,17,1,'#d4cfbc');
+  const gw=104,gh=40,gx=cx+46; const topY=gy-12-gh;
+  R(gx-gw/2-8,gy-3,gw+16,3,'#e2e2d6'); R(gx-gw/2-5,gy-6,gw+10,3,'#eeeade'); R(gx-gw/2-2,gy-9,gw+4,3,'#f4f2e8'); R(gx-gw/2,gy-12,gw,3,'#f8f6ec');
+  for(let i=0;i<20;i++){ const px=gx-gw/2+i*5; R(px,gy-2,2,1,'#c2c0ae'); if(i%3===0) R(px+1,gy-5,2,1,'#c2c0ae'); }
+  R(gx-gw/2,topY,gw,gh,IXC.wall); R(gx-gw/2,topY,gw,2,'#f4f0e2');
+  for(let y=topY+5;y<gy-12;y+=5){ for(let x=gx-gw/2+3;x<gx+gw/2-2;x+=7){ R(x,y,5,1,'#ded8c6'); } }
+  R(gx-gw/2,gy-14,gw,3,'#b8b4a4');
+  for(const dx of [-31,0,31]){ const dw=dx===0?20:15; const dh=gh-6; R(gx+dx-dw/2,gy-12-dh,dw,dh,'#3a2b20'); R(gx+dx-dw/2+1,gy-12-dh+1,dw-2,dh-2,'#241a14'); for(let i=0;i<3;i++) R(gx+dx-dw/2+3,gy-12-dh+4+i*6,dw-6,1,'#8a6a3a'); R(gx+dx-dw/2,gy-12-dh,dw,1,IXC.gold); }
+  for(const dx of [-48,48]){ R(gx+dx-7,gy-12-gh+10,14,12,'#4a3a28'); for(let i=0;i<3;i++) R(gx+dx-7,gy-12-gh+10+i*4,14,1,'#c9a227'); for(let i=0;i<3;i++) R(gx+dx-6+i*5,gy-12-gh+10,1,12,'#c9a227'); }
+  R(gx-13,gy-12-gh-1,26,9,'#2e2018'); R(gx-11,gy-12-gh+1,22,5,IXC.gold); R(gx-11,gy-12-gh+1,22,1,IXC.goldL);
+  ixRoof(gx,gy-12-gh,gw+30,20,IXC.roofG,IXC.roofD,IXC.roofGL,'#1f2a30');
+  R(gx-24,gy-12-gh-20,48,2,'#1f2a30'); R(gx-24,gy-12-gh-21,48,1,'#4a5a62');
+}
+function st2(cx,gy,t){
+  R(cx-160,gy+10,320,58,IXC.water); R(cx-160,gy+10,320,2,IXC.waterD);
+  ixWaterWave(cx-158,cx+158,gy+16,gy+60,t);
+  for(let i=0;i<24;i++){ const wx=cx-150+(i*53)%300; const wy=gy+22+(i*13)%36; CUR.globalAlpha=0.35+0.35*Math.sin(t*0.002+i); R(wx,wy,8+(i*7)%10,1,IXC.waterL); CUR.globalAlpha=1; }
+  R(cx-100,gy+2,200,12,IXC.stone); R(cx-100,gy+2,200,2,IXC.stoneL); R(cx-100,gy+12,200,2,IXC.stoneD);
+  for(const ax of [cx-58,cx,cx+58]){ ixDisc(ax,gy+16,21,IXC.waterD); ixDisc(ax,gy+18,19,'#4d849c'); ixDisc(ax,gy+21,16,IXC.water); }
+  for(const px of [cx-87,cx-29,cx+29,cx+87]){ R(px-4,gy+10,8,18,IXC.stoneD); R(px-4,gy+10,8,2,IXC.stone); }
+  for(const ax of [cx-58,cx,cx+58]){ R(ax-5,gy+0,10,5,IXC.stoneL); R(ax-4,gy+1,8,3,'#9c9c90'); R(ax-3,gy+2,2,2,'#5a5a52'); R(ax+1,gy+2,2,2,'#5a5a52'); R(ax-3,gy-2,2,2,IXC.stoneL); R(ax+1,gy-2,2,2,IXC.stoneL); }
+  R(cx-100,gy-2,200,2,IXC.stoneL);
+  for(let i=0;i<12;i++) R(cx-96+i*17,gy-6,2,5,IXC.stoneL);
+  const pw=60,bodyH=32; const topY=gy-4-bodyH;
+  R(cx-pw/2-4,gy-4,pw+8,6,IXC.stoneD);
+  for(const px of [cx-pw/2,cx-pw/6,cx+pw/6,cx+pw/2-3]){ R(px,topY,3,bodyH,IXC.pillar); R(px,topY,1,bodyH,IXC.pillarL); R(px-1,topY+bodyH-2,5,2,IXC.stoneD); }
+  R(cx-pw/2-3,topY+bodyH-9,pw+6,2,'#8a3a30');
+  for(let i=0;i<7;i++) R(cx-pw/2+i*(pw/6),topY+bodyH-7,1,6,'#8a3a30');
+  R(cx-pw/2-4,topY-3,pw+8,3,'#5e2a22'); R(cx-9,topY-2,18,6,'#2e2018'); R(cx-7,topY-1,14,4,IXC.gold);
+  ixRoof(cx,topY-3,pw+22,16,IXC.roof,IXC.roofD,IXC.roofL,'#1e2530');
+  R(cx-1,topY-3-16-6,2,6,IXC.gold); R(cx-2,topY-3-16-8,4,2,IXC.goldL);
+  for(let i=0;i<7;i++){ const tx=cx-150+i*47; if(Math.abs(tx-cx)<76) continue; ixDisc(tx,gy-16,13,'#7fa87e'); ixDisc(tx-6,gy-10,10,'#6d9870'); ixDisc(tx+7,gy-11,9,'#6d9870'); R(tx-1,gy-16,2,18,'#6b5236'); }
+}
+function st3(cx,gy,t){
+  ixBambooClump(cx-118,gy,50,12,t); ixBambooClump(cx+108,gy,46,11,t);
+  const w=92,h=38;
+  R(cx-w/2,gy-h,w,h,'#f0e8e0'); R(cx-w/2,gy-h,w,2,'#ffffff'); R(cx-w/2,gy-h+2,w,1,'#e4dcd2');
+  R(cx-w/2-3,gy-h-3,w+6,3,IXC.roofG); R(cx-w/2-3,gy-h-4,w+6,1,IXC.roofGL);
+  R(cx-w/2,gy-4,w,4,'#c8c4b6');
+  R(cx-10,gy-26,20,26,'#241a14'); R(cx-8,gy-24,16,3,'#5a3a28'); R(cx-10,gy-26,20,1,IXC.gold);
+  let lx=cx+34; for(let s=0;s<3;s++){ const seg=16,yy=gy-16-(s%2)*4; R(lx,yy,seg,2,'#6b4c35'); R(lx,yy+2,2,16,'#5a3a28'); R(lx+seg-2,yy+2,2,16,'#5a3a28'); R(lx,yy,seg,1,'#9a7a58'); lx+=seg-2; }
+  for(let i=0;i<26;i++){ const px=cx-34+(i*3); const py=gy-2+(i%3); R(px,py,2,1,'#dcd8c8'); }
+  ixBlossom(cx-52,gy,11,34,'#f4f4ec','#ffffff','#e8ece0'); ixBanana(cx+52,gy,32);
+  R(cx-46,gy-6,92,4,IXC.water); R(cx-46,gy-6,92,1,IXC.waterL);
+  for(let i=0;i<12;i++){ R(cx-44+i*8+(Math.sin(t*0.003+i)*2),gy-4,5,1,'#d8f0f8'); }
+  ixBambooClump(cx-92,gy,38,9,t); ixBambooClump(cx+82,gy,42,10,t);
+}
+function st4(cx,gy,t){
+  for(let i=0;i<7;i++){ const vx=cx-130+i*38; R(vx,gy-6,30,6,'#6a8a3e'); R(vx,gy-6,30,1,'#8aa858'); for(let k=0;k<4;k++) R(vx+4+k*7,gy-5,2,4,'#9ac060'); }
+  R(cx-116,gy-26,232,26,IXC.clay); R(cx-116,gy-26,232,2,'#d8bc84'); R(cx-116,gy-2,232,2,IXC.clayD);
+  for(let x=cx-114;x<cx+114;x+=5){ R(x,gy-30,2,5,'#c2a862'); R(x,gy-31,2,2,'#d8c070'); }
+  const hw=68,hh=30,hx=cx-12;
+  R(hx-hw/2,gy-hh,hw,hh,'#d8c8a0'); R(hx-hw/2,gy-hh,hw,2,'#ece0c0');
+  R(hx-24,gy-22,13,11,'#5a4a34'); for(let i=0;i<3;i++) R(hx-24,gy-22+i*4,13,1,'#c9b88a');
+  R(hx+11,gy-22,13,11,'#5a4a34'); for(let i=0;i<3;i++) R(hx+11,gy-22+i*4,13,1,'#c9b88a');
+  R(hx-7,gy-18,14,18,'#4a3a28'); R(hx-7,gy-18,14,2,'#8a6a48');
+  for(let i=0;i<15;i++){ const p=i/14; const ww=(hw+26)*(0.55+p*0.45); R(hx-ww/2,gy-hh-15+i,ww,1,i<2?'#d8c07e':IXC.thatch); if(i%3===0) for(let x=hx-ww/2+2;x<hx+ww/2-1;x+=4) R(x,gy-hh-15+i,1,1,IXC.thatchD); }
+  R(hx-hw/2-14,gy-hh-3,hw+28,3,IXC.thatchD);
+  for(let i=0;i<17;i++){ const bx=cx-124+i*7; R(bx,gy-18,2,18,'#6a8a48'); R(bx,gy-18,1,18,'#88a860'); }
+  R(cx-124,gy-12,118,2,'#6a8a48');
+  ixBlossom(cx+74,gy,18,48,IXC.peach,IXC.peachL,'#f0b0c0'); ixBlossom(cx+96,gy,13,36,IXC.peach,IXC.peachL,'#f0b0c0'); ixBlossom(cx+50,gy,10,28,IXC.peach,IXC.peachL,'#f0b0c0');
+  ixDisc(cx-88,gy-30,11,'#7a9a5a'); ixDisc(cx-96,gy-24,9,'#6a8a4a'); R(cx-89,gy-30,2,30,'#6b5236');
+  R(cx-72,gy-14,17,14,IXC.stoneD); R(cx-72,gy-14,17,2,IXC.stone); R(cx-72,gy-14,2,14,IXC.stone); R(cx-64,gy-6,1,6,'#4a3a28');
+  R(cx-66,gy-30,2,16,'#6b5236'); R(cx-78,gy-32,22,2,'#7a5c3e'); R(cx-78,gy-36,3,4,'#6b5236'); R(cx-80,gy-34,3,3,'#8a6a48'); R(cx-80,gy-29,4,4,'#8a6a48');
+}
+function st5(cx,gy,t){
+  R(cx-180,gy+4,360,H-gy-4,IXC.water); R(cx-180,gy+4,360,2,'#a4d4e4'); R(cx-180,gy+6,360,1,IXC.waterD);
+  ixWaterWave(cx-178,cx+178,gy+10,H,t);
+  for(let i=0;i<28;i++){ const wx=cx-172+(i*53)%344; const wy=gy+14+(i*19)%52; CUR.globalAlpha=0.22+0.30*Math.sin(t*0.002+i*1.7); R(wx,wy,6+(i*11)%14,1,IXC.waterL); CUR.globalAlpha=1; }
+  const ix=cx-12;
+  ixDisc(ix,gy+40,26,'#93b066'); ixDisc(ix,gy+44,23,'#7e9c54'); R(ix-26,gy+42,52,8,'#7e9c54'); ixDisc(ix,gy+47,21,IXC.clayD); R(ix-20,gy+49,40,5,IXC.clayD);
+  for(let i=0;i<10;i++){ const px=ix-22+i*4.8; const ph=12+(i*7)%13; const sw=Math.sin(t*0.0018+i)*1.3; for(let k=0;k<ph;k++){ R(px+sw*(k/ph),gy+40-k,1,1,k<3?'#7a9a5a':'#688a48'); } for(let k=0;k<5;k++){ CUR.globalAlpha=0.9; R(px+sw+0.5,gy+40-ph-k,2,1,k%2?'#e07a92':'#f4a6ba'); CUR.globalAlpha=1; } }
+  for(let i=0;i<4;i++){ const sx=cx-100+i*21; const sy=gy+52+Math.sin(i*0.8)*2; R(sx-7,sy,14,3,'#8e8e82'); R(sx-7,sy,14,1,'#d2d2c6'); R(sx-7,sy+3,14,1,'#5a5a52'); }
+  ixWillow(cx+118,gy,56,t); ixWillow(cx+150,gy+2,44,t);
+  ixRockMass(cx-132,gy+4,76,56,21); ixDisc(cx-132,gy-14,17,'#3f4a44'); ixDisc(cx-132,gy-14,14,'#171f1d'); R(cx-146,gy-14,28,18,'#171f1d');
+  for(let i=0;i<7;i++){ CUR.globalAlpha=0.55; R(cx-138+i*4,gy-10,2,8+(i*5)%8,'#a8d8e8'); CUR.globalAlpha=1; }
+  for(let i=0;i<22;i++){ const fx=cx-170+(i*67)%340+Math.sin(t*0.001+i)*4; const fy=gy+18+(i*23)%46; R(fx,fy,2,1,i%3===0?IXC.peachL:IXC.peach); }
+}
+function st6(cx,gy,t){
+  ixRockMass(cx+76,gy,94,82,41); ixRockMass(cx+108,gy,52,60,47);
+  const w=136,h=46; const topY=gy-h;
+  R(cx-w/2,topY,w,h,'#e6e8e0'); R(cx-w/2,topY,w,2,'#f6f8f0'); R(cx-w/2,topY+2,w,1,'#d8dcd2'); R(cx-w/2,gy-4,w,4,'#bfc4b8');
+  for(let y=topY+6;y<gy-6;y+=6){ for(let x=cx-w/2+4;x<cx+w/2-4;x+=9){ R(x,y,6,1,'#dcded6'); } }
+  R(cx-w/2-6,topY-8,w+12,8,'#7e8a86'); R(cx-w/2-6,topY-8,w+12,2,'#9daaa4'); R(cx-w/2-6,topY-2,w+12,2,'#5a6662');
+  for(let x=cx-w/2-4;x<cx+w/2+4;x+=6){ R(x,topY-7,1,6,'#68746f'); }
+  const mr=20; const mgx=cx-6;
+  ixDisc(mgx,gy-mr,mr+3,'#c8ccc2'); ixDisc(mgx,gy-mr,mr,'#2e3733'); ixDisc(mgx,gy-mr+3,mr-4,'#44514a'); ixDisc(mgx-4,gy-mr+9,7,'#5d7a55'); ixDisc(mgx+6,gy-mr+11,6,'#6d8a62');
+  R(mgx-mr,gy-2,mr*2,2,'#bfc4b8');
+  for(let i=0;i<18;i++){ const vx=cx-w/2+7+(i*37)%(w-14); const vh=18+(i*13)%(h-12); const sw=Math.sin(t*0.0012+i)*0.8; for(let k=0;k<vh;k++){ R(vx+sw*(k/vh),topY+3+k,1,1,k%3?'#6f8a5a':'#89a26c'); } for(let k=5;k<vh;k+=7){ R(vx+sw-1,topY+3+k,3,2,i%2?'#7f9a62':'#95ae76'); } }
+  for(let i=0;i<30;i++){ const hx=cx-w/2-10+(i*43)%(w+20); const hh=10+(i*17)%18; const sw=Math.sin(t*0.0016+i*0.8)*1.3; for(let k=0;k<hh;k++){ R(hx+sw*(k/hh),gy-k,1,1,k<hh*0.35?'#5f7a4a':'#7d9a5e'); } if(i%3===0) R(hx+sw-1,gy-hh,3,2,'#a8c48a'); }
+  for(let i=0;i<22;i++){ const sx=cx-96+i*9; const sy=gy+3+(i%3)*2; R(sx,sy,6,2,i%2?'#c0c0b0':'#a8a898'); }
+  for(let i=0;i<16;i++){ const fx=cx-56+(i*37)%112; const fy=gy-46+(i*13)%30; CUR.globalAlpha=0.35+0.35*Math.sin(t*0.003+i*1.7); R(fx,fy,1,1,'#e8f0c0'); CUR.globalAlpha=1; }
+}
+function st7(cx,gy,t){
+  const dx=cx+52;
+  for(const px of [cx-200,cx+190]){ R(px,gy-42,3,42,'#5a4a32'); ixDisc(px+1,gy-44,13,'#3f6a3e'); ixDisc(px-7,gy-36,9,'#4e7a48'); ixDisc(px+9,gy-37,8,'#4e7a48'); ixDisc(px+1,gy-52,8,'#5e8a52'); }
+  const w=132,h=58;
+  R(dx-w/2-20,gy-8,w+40,8,'#d8d8cc'); R(dx-w/2-18,gy-16,w+36,8,'#e4e4d8'); R(dx-w/2-14,gy-24,w+28,8,'#eeeede'); R(dx-w/2-10,gy-30,w+20,6,'#f6f6ea');
+  for(let i=0;i<22;i++){ R(dx-w/2-16+i*8,gy-4,4,1,'#c8c8ba'); }
+  ixStoneRail(dx-w/2-20,dx-w/2-2,gy-32); ixStoneRail(dx+w/2+2,dx+w/2+20,gy-32);
+  const topY=gy-30-h;
+  R(dx-w/2,topY,w,h,'#efe8d6'); R(dx-w/2,topY,w,2,'#fbf6e8');
+  for(let i=0;i<7;i++){ const px=dx-w/2+6+i*((w-12)/6); R(px,topY,4,h,IXC.pillar); R(px,topY,1,h,IXC.pillarL); }
+  R(dx-w/2,topY+2,w,4,IXC.gold); R(dx-w/2,topY+2,w,1,IXC.goldL);
+  for(let i=0;i<14;i++) R(dx-w/2+4+i*9,topY+3,3,2,'#a87c20');
+  for(let i=0;i<5;i++){ const wx=dx-w/2+16+i*((w-32)/4); R(wx,topY+18,16,h-18,'#3a2618'); R(wx,topY+18,16,2,IXC.gold); for(let k=0;k<3;k++) R(wx+2,topY+24+k*7,12,1,'#8a6a3a'); }
+  for(const ex of [dx-w/2-2,dx+w/2-2]){ R(ex,topY+8,4,6,IXC.gold); R(ex,topY+6,4,2,'#a87c20'); R(ex+1,topY+4,2,2,IXC.goldL); }
+  ixRoof(dx,topY,w+30,17,IXC.roof,IXC.roofD,IXC.roofL,'#1e2530');
+  const upY=topY-17; const uw=w*0.62,uh=17;
+  R(dx-uw/2,upY-uh,uw,uh,'#efe8d6');
+  for(let i=0;i<5;i++){ R(dx-uw/2+4+i*((uw-8)/4),upY-uh,3,uh,IXC.pillar); }
+  R(dx-uw/2,upY-uh+2,uw,3,IXC.gold);
+  ixRoof(dx,upY-uh,uw+18,15,IXC.roof,IXC.roofD,IXC.roofL,'#1e2530');
+  R(dx-2,upY-uh-15-6,4,6,IXC.goldL); R(dx-3,upY-uh-15-8,6,2,IXC.gold);
+  for(const s of [-1,1]){ const bx=dx+s*(w/2+8); const by=topY+14; R(bx,by,s*46,3,'#8a3a30'); for(let i=0;i<5;i++){ R(bx+s*(i*10),by+3,2,16,'#6b4c35'); } R(bx,by-4,s*46,2,'#a85a4a'); }
+  for(const s of [-1,1]){ const bx=dx+s*104; R(bx-32,gy-8,64,8,'#d8d8cc'); R(bx-28,gy-14,56,6,'#e4e4d8'); R(bx-24,gy-46,48,32,'#e8e2d0'); for(let i=0;i<3;i++) R(bx-20+i*17,gy-46,3,32,IXC.pillar); ixRoof(bx,gy-46,58,12,IXC.roof,IXC.roofD,IXC.roofL); R(bx-8,gy-30,16,16,'#3a2618'); R(bx-8,gy-30,16,1,IXC.gold); }
+  const fx=cx-150; const fh=76;
+  R(fx-42,gy-fh,7,fh,'#eef0e8'); R(fx+35,gy-fh,7,fh,'#eef0e8'); R(fx-42,gy-fh,2,fh,'#ffffff'); R(fx+35,gy-fh,2,fh,'#ffffff');
+  R(fx-46,gy-8,15,8,'#c8ccc0'); R(fx+31,gy-8,15,8,'#c8ccc0');
+  R(fx-48,gy-fh+6,96,8,'#eef0e8'); R(fx-48,gy-fh+6,96,2,'#ffffff'); R(fx-48,gy-fh+14,96,3,'#d4d8cc');
+  for(let i=0;i<10;i++){ R(fx-44+i*9,gy-fh+8,3,3,i%2?'#c8ccc0':'#b8bca8'); if(i%3===0) R(fx-44+i*9,gy-fh+8,1,1,IXC.gold); }
+  R(fx-17,gy-fh+7,34,5,IXC.gold); R(fx-17,gy-fh+7,34,1,IXC.goldL);
+  ixRoof(fx,gy-fh,78,13,IXC.roof,IXC.roofD,IXC.roofL,'#1e2530');
+  R(fx-52,gy-3,104,3,'#e0e2d8');
+}
+function st8(cx,gy,t){
+  R(cx-146,gy+6,292,62,IXC.water);
+  ixWaterWave(cx-144,cx+144,gy+30,gy+66,t);
+  for(let i=0;i<18;i++){ const wx=cx-140+(i*47)%280; CUR.globalAlpha=0.4+0.35*Math.sin(t*0.0025+i*1.3); R(wx,gy+40+(i*13)%22,10+(i*7)%12,1,IXC.waterL); CUR.globalAlpha=1; }
+  R(cx-108,gy-4,216,16,IXC.stone); R(cx-108,gy-4,216,2,IXC.stoneL); R(cx-108,gy+12,216,2,IXC.stoneD);
+  for(const ax of [cx-64,cx,cx+64]){ ixDisc(ax,gy+16,22,IXC.waterD); ixDisc(ax,gy+19,19,'#4d849c'); }
+  R(cx-108,gy-8,216,2,IXC.stoneL);
+  for(let i=0;i<13;i++) R(cx-104+i*17,gy-12,2,5,IXC.stoneL);
+  R(cx-18,gy-30,36,32,'#6b4c35'); R(cx-18,gy-30,36,2,'#8a6a48'); R(cx-15,gy-26,30,4,'#9a7a58');
+  for(let i=0;i<8;i++) R(cx-15+i*4,gy-22,1,22,'#8a6a48');
+  R(cx-22,gy-33,44,4,'#8a6a48'); R(cx-22,gy-33,44,1,'#a88a60');
+  ixDisc(cx,gy-36,4,'#5a3a28'); R(cx-1,gy-40,2,4,'#7a5c3e');
+  for(let i=0;i<20;i++){ const wx=cx-30+i*3; const hh=22+(i*7)%14; const flick=Math.sin(t*0.008+i)*1.5; CUR.globalAlpha=0.8; R(wx+flick,gy+2,2,hh,i%2?'#c8ecf6':'#a8d8e8'); CUR.globalAlpha=1; }
+  for(let i=0;i<16;i++){ const fx=cx-34+(i*37)%68; const fy=gy+30+(i*11)%16; CUR.globalAlpha=0.5+0.5*Math.sin(t*0.006+i*2); R(fx,fy,2,1,'#ffffff'); CUR.globalAlpha=1; }
+}
+function st9(cx,gy,t){
+  const w=100,h=38; const topY=gy-h;
+  R(cx-w/2,topY,w,h,IXC.wallP); R(cx-w/2,topY,w,2,'#fceee8'); R(cx-w/2,gy-4,w,4,'#c8b4ac');
+  R(cx-w/2-3,topY-3,w+6,3,IXC.roofG); R(cx-w/2-3,topY-4,w+6,1,IXC.roofGL);
+  R(cx-12,gy-27,24,27,'#3a241c'); R(cx-10,gy-25,20,25,'#5a3a28');
+  for(let i=0;i<3;i++) R(cx-9,gy-23+i*7,18,1,'#a88a60');
+  for(let i=0;i<4;i++) R(cx-9+i*6,gy-25,1,24,'#a88a60');
+  R(cx-12,gy-27,24,1,IXC.gold);
+  for(const dx of [-36,36]){ R(cx+dx-9,gy-28,18,12,'#5a3a28'); for(let i=0;i<3;i++) R(cx+dx-9,gy-28+i*4,18,1,'#a88a60'); for(let i=0;i<3;i++) R(cx+dx-6+i*6,gy-28,1,12,'#a88a60'); }
+  ixRoof(cx,topY-3,w+22,13,IXC.roof,IXC.roofD,IXC.roofL,'#1e2530');
+  for(let i=0;i<5;i++){ R(cx-56+i*11,gy-16,3,16,'#6b4c35'); }
+  R(cx-58,gy-18,60,2,'#8a6a48'); R(cx-58,gy-18,60,1,'#a88a60');
+  ixRockMass(cx-52,gy,30,26,61);
+  ixBanana(cx-72,gy,36); ixBanana(cx-88,gy,30);
+  ixBlossom(cx+68,gy,19,50,'#e88098','#f8b8c8','#ffd8e0'); ixBlossom(cx+90,gy,13,36,'#e88098','#f8b8c8','#ffd8e0');
+  ixWillow(cx+112,gy,54,t); ixWillow(cx-112,gy,50,t);
+  for(let i=0;i<10;i++){ const fx=cx+96+(i*13)%30; const fy=gy-18+(i*7)%14; R(fx,fy,2,2,i%2?'#f0a8b8':'#d88898'); }
+}
+
+const mcv=$('#cv'), mctx=mcv.getContext('2d');
+mcv.width=W; mcv.height=H; mctx.imageSmoothingEnabled=false;
+const M = { idx:0, charX:stations[0].x-80, camX:0, arrived:false, walking:false, t:0, panelShown:false };
+const PROG = { done:new Set(), lessons:new Set(), order:[], finalDone:false };
+let FREE_MODE = false;
+function maxUnlocked(){ if(FREE_MODE) return 8; let i=0; while(i<9 && PROG.done.has(i)) i++; return Math.min(i,8); }
+function nextStationAfter(i){ if(FREE_MODE) return i; return Math.min(maxUnlocked(),8); }
+function allDone(){ return PROG.done.size>=9; }
+function drawChar(x,t,walking){
+  const bob=walking?Math.abs(Math.sin(t*0.012))*2:Math.sin(t*0.004)*0.8;
+  const y=Math.round(GY-24+bob);
+  CUR.globalAlpha=.28; R(x-6,GY-2,12,2,'#26301a'); CUR.globalAlpha=1;
+  R(x-3,y+17,2,6,'#2a2418'); R(x+1,y+17,2,6,'#2a2418');
+  R(x-4,y+7,8,11,'#b83a34'); R(x-4,y+7,8,2,'#d15a4a'); R(x-4,y+16,8,2,'#8a2420');
+  R(x-5,y+9,1,6,'#8a2a26'); R(x+4,y+9,1,6,'#8a2a26');
+  R(x-4,y+13,8,1,'#d9b45c');
+  R(x-3,y,6,7,'#f0d6b0'); R(x-3,y,6,1,'#fbe8cc');
+  R(x-3,y-1,6,2,'#1c1a20'); R(x-4,y+1,1,3,'#1c1a20'); R(x+3,y+1,1,3,'#1c1a20');
+  R(x-2,y-3,4,2,'#1c1a20'); R(x-1,y-5,2,2,'#d9b45c');
+  R(x-2,y+3,1,1,'#2a2018'); R(x+1,y+3,1,1,'#2a2018');
+  R(x+4,y+11,1,2,'#8fd0a8');
+}
+let mapFlakes=[];
+for(let i=0;i<40;i++) mapFlakes.push({x:Math.random()*W,y:Math.random()*H,vy:.12+Math.random()*.22,ph:Math.random()*6.28,sz:Math.random()<.3?2:1});
+function mapUpdate(){
+  const s=stations[M.idx]; const diff=s.x-M.charX;
+  if(Math.abs(diff)>1.5){ M.charX+=clamp(diff*0.06,-3.2,3.2); M.walking=true; }
+  else if(M.walking){ M.charX=s.x; M.walking=false; M.arrived=true; onArriveMap(); }
+  const target=clamp(M.charX-W/2,0,WORLD_W-W); M.camX+=(target-M.camX)*0.08;
+}
+function mapRender(t){
+  CUR=mctx; const camX=Math.round(M.camX);
+  mctx.clearRect(0,0,W,H);
+  vgrad(0,150,'#5f9ccb','#c0dced'); vgrad(150,200,'#dceaf1','#f4f0e0');
+  for(let i=0;i<6;i++){ const cxx=((i*140+t*0.004-camX*0.06)%(W*1.6)+W*1.6)%(W*1.6)-60; CUR.globalAlpha=.7; DISC(cxx,40+(i%3)*18,9,'#ffffff'); DISC(cxx+12,36+(i%3)*18,10,'#ffffff'); DISC(cxx+26,40+(i%3)*18,7,'#ffffff'); R(cxx-6,42+(i%3)*18,38,6,'#ffffff'); CUR.globalAlpha=1; }
+  ridge(camX*0.10,150,14,0.008,'#9dbccc',0.6,0.019); ridge(camX*0.22,168,11,0.011,'#7ba1b8',0.5,0.026); ridge(camX*0.42,186,8,0.015,'#5c859e',0.5,0.033);
+  mist(172,14,.35,'#f4f4e6');
+  for(let i=0;i<80;i++){ const wx=i*42+(i*37)%37; if(wx<camX-60||wx>camX+W+60) continue; const h=18+((i*37)%16); R(wx,GY-h,2,h,'#7d9c86'); DISC(wx+1,GY-h,7,'#7fa88c'); DISC(wx-4,GY-h+4,6,'#6d987c'); DISC(wx+6,GY-h+4,5,'#6d987c'); }
+  R(0,GY,W,H-GY,'#6d9c4a'); R(0,GY,W,3,'#8bb85e');
+  for(let x=0;x<W;x+=3){ if(rnd((x+camX)*0.37)>.6){ const yy=GY+8+Math.floor(rnd((x+camX)*1.13)*56); R(x,yy,1,2,'#537a35'); } }
+  for(let x=0;x<W;x++){ const wx=x+camX; const yy=238+Math.round(Math.sin(wx*0.011)*5+Math.sin(wx*0.029)*2); R(x,yy,1,20,'#c0ac86'); R(x,yy,1,2,'#d3c1a0'); }
+  mctx.save(); mctx.translate(-camX,0);
+  for(const s of stations){ if(s.x>camX-220&&s.x<camX+W+220) s.draw(s.x,GY,t); const st=PROG.done.has(stations.indexOf(s))?'#7fa878':(stations.indexOf(s)===M.idx?'#e8c95a':'#b8b8a8'); R(s.x-1,GY-2,3,3,st); }
+  drawChar(Math.round(M.charX),t,M.walking);
+  mctx.restore();
+  for(const f of mapFlakes){ f.y+=f.vy; f.ph+=.02; if(f.y>H+4){ f.y=-4; f.x=Math.random()*W; } CUR.globalAlpha=.5; R(f.x+Math.sin(f.ph)*4,f.y,f.sz,f.sz,'#ffffff'); CUR.globalAlpha=1; }
+  CUR=null;
+}
+function mapLoop(now){ M.t=now; mapUpdate(); mapRender(now); requestAnimationFrame(mapLoop); }
+requestAnimationFrame(mapLoop);
+</script>
+
+<script>
+/* =========================================================
+   5. 剧本 / 词条 / 小游戏题库
+   ========================================================= */
+/* 资源地址前缀。
+   默认走同目录，简单可靠。
+   若要把图片放到 CDN 加速（例如 jsDelivr），把下一行的注释解开即可：
+   const ASSETS = 'https://cdn.jsdelivr.net/gh/q12630/yyj@main/';
+   注意：换 CDN 后，页面里的 index.html 仍由 GitHub Pages 提供，
+   只有图片改走 CDN，两者互不影响。 */
+const ASSETS = './';
+const CAST = {
+  narr:{name:'旁　白'},
+  player:{name:'贾宝玉',role:'就是我',desc:'爱玩，不爱读正经书。偏在诗词对联上，有点歪才情。',img:'player.webp',emos:{smile:'player_smile.webp',think:'player_think.webp',recite:'player_recite.webp',nervous:'player_nervous.webp'}},
+  jia:{name:'贾政',role:'我的父亲',desc:'素来严厉，一见我就板脸；其实，心里是疼我的。',img:'npc1.webp',emos:{stern:'npc1_stern.webp',nod:'npc1_nod.webp',displeased:'npc1_displeased.webp',angry:'npc1_angry.webp',sneer:'npc1_sneer.webp'}},
+  qingke:{name:'清客相公',role:'父亲的门客',desc:'专会凑趣夸人，我随口说什么，他们都说好。',img:'npc2.webp',emos:{praise:'npc2_praise.webp',worry:'npc2_worry.webp'}},
+  zhen:{name:'贾珍',role:'宁府管事',desc:'年纪比我大，却得叫我「二叔」；见了我父亲就慌。',img:'npc3.webp',emos:{panic:'npc3_panic.webp'}}
+};
+
+const GLOSS = {
+  '秦钟':{cat:'人物',py:'qín zhōng',d:'贾宝玉的好友，秦可卿的弟弟。',scene:'序言说「秦钟新丧」，正是宝玉心里压着石头、笑不出来的缘由。'},
+  '贾政':{cat:'人物',py:'jiǎ zhèng',d:'贾宝玉的父亲，荣国府二老爷。',scene:'本回「试才」的主考官。他严厉、不肯当面夸宝玉，却是真心盼儿子成器。'},
+  '贾珍':{cat:'人物',py:'jiǎ zhēn',d:'宁国府的管事，论辈分是宝玉的侄辈。',scene:'开篇慌慌张张跑来报信「老爷往这边来了」，见贾政就慌。'},
+  '元春':{cat:'人物',py:'yuán chūn',d:'贾宝玉的姐姐，被皇帝封为贤德妃。',scene:'大观园就是为她回家省亲修的。本回题匾，处处要顾及她的身份。'},
+  '妙玉':{cat:'人物',py:'miào yù',d:'大观园栊翠庵里的女尼，才貌出众。',scene:'终章提到府里下帖请她进园，为后文埋线。'},
+  '清客':{cat:'人物',py:'qīng kè',d:'住在富贵人家、陪主人读书聊天的门客。',scene:'父亲带清客游园，清客先题「叠翠」「锦嶂」，父亲都不满意——这是为了让宝玉后面出场「试才」。'},
+  '相公':{cat:'人物',py:'xiàng gong',d:'旧时对读书人的尊称。',scene:'序言「一众清客相公齐齐看向我」，就是这群门客。'},
+  '丫鬟':{cat:'人物',py:'yā huan',d:'有钱人家雇来伺候人的女孩子。',scene:'大观园里将来会住进许多丫鬟。'},
+  '贾府':{cat:'人物',py:'jiǎ fǔ',d:'贾宝玉家，是书里最有权势的大家族。',scene:'大观园是贾府为迎贵妃修的园子。'},
+  '老爷':{cat:'称谓',py:'lǎo ye',d:'旧时仆人对主人的称呼，这里指贾政。',scene:'贾珍喊「老爷往这边来了」，宝玉一听就紧张。'},
+  '二叔':{cat:'称谓',py:'èr shū',d:'排行第二的叔父，这里指宝玉。',scene:'贾珍年纪比宝玉大，却得叫他「二叔」，见出贾府辈分严。'},
+  '晚生':{cat:'称谓',py:'wǎn shēng',d:'旧时读书人对前辈的自称（谦辞）。',scene:'清客说「依晚生愚见」，是门客对主人的客气话。'},
+  '愚见':{cat:'称谓',py:'yú jiàn',d:'自己的看法（谦辞）。',scene:'清客「依晚生愚见」，先谦后夸，是门客的说话套路。'},
+  '省亲':{cat:'称谓',py:'xǐng qīn',d:'出嫁的女儿回娘家看望父母。',scene:'大观园就是为贵妃元春回家省亲修的，所以题匾不能太避世、太晦气。'},
+  '贵妃':{cat:'称谓',py:'guì fēi',d:'皇帝的高级妃子。',scene:'元春被封贤德妃，园中题匾要顾及「颂圣」的分寸。'},
+  '颂圣':{cat:'称谓',py:'sòng shèng',d:'歌颂皇帝、皇家的功德。',scene:'潇湘馆题「有凤来仪」，就是暗含颂圣之意。'},
+  '八股':{cat:'科举',py:'bā gǔ',d:'明清科举规定的一种文章格式，规矩很多、很死板。',scene:'序言说宝玉「不好八股经书」，偏在诗词对联上有才情——这正是本回他能「试才」的底子。'},
+  '经书':{cat:'科举',py:'jīng shū',d:'古代读书人必读的经典，如《四书》《五经》。',scene:'与「八股」连用，指科举正途的学问。'},
+  '大观园':{cat:'园林',py:'dà guān yuán',d:'贾府为迎贵妃贾元春回家省亲修的园子。',scene:'本回就是游这座园子，一处处题匾拟联。'},
+  '匾额':{cat:'园林',py:'biǎn é',d:'挂在门或墙上方、写着名字或赞语的长方形木牌。',scene:'本回每处景致都要题一块匾。'},
+  '对联':{cat:'园林',py:'duì lián',d:'挂在门两边、字数一样、意思相对的两句话。',scene:'题匾之后还要拟联，是本回考较的重点。'},
+  '题额':{cat:'园林',py:'tí é',d:'在匾额上题字。',scene:'「试才题对额」的「题额」，就是指这件事。'},
+  '对仗':{cat:'园林',py:'duì zhàng',d:'对联上下两句，字数相同，词性相对。比如「柳」对「花」，「翠」对「香」。',scene:'沁芳亭联「绕堤柳借三篙翠，隔岸花分一脉香」，就是工整的对仗。'},
+  '翠嶂':{cat:'园林',py:'cuì zhàng',d:'翠是绿色，嶂是像屏风一样立着的山。',scene:'进门第一景，把满园景致藏在山后，逼出一条「曲径」。'},
+  '镜面白石':{cat:'园林',py:'jìng miàn bái shí',d:'平整光滑如镜的白石，专门用来题字。',scene:'山顶这块白石，就是留给宝玉题「曲径通幽处」的地方。'},
+  '苔藓':{cat:'园林',py:'tái xiǎn',d:'长在石头、墙根上的绿色小植物。',scene:'园中老石上常见，添几分古意。'},
+  '藤萝':{cat:'园林',py:'téng luó',d:'爬在石头或架子上、会垂下来的藤。',scene:'蓼汀花溆的石洞口，藤萝垂挂，落花浮水。'},
+  '翼然':{cat:'园林',py:'yì rán',d:'像鸟张开翅膀的样子。',scene:'清客给沁芳亭起的名字，取欧阳修《醉翁亭记》「有亭翼然」。父亲嫌它没有水意。'},
+  '泻玉':{cat:'园林',py:'xiè yù',d:'泻是水直冲下来，玉是形容水光。',scene:'父亲先提出「泻玉」，宝玉嫌「泻」字太直，改「沁芳」——这是本回第一次正式「试才」。'},
+  '沁芳':{cat:'园林',py:'qìn fāng',d:'沁是渗进去，芳是花香。水把花香带着走。',scene:'宝玉给沁芳亭题的名字，父亲嘴上不说好，脚下却慢了半步。'},
+  '三篙':{cat:'园林',py:'sān gāo',d:'撑船用的竹篙，这里形容水之深。',scene:'「绕堤柳借三篙翠」，写柳色借水深而更翠。'},
+  '一脉':{cat:'园林',py:'yī mài',d:'一条、一缕。',scene:'「隔岸花分一脉香」，写花香分一缕飘到对岸。'},
+  '有凤来仪':{cat:'园林',py:'yǒu fèng lái yí',d:'凤凰飞来，吉祥之兆。出自《尚书》。',scene:'宝玉给潇湘馆题的匾。凤凰非竹实不食，满院翠竹正合此意，也暗含颂圣。'},
+  '杏帘在望':{cat:'园林',py:'xìng lián zài wàng',d:'杏花如帘，远远在望。',scene:'宝玉给稻香村题的匾，化用「牧童遥指杏花村」，又不犯村名。'},
+  '稻香村':{cat:'园林',py:'dào xiāng cūn',d:'宝玉给这处田庄起的名字。',scene:'「稻香」二字，正合黄泥矮墙、茅屋菜地的田园气。'},
+  '蓼汀花溆':{cat:'园林',py:'liǎo tīng huā xù',d:'蓼是水边小草，汀是水边平地，溆是水边。',scene:'宝玉给石洞流泉处题的匾，避开「武陵源」的避世之意。'},
+  '蘅芷':{cat:'园林',py:'héng zhǐ',d:'蘅和芷都是香草的名字。',scene:'蘅芜苑满院香草，宝玉题「蘅芷清芬」。'},
+  '蘅芜苑':{cat:'园林',py:'héng wú yuàn',d:'这处院子的名字。',scene:'院中无大树，遍地奇花异草，香气幽幽。'},
+  '玉石牌坊':{cat:'园林',py:'yù shí pái fāng',d:'玉石做的牌坊，立在省亲正殿前。',scene:'宝玉看见它心头恍惚，仿佛梦里见过，一时想不出字。'},
+  '天仙宝境':{cat:'园林',py:'tiān xiān bǎo jìng',d:'宝玉硬凑的匾额名。',scene:'父亲嫌「越发胡闹」，游园草草收场。'},
+  '沁芳闸':{cat:'园林',py:'qìn fāng zhá',d:'全园的水闸。',scene:'宝玉想叫「沁芳闸」，父亲偏说不用「沁芳」二字。'},
+  '红香绿玉':{cat:'园林',py:'hóng xiāng lǜ yù',d:'宝玉给怡红院题的匾，兼顾芭蕉之绿、海棠之红。',scene:'父亲嘴上连说「不好」，临走却回头看了一眼挂匾的位置。'},
+  '怡红快绿':{cat:'园林',py:'yí hóng kuài lǜ',d:'省亲时改的匾名。',scene:'「红香绿玉」后来被改成这个，是后话。'},
+  '崇光泛彩':{cat:'园林',py:'chóng guāng fàn cǎi',d:'清客给怡红院题的匾，写海棠之色。',scene:'宝玉嫌它「拾人牙慧，毫无新意」。'},
+  '栊翠庵':{cat:'园林',py:'lóng cuì ān',d:'大观园里的一座庵堂。',scene:'妙玉后来住在这里。'},
+  '梨香院':{cat:'园林',py:'lí xiāng yuàn',d:'贾府里的一处院落。',scene:'终章提到收拾梨香院，给唱戏的女孩子住。'},
+  '曲径通幽处':{cat:'典故',py:'qū jìng tōng yōu chù',d:'弯曲的小路通向幽静深处。出自常建《题破山寺后禅院》。',scene:'翠嶂假山一径曲折、藏尽园景，正合此句，是宝玉第一次「试才」的答案。'},
+  '淇水遗风':{cat:'典故',py:'qí shuǐ yí fēng',d:'《诗经》里咏竹的典故，指高雅遗风。',scene:'清客给潇湘馆起的名字，父亲嫌「太俗」。'},
+  '睢园雅迹':{cat:'典故',py:'suī yuán yǎ jì',d:'西汉梁孝王的睢园，文人雅集之地。',scene:'清客起的另一个名字，同样被父亲否掉。'},
+  '浣葛':{cat:'典故',py:'huàn gé',d:'洗葛布，指田园生活。',scene:'「新涨绿添浣葛处」，写春水上涨、村妇浣葛。'},
+  '采芹':{cat:'典故',py:'cǎi qín',d:'采摘水芹，指读书人入学。',scene:'「好云香护采芹人」，写田园中也有读书种子。'},
+  '武陵源':{cat:'典故',py:'wǔ líng yuán',d:'陶渊明《桃花源记》里的世外桃源。',scene:'清客想用这个名，宝玉觉得「避世」之意太重，不合贵妃省亲的园子。'},
+  '秦人旧舍':{cat:'典故',py:'qín rén jiù shè',d:'桃花源里避乱的秦人旧居。',scene:'比「武陵源」更露避世之意，宝玉明确反对。'},
+  '豆蔻':{cat:'典故',py:'dòu kòu',d:'一种香草。后比喻十三四岁的少女。',scene:'「吟成豆蔻才犹艳」，写少年才情像豆蔻花一样鲜活。'},
+  '荼蘼':{cat:'典故',py:'tú mí',d:'暮春最后开的花。它一开，春天就结束了。',scene:'「睡足荼蘼梦也香」，写暮春花香入梦。'},
+  '拾人牙慧':{cat:'典故',py:'shí rén yá huì',d:'捡别人说过的话当自己的，没有新意。',scene:'宝玉顺着清客说「锦嶂」，父亲斥他「拾人牙慧」。'},
+  '凤凰非梧桐不栖':{cat:'典故',py:'fèng huáng fēi wú tóng bù qī',d:'凤凰只落在梧桐上。出自《庄子》。',scene:'宝玉题「有凤来仪」时的心理依据。'},
+  '非竹实不食':{cat:'典故',py:'fēi zhú shí bù shí',d:'凤凰不吃别的，只吃竹实。',scene:'与「非梧桐不栖」连用，满院翠竹正合凤凰之性。'},
+  '叉出去':{cat:'动作',py:'chā chū qù',d:'把人赶出去。',scene:'宝玉说稻香村「人工硬造」，父亲大怒，喝命「叉出去」。'},
+  '拂袖':{cat:'动作',py:'fú xiù',d:'一甩袖子，表示生气。',scene:'父亲生气时常「拂袖而去」。'},
+  '讪讪':{cat:'动作',py:'shàn shàn',d:'难为情、不自然的样子。',scene:'父亲走后，众人「讪讪跟着」。'},
+  '缄口':{cat:'动作',py:'jiān kǒu',d:'闭着嘴不说话。',scene:'父亲问「为何缄口不语」，指宝玉低头沉默。'},
+  '卖弄':{cat:'动作',py:'mài nòng',d:'故意显示、炫耀。',scene:'父亲呵斥宝玉「就爱卖弄」，其实是明贬暗褒。'},
+  '限日补作':{cat:'动作',py:'xiàn rì bǔ zuò',d:'限定日期补写。',scene:'宝玉在玉石牌坊前想不出句，父亲限他一日补写。'}
+};
+const GLOSS_KEYS = Object.keys(GLOSS).sort((a,b)=> b.length-a.length);
+const GLOSS_CATS = ['人物','称谓','科举','园林','典故','动作'];
+const CAT_LABEL = {人物:'人 物',称谓:'称 谓',科举:'科 举',园林:'园 林',典故:'典 故',动作:'动 作'};
+
+const LESSONS = {
+  poem:{
+    kind:'诗 · 唐',title:'题破山寺后禅院',by:'唐 · 常建',
+    cols:[
+      {text:'清晨入古寺，初日照高林。'},
+      {text:'曲径通幽处，禅房花木深。',hi:true},
+      {text:'山光悦鸟性，潭影空人心。'},
+      {text:'万籁此俱寂，但余钟磬音。'}
+    ],
+    explain:'弯弯曲曲的小路通向幽静深处，繁茂的花木遮掩着雅致的庭院。',
+    gloss:[
+      {w:'曲径',py:'qū jìng',d:'弯曲的小路。'},
+      {w:'幽处',py:'yōu chù',d:'幽静深远的地方。'},
+      {w:'禅房',py:'chán fáng',d:'僧人居住的房舍。'},
+      {w:'花木深',py:'huā mù shēn',d:'花木繁茂幽深，把院子遮住了。'}
+    ],
+    why:'大观园进门这座翠嶂，正把满园景致藏在山后；一径曲折进去，才见天光——与「曲径通幽处」的意境分毫不差。题匾先看景，再想诗；景与诗对得上，字才有根。',
+    link:'「曲径通幽处」不只是背诗：翠嶂假山一径曲折、藏尽园景，正是这五个字的实景。题匾先看景，再想诗——景、诗、字对得上，才不算白题。',
+    tip:'—— 父命：抄二十遍，明日背来。'
+  },
+  duilian:{
+    kind:'联 · 清',title:'吟成豆蔻才犹艳　睡足荼蘼梦也香',by:'《红楼梦》第十七回 · 蘅芜苑对联',
+    cols:[
+      {text:'吟成豆蔻才犹艳'},
+      {text:'睡足荼蘼梦也香',hi:true}
+    ],
+    explain:'少年吟成的诗句，像豆蔻年华一样鲜活艳丽；院中花草芬芳温柔，睡得沉了，连梦里都带着清香。',
+    gloss:[
+      {w:'豆蔻',py:'dòu kòu',d:'初夏开花的香草。杜牧「娉娉袅袅十三余，豆蔻梢头二月初」，后用以比青春年少、朝气蓬勃。'},
+      {w:'荼蘼',py:'tú mí',d:'暮春最后开放的花。苏轼「开到荼蘼花事了」——它一开，春天就到头了。'}
+    ],
+    why:'这副对联专为蘅芜苑而设：满院香草清雅，少年才情灵动，一联之内，人与景都写到了。抄来的句子是别人的；懂得它好在哪里，才是自己的。',
+    link:'「豆蔻」「荼蘼」不只是两个香草名：一个写少年才情，一个写暮春花香。宝玉把满院香草与自己的年纪、眼前的景串成一副联——这才是「试才」要考的心思。',
+    tip:'—— 父命：把词义抄明白，再讲给我听。'
+  }
+};
+
+const CHAPTERS = {
+  intro:{no:'序',title:'入园',sub:'园门之外',bg:'bg0.webp',script:[
+    {t:'say',who:'narr',text:'我正独自在大观园里闲逛，贾珍匆匆跑来，叫我快躲一躲。'},
+    {t:'say',who:'zhen',emo:'panic',text:'宝二叔！快躲一躲——老爷往这边来了！'},
+    {t:'say',who:'narr',text:'一转头，就看见父亲带着一群清客相公走了过来。'},
+    {t:'say',who:'jia',emo:'stern',text:'今日游园，看到景物，你便说出自己的想法，不许敷衍胡闹。'},
+    {t:'say',who:'narr',text:'我心里有点紧张，只能跟在众人身后，往园门里走去。'},
+    {t:'end',r:'intro'}
+  ]},
+  s0:{no:'壹',title:'翠嶂假山',sub:'第一站 · 曲径通幽处',bg:'bg1.webp',script:[
+    {t:'say',who:'narr',text:'走到园子入口，迎面一座巨大的翠嶂假山，把园里的风景全遮住了。山顶有一块平整的镜面白石，专门用来题写匾额。'},
+    {t:'say',who:'qingke',emo:'praise',text:'依晚生愚见，此处题「叠翠」二字，最是贴切。'},
+    {t:'say',who:'qingke',text:'再不然，「锦嶂」也好，见得富丽。'},
+    {t:'say',who:'jia',emo:'stern',text:'宝玉，你也说说。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'引用旧诗，题「曲径通幽处」',goto:'a'},
+      {text:'顺着清客，也说「锦嶂」',goto:'b'},
+      {text:'随口编一个稀奇古怪的名字',goto:'c'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'我抬头看那山：山口一径曲折，走进去才见天光，倒像把满园景色都藏在里头。'},
+    {t:'say',who:'player',emo:'smile',text:'不如题「曲径通幽处」。借的是旧诗，气派却大方。'},
+    {t:'say',who:'qingke',emo:'praise',text:'好！好一个「曲径通幽处」！二爷这天分，我们这些老朽想破头也想不出。'},
+    {t:'say',who:'jia',emo:'nod',text:'（淡淡地）不过是取巧，值不得你们这样夸他。'},
+    {t:'say',who:'narr',text:'父亲嘴上压着，眼角的纹路却松了一松。我知道，这一关算是过了。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',emo:'smile',text:'「锦嶂」就很好了。'},
+    {t:'say',who:'jia',emo:'displeased',text:'这是旁人说过的话，你不过拾人牙慧。再仔细想一想。'},
+    {t:'jump',to:'ask'},
+    {t:'label',n:'c'},
+    {t:'say',who:'player',emo:'smile',text:'我随口道：「不如叫『乱石堆』，倒还实在。」'},
+    {t:'say',who:'narr',text:'话音未落，四下静得能听见风穿过石缝。'},
+    {t:'say',who:'jia',emo:'angry',text:'胡说！观景题字，岂容你这般肆意胡闹！'},
+    {t:'say',who:'jia',emo:'stern',text:'此山一径曲折，藏尽园中景致，正是「曲径通幽处，禅房花木深」之意。你连这一句都不曾读过？'},
+    {t:'say',who:'narr',text:'我低下头，脸上发烫。父亲便命人取来纸笔，叫我当场把这首诗抄记下来。'},
+    {t:'say',who:'jia',emo:'stern',text:'抄不明白，不许走。'},
+    {t:'lesson',id:'poem'}
+  ]},
+  s1:{no:'贰',title:'沁芳亭',sub:'第二站 · 绕堤柳借三篙翠',bg:'bg2.webp',script:[
+    {t:'say',who:'narr',text:'出了假山，眼前豁然一亮。一道溪水从花木深处淌出来，石桥上一座亭子，四面通风，桥下流水叮咚。'},
+    {t:'say',who:'qingke',emo:'praise',text:'依晚生愚见，题「翼然」二字，取欧阳公醉翁亭之意。'},
+    {t:'say',who:'jia',emo:'stern',text:'「翼然」虽好，只是此亭压水而成，还须有水意。我看用「泻」字，题「泻玉」如何？'},
+    {t:'say',who:'narr',text:'众人齐声说好。父亲却转过头来，看着我。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'「泻」字直白不雅，不如题「沁芳」，再拟一联',goto:'a'},
+      {text:'父亲说得极是，「泻玉」最妙',goto:'b'},
+      {text:'低头沉默，一言不发',goto:'c'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'我望着桥下溪水：落花浮在水面，香气被水带着走。'},
+    {t:'say',who:'player',emo:'recite',text:'「泻」字太直，像水直冲下去，不雅。不如题「沁芳」——水沁花香。'},
+    {t:'say',who:'jia',emo:'nod',text:'嗯。既如此，再作一副对联。'},
+    {t:'say',who:'player',emo:'recite',text:'绕堤柳借三篙翠，隔岸花分一脉香。'},
+    {t:'say',who:'qingke',emo:'praise',text:'好联！好联！柳色借水而翠，花香分水而远，妙极！'},
+    {t:'say',who:'jia',emo:'stern',text:'（捻着胡须，半晌）……也还罢了。'},
+    {t:'say',who:'narr',text:'父亲不肯说好，脚下却走得慢了半步。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',emo:'smile',text:'父亲说得极是，「泻玉」最妙，儿子想不出更好的。'},
+    {t:'say',who:'jia',emo:'displeased',text:'只会附和旁人，没有自己见解。再想。'},
+    {t:'jump',to:'ask'},
+    {t:'label',n:'c'},
+    {t:'say',who:'narr',text:'我低着头，一声不吭。'},
+    {t:'say',who:'jia',emo:'angry',text:'问你话，为何缄口不语！'},
+    {t:'say',who:'jia',emo:'stern',text:'题额拟联，考的是你的心思，不是你的胆量。'},
+    {t:'end',r:'normal',text:'我在亭中站了半晌，终究一个字也没说出来。父亲拂袖而去，众人讪讪跟着。\n【普通结局】'}
+  ]},
+  s2:{no:'叁',title:'有凤来仪',sub:'第三站 · 潇湘馆',bg:'bg3.webp',script:[
+    {t:'say',who:'narr',text:'一带粉墙，千百竿翠竹遮天蔽日。风过处，竹叶沙沙，像有人在廊下低声说话。'},
+    {t:'say',who:'narr',text:'院里梨花、芭蕉，一道清泉绕阶而下，从竹根底下流走。'},
+    {t:'say',who:'qingke',emo:'praise',text:'此处可题「淇水遗风」，再不然「睢园雅迹」，都是古人咏竹的典。'},
+    {t:'say',who:'jia',emo:'displeased',text:'都太俗。'},
+    {t:'say',who:'narr',text:'父亲看向我。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'题「有凤来仪」，再吟一副对联',goto:'a'},
+      {text:'依着清客，用「淇水遗风」',goto:'b'},
+      {text:'直言这院子的景致不过平平',goto:'c'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'我心里暗想：这是贵妃省亲可能落脚的地方，题字该有颂圣之意。凤凰非梧桐不栖，非竹实不食——满院翠竹，正合此意。'},
+    {t:'say',who:'player',emo:'recite',text:'题「有凤来仪」。对联是——宝鼎茶闲烟尚绿，幽窗棋罢指犹凉。'},
+    {t:'say',who:'qingke',emo:'praise',text:'二爷心思细！连茶烟、棋局都写进去了，我们只想着竹子呢。'},
+    {t:'say',who:'jia',emo:'nod',text:'（淡淡地）也未见长。'},
+    {t:'say',who:'narr',text:'可他说完，竟没有像往常那样催我快走。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',text:'就用「淇水遗风」罢，清客先生说得极好。'},
+    {t:'say',who:'jia',emo:'displeased',text:'落入俗套，不肯自己动脑。再想。'},
+    {t:'jump',to:'ask'},
+    {t:'label',n:'c'},
+    {t:'say',who:'player',text:'我看这院子也不过平平，竹子虽多，也没什么稀奇。'},
+    {t:'say',who:'jia',emo:'angry',text:'如此清雅去处，你竟不识！可见平日读书，全不用心。'},
+    {t:'end',r:'fail',text:'父亲气得拂袖，清客们忙打圆场。这一处终究没有题成。\n【小失败结局】'}
+  ]},
+  s3:{no:'肆',title:'杏帘在望',sub:'第四站 · 稻香村',bg:'bg4.webp',script:[
+    {t:'say',who:'narr',text:'黄泥矮墙，墙头铺着稻茎；几百株杏花开得如火，里面数楹茅屋，篱外一口土井、一架辘轳，还有几畦菜地。'},
+    {t:'say',who:'jia',emo:'stern',text:'此处如何？'},
+    {t:'say',who:'qingke',emo:'praise',text:'题「杏花村」最妙。唐人诗里「牧童遥指杏花村」，再贴切不过。'},
+    {t:'say',who:'narr',text:'父亲不置可否，只把眼睛看向我。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'题「杏帘在望」，另取一名「稻香村」，再题一联',goto:'a'},
+      {text:'就依清客，用「杏花村」',goto:'b'},
+      {text:'直言这田庄是人工硬造，并不自然',goto:'c'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'「杏花村」犯了村名，也太实。酒旗为帘，稻香为村，才有田园的意思。'},
+    {t:'say',who:'player',emo:'recite',text:'题「杏帘在望」，此处便叫「稻香村」也好。'},
+    {t:'say',who:'jia',emo:'stern',text:'（故意呵斥）就爱卖弄。既如此，再作一副对联。'},
+    {t:'say',who:'player',emo:'recite',text:'新涨绿添浣葛处，好云香护采芹人。'},
+    {t:'say',who:'qingke',emo:'praise',text:'妙极！田园与读书，都写进去了。'},
+    {t:'say',who:'narr',text:'父亲不言语，只把手一摆，众人继续前行——这已是他极满意的表示。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',text:'就叫「杏花村」罢。'},
+    {t:'say',who:'jia',emo:'displeased',text:'犯了村的本名，又落了俗。再想。'},
+    {t:'jump',to:'ask'},
+    {t:'label',n:'c'},
+    {t:'say',who:'player',text:'这是人力硬造出来的田庄，缺少天然意趣。'},
+    {t:'say',who:'jia',emo:'angry',text:'叉出去！'},
+    {t:'say',who:'narr',text:'众清客慌忙上前劝住。我缩在一边，不敢再开口。'},
+    {t:'end',r:'fail',text:'父亲勃然大怒，命人把我叉出园去。这一日的游园，到此为止。\n【小失败结局】'}
+  ]},
+  s4:{no:'伍',title:'蓼汀花溆',sub:'第五站 · 石洞流泉',bg:'bg5.webp',script:[
+    {t:'say',who:'narr',text:'石洞当中流出潺潺泉水，藤萝垂挂洞口，水面漂着片片落花；两岸桃柳成荫，遮天蔽日。'},
+    {t:'say',who:'qingke',emo:'praise',text:'此处题「武陵源」如何？或者「秦人旧舍」，都合这避世的意思。'},
+    {t:'say',who:'narr',text:'父亲不置可否，转头看我。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'题「蓼汀花溆」',goto:'a'},
+      {text:'赞同，取名「武陵源」',goto:'b'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'「武陵源」是避乱之地，「秦人旧舍」更露了避世之意。贵妃省亲的园子，怎好这样题？'},
+    {t:'say',who:'player',emo:'recite',text:'不如题「蓼汀花溆」。'},
+    {t:'say',who:'jia',emo:'displeased',text:'（嘴上）胡说。'},
+    {t:'say',who:'narr',text:'父亲嘴上说胡说，人却已抬脚往桥上走。清客们互相看看，悄悄笑了。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',text:'我看「武陵源」就很好。'},
+    {t:'say',who:'jia',emo:'displeased',text:'名字老旧，又落得太实。再想。'},
+    {t:'jump',to:'ask'}
+  ]},
+  s5:{no:'陆',title:'蘅芷清芬',sub:'第六站 · 蘅芜苑',bg:'bg6.webp',script:[
+    {t:'say',who:'narr',text:'这座院子没有高大树木，遍地都是奇花异草。藤蔓缠绕山石廊柱，香气幽幽，弥漫整个庭院。'},
+    {t:'say',who:'qingke',text:'（接连念出几副对联，都是些熟烂的句子）'},
+    {t:'say',who:'jia',emo:'stern',text:'（看向我）你也拟一副来。匾额、对联，都要。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'题「蘅芷清芬」，联：吟成豆蔻才犹艳，睡足荼蘼梦也香',goto:'a'},
+      {text:'直接照搬清客所作的对联',goto:'b'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'think',text:'满院都是香草：杜蘅、白芷……香气清而不浓。我忽然想起「豆蔻」与「荼蘼」——一个是少年，一个是暮春。'},
+    {t:'say',who:'player',emo:'recite',text:'题「蘅芷清芬」。对联是——吟成豆蔻才犹艳，睡足荼蘼梦也香。'},
+    {t:'say',who:'qingke',emo:'praise',text:'二爷好句！我们甘拜下风。'},
+    {t:'say',who:'jia',emo:'displeased',text:'（嘴上）这是仿写前人，不算佳作。'},
+    {t:'say',who:'narr',text:'父亲嘴上这样说，众人却都听得出，他心情不坏。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',text:'（复述清客写好的对联）'},
+    {t:'say',who:'jia',emo:'angry',text:'只会捡拾别人的文字，没有自己的构思！做学问，最忌这等偷懒。'},
+    {t:'say',who:'jia',emo:'stern',text:'你既抄了它，便该懂得它。今日就在此处，把这两句弄明白。'},
+    {t:'lesson',id:'duilian'}
+  ]},
+  s6:{no:'柒',title:'省亲正殿',sub:'第七站 · 玉石牌坊',bg:'bg7.webp',script:[
+    {t:'say',who:'narr',text:'巍峨宏伟的省亲大殿，白玉栏杆一层层铺上去，一座玉石牌坊立在面前，上面雕着龙。'},
+    {t:'say',who:'narr',text:'我看见这牌坊，心头忽然一阵恍惚——仿佛在梦里见过这景象，却又想不起来。'},
+    {t:'say',who:'narr',text:'一时间，脑子里空空荡荡，一个字也想不出。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'如实坦白：此刻想不出佳句，请限日补作',goto:'a'},
+      {text:'硬凑一段，胡乱编造',goto:'b'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'nervous',text:'父亲……儿子此刻实在没有好构思。'},
+    {t:'say',who:'qingke',emo:'worry',text:'（连忙劝解）二爷年纪还小，慢慢再想便是。'},
+    {t:'say',who:'jia',emo:'sneer',text:'（冷笑）想不到你也有想不出来的时候。限你一日之内补写完毕。'},
+    {t:'say',who:'narr',text:'我松了一口气，跟着众人往前走。心里却还惦记着那阵恍惚。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',emo:'nervous',text:'（硬凑）……题「天仙宝境」。'},
+    {t:'say',who:'jia',emo:'displeased',text:'越发胡闹了。罢了，罢了。'},
+    {t:'say',who:'narr',text:'父亲满脸失望，转身便走。游园草草收场。'},
+    {t:'end',r:'normal',text:'我在牌坊下站了很久。那阵恍惚像一层雾，怎么也抓不住。\n【普通结局】'}
+  ]},
+  s7:{no:'捌',title:'沁芳闸',sub:'第八站 · 水闸',bg:'bg8.webp',script:[
+    {t:'say',who:'narr',text:'一座大桥横跨水面，水从桥下奔涌出来，像一挂帘子。这是全园的水闸。'},
+    {t:'say',who:'jia',emo:'stern',text:'此处也该有个名字。'},
+    {t:'say',who:'player',emo:'smile',text:'不如就叫「沁芳闸」。'},
+    {t:'say',who:'jia',emo:'displeased',text:'（摆手）偏不用「沁芳」二字。'},
+    {t:'say',who:'narr',text:'父亲嘴上不肯用，众人也不敢再提。我悄悄把「沁芳」这两个字记在心里——水沁花香，总是好的。'},
+    {t:'end',r:'success'}
+  ]},
+  s8:{no:'玖',title:'红香绿玉',sub:'第九站 · 怡红院',bg:'bg9.webp',script:[
+    {t:'say',who:'narr',text:'院里一边种芭蕉，一边是西府海棠。芭蕉是绿，海棠是红。'},
+    {t:'say',who:'narr',text:'屋内雕梁隔扇，机关精巧，门和窗都藏在里面，走进去容易迷路。'},
+    {t:'say',who:'qingke',emo:'praise',text:'此处可题「崇光泛彩」，海棠之色，尽在其中。'},
+    {t:'say',who:'narr',text:'父亲等待我的想法。'},
+    {t:'label',n:'ask'},
+    {t:'choice',opts:[
+      {text:'题「红香绿玉」，兼顾芭蕉之绿、海棠之红',goto:'a'},
+      {text:'直接用「崇光泛彩」',goto:'b'}
+    ]},
+    {t:'label',n:'a'},
+    {t:'say',who:'player',emo:'recite',text:'芭蕉为绿，海棠为红。题「红香绿玉」，两处景物都兼顾到了。'},
+    {t:'say',who:'jia',emo:'displeased',text:'（摆手连说）不好，不好。'},
+    {t:'say',who:'narr',text:'父亲嘴上说不好，临走却又回头看了一眼那块匾该挂的位置。'},
+    {t:'end',r:'success'},
+    {t:'label',n:'b'},
+    {t:'say',who:'player',text:'就用「崇光泛彩」罢。'},
+    {t:'say',who:'jia',emo:'displeased',text:'又是拾人牙慧，毫无新意。'},
+    {t:'say',who:'narr',text:'父亲失望，游园草草结束。'},
+    {t:'end',r:'fail',text:'最后一处景致，我终究没能自己拟出一个名字。\n【小失败结局】'}
+  ]},
+  final:{no:'終',title:'终章',sub:'静待贵妃归',bg:'bg9.webp',night:true,final:true,script:[
+    {t:'say',who:'narr',text:'天色渐渐晚了。父亲立在玉石牌坊下，回头看了看一路行来的楼阁亭台。'},
+    {t:'say',who:'jia',emo:'nod',text:'也罢了。这一园子的匾额对联，总算有了眉目。'},
+    {t:'say',who:'narr',text:'父亲顿了顿。'},
+    {t:'say',who:'jia',emo:'stern',text:'你那些句子，虽多是些小聪明，倒也有几句可取。往后读书，也用这份心思。'},
+    {t:'say',who:'player',emo:'smile',text:'是。儿子记下了。'},
+    {t:'say',who:'narr',text:'众人随父亲出园。我回头望了一眼——暮色里，亭台楼阁静静立着，像在等一个人。'},
+    {t:'say',who:'narr',text:'府中上下忙忙碌碌：买回唱戏的女孩子，收拾梨香院；又准备下帖子，去请那位才貌出众的妙玉进府居住。'},
+    {t:'say',who:'narr',text:'亭台楼阁、陈设物件，一一置办齐全。整座园子整装待发，安安静静，等候贵妃贾元春回家省亲。'},
+    {t:'say',who:'narr',text:'这一日的游园考较，到此结束。父亲见我累了，便让我回去歇息。'},
+    {t:'end',r:'perfect',text:'游园考验顺利完成，我的才情得到众人认可；大观园一切就绪，静待贵妃归来。'}
+  ]}
+};
+
+const FILL_ITEMS = [
+  {line:'曲径通__处',ans:'幽',opts:['幽','悠','优'],tip:'幽：幽静、深远。「曲径通幽处」是说弯曲的小路通向幽静的地方。'},
+  {line:'禅房花木__',ans:'深',opts:['深','伸','申'],tip:'深：繁茂幽深。花木长得旺，把院子都遮住了。'},
+  {line:'绕堤柳借三篙__',ans:'翠',opts:['翠','脆','萃'],tip:'翠：青绿色。柳色借了水光，才显得这样绿。'},
+  {line:'隔岸花分一脉__',ans:'香',opts:['香','乡','相'],tip:'香：花香。花香分了一缕，飘到对岸。'},
+  {line:'吟成豆蔻才犹__',ans:'艳',opts:['艳','滟','厌'],tip:'艳：鲜艳、美好。少年的诗句像豆蔻花一样鲜活。'},
+  {line:'睡足荼蘼梦也__',ans:'香',opts:['香','乡','享'],tip:'香：梦里都带着花草的清香。'}
+];
+const MATCH_ITEMS = [
+  {plaque:'曲径通幽处',place:'翠嶂假山'},
+  {plaque:'沁 芳',place:'沁芳亭'},
+  {plaque:'有凤来仪',place:'潇湘馆'},
+  {plaque:'杏帘在望',place:'稻香村'},
+  {plaque:'蘅芷清芬',place:'蘅芜苑'},
+  {plaque:'红香绿玉',place:'怡红院'}
+];
+const MEANING_ITEMS = [
+  {q:'「清客」是做什么的？',opts:['陪主人读书聊天的门客','负责打扫园林的仆人','专门题写匾额的官员'],ans:0,tip:'清客是住在富贵人家、陪主人读书聊天的门客。本回中他们先题「叠翠」「锦嶂」，衬出宝玉的灵性。'},
+  {q:'「省亲」是什么意思？',opts:['出嫁的女儿回娘家看望父母','官员回乡祭祖','皇帝出巡'],ans:0,tip:'大观园就是为贵妃元春回家省亲修的。'},
+  {q:'「拾人牙慧」在文中指什么？',opts:['捡别人说过的话当自己的，没有新意','捡到别人掉落的牙齿','收集别人的文章'],ans:0,tip:'宝玉顺着清客说「锦嶂」，父亲斥他「拾人牙慧」。'},
+  {q:'「泻玉」的「泻」字，宝玉为什么觉得不好？',opts:['太直白，像水直冲下去，不雅','写错了字','不符合平仄'],ans:0,tip:'宝玉改「泻玉」为「沁芳」——水沁花香，更雅。'},
+  {q:'「有凤来仪」暗含什么意思？',opts:['凤凰飞来，吉祥之兆，暗含颂圣','凤凰住在竹子里','写竹子长得高'],ans:0,tip:'凤凰非竹实不食，满院翠竹正合此意。'}
+];
+</script>
+
+<script>
+/* =========================================================
+   6. 引擎（含简繁切换修复）
+   ========================================================= */
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let LANG = (()=>{ try{ return localStorage.getItem('hlm_lang') || 's'; }catch(e){ return 's'; } })();
+
+/* =========================================================
+   简 → 繁 字表 + 词组例外 + 翻译函数
+   ========================================================= */
+/* 一简对一繁字表（覆盖本作用字） */
+const S2T_PAIRS = `
+满滿 纸紙 泪淚 谁誰 红紅 楼樓 梦夢 观觀 试試 题題 对對 额額 园園 点點 击擊 标標
+约約 钟鐘 过過 游遊 险險 处處 场場 较較 时時 亲親 传傳 话話 后後 压壓 块塊 头頭
+来來 这這 个個 着著 别別 样樣 当當 众眾 齐齊 贾賈 贵貴 为為 归歸 书書 经經 几幾
+么麼 许許 闹鬧 叹嘆 错錯 罚罰 诗詩 认認 词詞 带帶 线線 类類 择擇 运運 脸臉 乱亂
+应應 学學 会會 轮輪 静靜 简簡 繁繁 换換 体體 叠疊 声聲 听聽 见見 风風 鸟鳥 继繼
+续續 温溫 终終 进進 径徑 绕繞 脉脈 凤鳳 仪儀 潇瀟 馆館 宝寶 闲閒 烟煙 绿綠
+罢罷 犹猶 凉涼 帘簾 涨漲 护護 采採 溆漵 旧舊 艳豔 宁寧 离離 怀懷 忆憶 怜憐 总總
+恋戀 惊驚 惧懼 惨慘 愿願 戏戲 战戰 报報 担擔 拟擬 拥擁 挂掛 挡擋 挤擠 挥揮 据據
+摆擺 摇搖 撑撐 数數 断斷 无無 显顯 术術 机機 杀殺 杂雜 权權 条條 杨楊 极極 构構
+栋棟 栏欄 树樹 桥橋 检檢 横橫 欢歡 欧歐 残殘 毕畢 气氣 汉漢 汤湯 沟溝 没沒 泻瀉
+泽澤 洁潔 洒灑 浅淺 浆漿 浇澆 浊濁 测測 济濟 浑渾 浓濃 涛濤 润潤 渊淵 涧澗 渔漁
+渗滲 湾灣 湿濕 溃潰 滚滾 滤濾 滥濫 滨濱 滩灘 潜潛 澜瀾 灭滅 灯燈 灵靈 炼煉 烂爛
+烦煩 烧燒 热熱 爱愛 爷爺 牵牽 状狀 狭狹 独獨 猎獵 献獻 环環 现現 玛瑪 电電 画畫
+畅暢 疗療 痴癡 盏盞 盐鹽 监監 盖蓋 盘盤 睁睜 瞒瞞 矫矯 矿礦 码碼 砖磚 础礎 确確
+碍礙 礼禮 祸禍 禄祿 禅禪 种種 积積 称稱 稳穩 穷窮 窃竊 窝窩 竞競 笔筆 笼籠 筑築
+筹籌 签簽 篮籃 篱籬 粮糧 紧緊 级級 纪紀 纯純 纲綱 纳納 纵縱 纷紛 纹紋 纺紡 练練
+组組 细細 织織 绍紹 绑綁 结結 绘繪 给給 络絡 绝絕 统統 绢絹 绣繡 绩績 绪緒 绮綺
+绳繩 维維 绵綿 绸綢 综綜 绽綻 缀綴 缆纜 缓緩 缔締 缕縷 编編 缘緣 缚縛 缝縫 缠纏
+缩縮 缴繳 网網 罗羅 联聯 聪聰 肃肅 肠腸 肤膚 肾腎 肿腫 胀脹 胁脅 胆膽 胜勝 胶膠
+脏臟 脑腦 脚腳 脱脫 腊臘 腻膩 腾騰 舍捨 舰艦 舱艙 艰艱 艺藝 节節 芜蕪 苇葦 苍蒼
+苏蘇 苹蘋 茎莖 荐薦 荚莢 荞蕎 荡蕩 荣榮 荤葷 荧熒 荫蔭 药藥 莲蓮 获獲 莹瑩 莺鶯
+萝蘿 萤螢 营營 萧蕭 萨薩 蒋蔣 蓝藍 蓟薊 蔷薔 蔼藹 蕴蘊 藓蘚 虏虜 虑慮 虚虛 虫蟲
+虽雖 虾蝦 蚀蝕 蚁蟻 蚂螞 蚕蠶 蛮蠻 蛰蟄 蜗蝸 蝇蠅 蝉蟬 蝼螻 衅釁 衔銜 补補 袄襖
+装裝 裤褲 规規 视視 览覽 觉覺 觊覬 触觸 订訂 计計 讥譏 讨討 让讓 训訓 议議 讯訊
+记記 讲講 讳諱 讶訝 论論 讼訟 讽諷 设設 访訪 诀訣 证證 评評 识識 诈詐 诉訴 诊診
+译譯 诚誠 诞誕 诡詭 询詢 该該 详詳 语語 误誤 诱誘 说說 诵誦 请請 诸諸 诺諾 读讀
+课課 调調 谅諒 谈談 谊誼 谋謀 谎謊 谐諧 谓謂 谕諭 谚諺 谜謎 谢謝 谣謠 谦謙 谨謹
+谬謬 谭譚 谱譜 谴譴 谷穀 贝貝 贞貞 负負 贡貢 财財 责責 贤賢 败敗 账賬 货貨 质質
+贩販 贪貪 贫貧 贬貶 购購 贮貯 贯貫 贰貳 贱賤 贴貼 贷貸 贸貿 费費 贺賀 贼賊 贿賄
+赁賃 赂賂 赃贓 资資 赈賑 赊賒 赋賦 赌賭 赎贖 赏賞 赐賜 赔賠 赖賴 赚賺 赛賽 赞贊
+赠贈 赡贍 赢贏 赵趙 赶趕 趋趨 跃躍 践踐 跻躋 踊踴 踌躊 踪蹤 蹑躡 蹒蹣 躯軀 车車
+轧軋 轨軌 轩軒 转轉 软軟 轰轟 轴軸 轶軼 轻輕 载載 轿轎 辅輔 辆輛 辈輩 辉輝 辍輟
+辐輻 辑輯 输輸 辔轡 辕轅 辖轄 辗輾 辘轆 辙轍 辞辭 辩辯 辫辮 边邊 辽遼 达達 迁遷
+迈邁 还還 远遠 违違 连連 迟遲 迹跡 适適 选選 逊遜 递遞 逻邏 遗遺 遥遙 邓鄧 邮郵
+邹鄒 邻鄰 郁鬱 郑鄭 酝醞 酱醬 酿釀 释釋 鉴鑑 针針 钉釘 钓釣 钙鈣 钝鈍 钞鈔
+钠鈉 钢鋼 钥鑰 钦欽 钧鈞 钩鉤 钮鈕 钱錢 钳鉗 钻鑽 铁鐵 铃鈴 铅鉛 铐銬 铜銅 铝鋁
+铭銘 银銀 铸鑄 铺鋪 链鏈 销銷 锁鎖 锄鋤 锅鍋 锋鋒 锐銳 锡錫 锣鑼 锤錘 锥錐 锦錦
+键鍵 锯鋸 锰錳 锹鍬 锻鍛 镀鍍 镁鎂 镂鏤 镇鎮 镊鑷 镐鎬 镑鎊 镖鏢 镜鏡 镣鐐 镬鑊
+镰鐮 镶鑲 长長 门門 闪閃 闭閉 问問 闯闖 闰閏 间間 闷悶 闸閘 闺閨 闻聞 闽閩 阀閥
+阁閣 阂閡 阅閱 阉閹 阎閻 阐闡 阑闌 阔闊 阖闔 阙闕 队隊 阳陽 阴陰 阵陣 阶階 际際
+陆陸 陇隴 陈陳 陕陝 陨隕 险險 随隨 隐隱 隶隸 难難 雏雛 雾霧 霁霽 霉黴 韦韋 韧韌
+韩韓 韬韜 韵韻 页頁 顶頂 顷頃 项項 顺順 须須 顽頑 顾顧 顿頓 颁頒 颂頌 预預 颅顱
+领領 颇頗 颈頸 颊頰 颌頜 频頻 颓頹 颖穎 颗顆 颜顏 颠顛 颤顫 飒颯 飘飄 飞飛 飨饗
+饥飢 饭飯 饮飲 饰飾 饱飽 饲飼 饵餌 饶饒 饺餃 饼餅 饿餓 馅餡 馈饋 馋饞 馒饅 马馬
+驭馭 驮馱 驯馴 驰馳 驱驅 驳駁 驴驢 驶駛 驻駐 驼駝 驾駕 驿驛 骂罵 骄驕 骆駱 骇駭
+验驗 骏駿 骑騎 骗騙 骚騷 骡騾 骤驟 骥驥 髅髏 鬓鬢 鱼魚 鲁魯 鲍鮑 鲜鮮 鲤鯉 鲨鯊
+鲫鯽 鲸鯨 鳖鱉 鳗鰻 鳞鱗 鸠鳩 鸡雞 鸣鳴 鸥鷗 鸦鴉 鸭鴨 鸯鴦 鸳鴛 鸽鴿 鸾鸞 鸿鴻
+鹅鵝 鹉鵡 鹊鵲 鹏鵬 鹤鶴 鹦鸚 鹰鷹 麦麥 黄黃 齿齒 龄齡 龙龍 龚龔 龟龜
+`.trim().split(/\s+/);
+
+const S2T_CHAR = Object.create(null);
+S2T_PAIRS.forEach(p => {
+  if (p.length === 2 && p[0] !== p[1]) S2T_CHAR[p[0]] = p[1];
+});
+
+/* 一简对多繁：按长度从长到短优先匹配，必须放在字表之前 */
+const S2T_WORDS = [
+  /* 里 / 後 */
+  ['后来','後來'],['后话','後話'],['身后','身後'],['之后','之後'],['最后','最後'],
+  ['往后','往後'],['背后','背後'],['然后','然後'],['前后','前後'],['以后','以後'],
+  ['心里','心裡'],['里面','裡面'],['里头','裡頭'],['这里','這裡'],['那里','那裡'],
+  ['哪里','哪裡'],['家里','家裡'],['园里','園裡'],['院里','院裡'],['庙里','廟裡'],
+  ['府里','府裡'],['屋里','屋裡'],['嘴里','嘴裡'],['夜里','夜裡'],['手里','手裡'],
+  /* 发 / 松 / 干 / 台 / 云 */
+  ['头发','頭髮'],['白发','白髮'],['松了','鬆了'],['松开','鬆開'],['轻松','輕鬆'],
+  ['干净','乾淨'],['才干','才幹'],['兄台','兄台'],
+  ['诗云','詩云'],['云香','雲香'],['好云','好雲'],['云霞','雲霞'],
+  /* 园中常见 */
+  ['卷轴','卷軸'],['画轴','畫軸']
+];
+
+function s2t(str){
+  let out = String(str);
+  for (const [a, b] of S2T_WORDS) if (out.includes(a)) out = out.split(a).join(b);
+  return out.replace(/[\u4e00-\u9fff]/g, c => S2T_CHAR[c] || c);
+}
+
+/* T 只翻译纯文本；HTML 请用 translateHTML */
+function T(s){
+  if (LANG !== 't' || !s) return s;
+  return s2t(s);
+}
+
+/* 只翻 HTML 中的文本节点，不动标签 / class / data-k */
+function translateHTML(html){
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  const walker = document.createTreeWalker(tpl.content, NodeFilter.SHOW_TEXT);
+  const list = [];
+  let n;
+  while ((n = walker.nextNode())) list.push(n);
+  list.forEach(node => { node.nodeValue = s2t(node.nodeValue); });
+  return tpl.innerHTML;
+}
+
+/* 单独绑定 .term 点击 */
+function bindTerms(root){
+  (root || document).querySelectorAll('.term').forEach(el => {
+    if (el.__bound) return;
+    el.__bound = true;
+    el.addEventListener('click', ev => { ev.stopPropagation(); showGloss(el.dataset.k); });
+  });
+}
+
+/* =========================================================
+   静态文本切换
+   ========================================================= */
+function applyStaticLang(){
+  document.documentElement.lang = LANG === 't' ? 'zh-Hant' : 'zh-CN';
+
+  /* [data-i18n]：保留原文 → 在原简体上 richify → 只翻文本节点 → 重绑 */
+  $$('[data-i18n]').forEach(el => {
+    if (el.__src === undefined) el.__src = el.innerHTML;
+    el.innerHTML = el.__src;
+    el.__richified = false;
+    richifyEl(el);
+    if (LANG === 't') el.innerHTML = translateHTML(el.innerHTML);
+    bindTerms(el);
+  });
+
+  const phT = $('#phT'), phS = $('#phS'), phR = $('#phR');
+  if (phT) phT.textContent = LANG === 't' ? '大觀園試才題對額' : '大观园试才题对额';
+  if (phS) phS.textContent = LANG === 't' ? '紅樓夢 · 第十七回 · 遊園試才' : '红楼梦 · 第十七回 · 游园试才';
+  if (phR) phR.textContent = LANG === 't' ? '石頭記 · 卷一' : '石头记 · 卷一';
+
+  const s1 = $('#tSub1'), s2 = $('#tSub2'), s3 = $('#tSub3'), s4 = $('#tSub4');
+  if (s1) s1.textContent = LANG === 't' ? '紅樓夢 · 第十七回' : '红楼梦 · 第十七回';
+  if (s2) s2.textContent = LANG === 't' ? '大觀園試才題對額' : '大观园试才题对额';
+  if (s3) s3.textContent = LANG === 't' ? '遊 園 試 才 · 文 字 冒 險' : '游 园 试 才 · 文 字 冒 险';
+  if (s4) s4.textContent = LANG === 't' ? '九 處 景 致 · 一 場 考 較' : '九 处 景 致 · 一 场 考 较';
+
+  const sb = $('#startBtn'), pn = $('#tpNote'), sk = $('#skipPoem');
+  if (sb) sb.textContent = LANG === 't' ? '點 擊 入 園' : '点 击 入 园';
+  if (pn) pn.textContent = LANG === 't' ? '鼠標點擊 / 空格鍵 · 約十五分鐘' : '鼠标点击 / 空格键 · 约十五分钟';
+  if (sk) sk.textContent = LANG === 't' ? '跳 過' : '跳 过';
+
+  $$('#segLang button').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
+  refreshDynamicLang();
+  refreshLang();
+}
+
+/* 重绘所有动态内容（RPG 对白、选项、地图、字词面板、学习面板、词条卡） */
+function refreshLang(){
+  /* 标题竖排字 */
+  const tv = $('#tVert');
+  if (tv && tv.children.length) renderTitleChars();
+
+  /* 地图 */
+  if (mapStarted) { try { showPanel(); updateMapUI(); } catch(e){} }
+
+  /* RPG */
+  if (rpgOn && RP.ch){
+    $('#rpgTitle').textContent = T(RP.ch.title);
+    $('#rpgSub').textContent = T(RP.ch.sub);
+    if (RP.full){
+      if (RP.typing) typeText(RP.full); else setRich(RP.full);
+    }
+    if (RP.lastWho) $('#rpgName').textContent = T((CAST[RP.lastWho] || {}).name || '旁白');
+    if (RP.choiceOpen && RP.choiceOrder) renderChoices();
+  }
+
+  /* 字词面板 */
+  if ($('#ovGame').classList.contains('on') && $('#wpList')){
+    const inp = $('#wpInput');
+    if (inp) WP.q = inp.value.trim();
+    renderWordList();
+  }
+
+  /* 学习面板 */
+  if ($('#ovLesson').classList.contains('on') && lessonId) openLesson(lessonId);
+
+  /* 词条浮卡 */
+  if ($('#gloss').classList.contains('on') && currentGlossKey) showGloss(currentGlossKey);
+}
+
+$$('#segLang button').forEach(b => b.addEventListener('click', () => {
+  LANG = b.dataset.lang;
+  try { localStorage.setItem('hlm_lang', LANG); } catch(e){}
+  applyStaticLang();
+  Snd.click();
+}));
+
+function refreshDynamicLang(){
+  $('#btnWords').textContent = LANG === 't' ? '字詞' : '字词';
+  $('#btnAudio').textContent = Snd.on ? (LANG === 't' ? '♪ 聲音' : '♪ 声音') : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
+  const tip = $('#rpgTip'); if (tip) tip.textContent = LANG === 't' ? '點虛線字，可查拼音和解釋' : '点带虚线的字，可查拼音和解释';
+  const nx = $('#rpgNext'); if (nx) nx.textContent = LANG === 't' ? '▼ 點擊繼續' : '▼ 点击继续';
+  try {
+    if (RP.ch){
+      $('#rpgTitle').textContent = T(RP.ch.title);
+      $('#rpgSub').textContent = T(RP.ch.sub);
+    }
+  } catch(e){}
+}
+
+const Snd = {
+  on:true, ctx:null,
+  init(){ if(!this.ctx){ try{ this.ctx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(this.ctx && this.ctx.state==='suspended') this.ctx.resume(); },
+  tone(freq,dur,type='sine',vol=.03,slide=0){ if(!this.on) return; this.init(); if(!this.ctx) return; const t=this.ctx.currentTime, o=this.ctx.createOscillator(), g=this.ctx.createGain(); o.type=type; o.frequency.setValueAtTime(freq,t); if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40,freq+slide),t+dur); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t+dur+.02); },
+  click(){ this.tone(420,.06,'triangle',.03,-120); },
+  ok(){ this.tone(660,.1,'sine',.035); setTimeout(()=>this.tone(880,.14,'sine',.03),90); },
+  bad(){ this.tone(180,.18,'triangle',.035,-60); },
+  thud(){ this.tone(90,.24,'sine',.07,-30); },
+  chime(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>this.tone(f,.55,'sine',.03),i*110)); }
+};
+const Amb = {
+  on:true, ctx:null, master:null, nodes:[], timers:[], key:'', noiseBuf:null,
+  ensure(){ if(this.ctx) { if(this.ctx.state==='suspended') this.ctx.resume(); return; } try{ this.ctx = new (window.AudioContext||window.webkitAudioContext)(); this.master = this.ctx.createGain(); this.master.gain.value = this.on ? .5 : 0; this.master.connect(this.ctx.destination); const len = this.ctx.sampleRate*2, buf = this.ctx.createBuffer(1,len,this.ctx.sampleRate); const d = buf.getChannelData(0); for(let i=0;i<len;i++) d[i] = Math.random()*2-1; this.noiseBuf = buf; }catch(e){} },
+  noise(){ const s=this.ctx.createBufferSource(); s.buffer=this.noiseBuf; s.loop=true; return s; },
+  stopAll(){ this.nodes.forEach(n=>{ try{ n.stop?n.stop():n.disconnect(); }catch(e){} }); this.nodes=[]; this.timers.forEach(clearInterval); this.timers=[]; },
+  start(key){ this.ensure(); if(!this.ctx) return; if(this.key===key) return; this.key=key; this.stopAll(); const parts = key.split('+'); if(parts.includes('water')) this.water(); if(parts.includes('wind')) this.wind(); if(parts.includes('birds')) this.birds(); if(parts.includes('night')) this.night(); this.applyVolume(); },
+  water(){ const s=this.noise(), f=this.ctx.createBiquadFilter(), g=this.ctx.createGain(); f.type='bandpass'; f.frequency.value=760; f.Q.value=.7; g.gain.value=.05; const lfo=this.ctx.createOscillator(), lg=this.ctx.createGain(); lfo.frequency.value=.18; lg.gain.value=180; lfo.connect(lg); lg.connect(f.frequency); s.connect(f); f.connect(g); g.connect(this.master); s.start(); lfo.start(); this.nodes.push(s,lfo,g,lg); },
+  wind(){ const s=this.noise(), f=this.ctx.createBiquadFilter(), g=this.ctx.createGain(); f.type='lowpass'; f.frequency.value=380; g.gain.value=.028; const lfo=this.ctx.createOscillator(), lg=this.ctx.createGain(); lfo.frequency.value=.07; lg.gain.value=.018; lfo.connect(lg); lg.connect(g.gain); s.connect(f); f.connect(g); g.connect(this.master); s.start(); lfo.start(); this.nodes.push(s,lfo,g,lg); },
+  birds(){ const chirp=()=>{ if(!this.on) return; const n=2+Math.floor(Math.random()*3); for(let i=0;i<n;i++){ const t=this.ctx.currentTime+i*(.09+Math.random()*.06); const o=this.ctx.createOscillator(), g=this.ctx.createGain(); o.type='sine'; const base=1800+Math.random()*1400; o.frequency.setValueAtTime(base,t); o.frequency.exponentialRampToValueAtTime(base*(1.3+Math.random()*.5),t+.07); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.035,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+.12); o.connect(g); g.connect(this.master); o.start(t); o.stop(t+.14); } }; this.timers.push(setInterval(()=>{ if(Math.random()>.45) chirp(); }, 5200)); },
+  night(){ const t=()=>{ if(!this.on) return; for(let i=0;i<3;i++){ const st=this.ctx.currentTime+i*.08; const o=this.ctx.createOscillator(), g=this.ctx.createGain(); o.type='triangle'; o.frequency.setValueAtTime(4200,st); g.gain.setValueAtTime(0,st); g.gain.linearRampToValueAtTime(.012,st+.01); g.gain.exponentialRampToValueAtTime(.0001,st+.07); o.connect(g); g.connect(this.master); o.start(st); o.stop(st+.08); } }; this.timers.push(setInterval(t, 1500)); },
+  applyVolume(){ if(this.master) this.master.gain.value = this.on ? .5 : 0; },
+  toggle(){ this.on=!this.on; this.applyVolume(); if(this.on){ this.ensure(); if(this.key) this.start(''); } }
+};
+function toast(msg, ms=1900){ const el=$('#toast'); el.textContent = T(msg); el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'), ms); }
+const scrTitle=$('#scrTitle'), scrPro=$('#scrPrologue'), scrMap=$('#scrMap'), scrRpg=$('#scrRpg');
+function showScreen(el){ [scrTitle,scrPro,scrMap,scrRpg].forEach(s=> s.classList.toggle('on', s===el)); }
+
+function richifyEl(root){
+  if(!root || root.__richified) return;
+  root.__richified = true;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node){
+      if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      if(node.parentElement && node.parentElement.closest('.term,.no-term')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const texts = []; let n;
+  while(n = walker.nextNode()) texts.push(n);
+  texts.forEach(node=>{
+    const text = node.nodeValue;
+    const frag = document.createDocumentFragment();
+    let i=0;
+    while(i < text.length){
+      let hit=null;
+      for(const k of GLOSS_KEYS){ if(text.startsWith(k,i)){ hit=k; break; } }
+      if(hit){
+        const span=document.createElement('span');
+        span.className='term'; span.dataset.k=hit;
+        span.textContent=text.slice(i,i+hit.length);
+        frag.appendChild(span);
+        i += hit.length;
+      } else {
+        let j=i+1, next=null;
+        while(j<text.length){ let f=false; for(const k of GLOSS_KEYS){ if(text.startsWith(k,j)){ f=true; break; } } if(f){ next=j; break; } j++; }
+        const seg = text.slice(i, next===null? text.length : next);
+        frag.appendChild(document.createTextNode(seg));
+        i += seg.length;
+      }
+    }
+    node.parentNode.replaceChild(frag, node);
+  });
+  root.querySelectorAll('.term').forEach(el=>{
+    if(el.__bound) return; el.__bound=true;
+    el.addEventListener('click', ev=>{ ev.stopPropagation(); showGloss(el.dataset.k); });
+  });
+}
+function unrichifyEl(root){ if(!root) return; root.__richified=false; }
+
+/* =========================================================
+   开场动画：晨景
+   ========================================================= */
+const tcv=$('#titleCv'), tctx=tcv.getContext('2d');
+tcv.width=W; tcv.height=H; tctx.imageSmoothingEnabled=false;
+const tPetals=[]; for(let i=0;i<34;i++) tPetals.push({x:Math.random()*W,y:Math.random()*H,vy:.10+Math.random()*.22,ph:Math.random()*6.28,sz:Math.random()<.3?2:1});
+
+function titleRender(t){
+  CUR=tctx; tctx.clearRect(0,0,W,H);
+  vgrad(0,110,'#6f9cbc','#a8c8dc');
+  vgrad(110,170,'#c2d8e4','#e8e2cc');
+  vgrad(170,210,'#e8e2cc','#d8c8a8');
+
+  for(let i=0;i<5;i++){
+    const cxx=((i*130+t*0.003)%(W+160))-80;
+    CUR.globalAlpha=.45;
+    DISC(cxx,34+(i%3)*16,8,'#ffffff'); DISC(cxx+12,30+(i%3)*16,9,'#ffffff'); DISC(cxx+25,34+(i%3)*16,6,'#ffffff');
+    R(cxx-5,36+(i%3)*16,35,5,'#ffffff');
+    CUR.globalAlpha=1;
+  }
+
+  const mg=tctx.createRadialGradient(360,52,10,360,52,86);
+  mg.addColorStop(0,'rgba(255,246,214,.55)');
+  mg.addColorStop(.4,'rgba(255,236,190,.18)');
+  mg.addColorStop(1,'rgba(255,236,190,0)');
+  tctx.fillStyle=mg; tctx.fillRect(270,-30,180,170);
+  DISC(360,52,16,'#fdf2d0');
+  CUR.globalAlpha=.35; DISC(360,50,12,'#fffbe8'); CUR.globalAlpha=1;
+
+  ridge(0,150,20,0.007,'#8fb0c4',0.6,0.017);
+  ridge(60,168,14,0.011,'#7a9cb0',0.6,0.023);
+  ridge(20,186,9,0.016,'#6a8a9c',0.6,0.03);
+  mist(158,16,.28,'#f6f2e4');
+
+  const px=112, py=190, pw=64;
+  R(px-pw/2-4,py-6,pw+8,6,'#2e3a42');
+  for(const dx of [-pw/2+3,-pw/6,pw/6,pw/2-6]) R(px+dx,py-44,3,44,'#2e3a42');
+  roof(px,py-44,pw+18,14,'#2e3a42','#1e2830','#46545e','#1e2830');
+  lantern(px-18,py-38,1,'#c85a4a');
+  lantern(px+18,py-38,1,'#c85a4a');
+
+  for(const p of tPetals){
+    p.y+=p.vy; p.ph+=.02;
+    if(p.y>H+4){ p.y=-4; p.x=Math.random()*W; }
+    CUR.globalAlpha=.55;
+    R(p.x+Math.sin(p.ph)*5,p.y,p.sz,p.sz,p.sz>1?'#e8a8b8':'#d88a9c');
+    CUR.globalAlpha=1;
+  }
+  CUR=null;
+}
+let titleRun=false;
+function titleLoop(now){ if(!titleRun) return; titleRender(now); requestAnimationFrame(titleLoop); }
+function renderTitleChars(){
+  const el=$('#tVert'); const txt = LANG==='t' ? '大觀園試才題對額' : '大观园试才题对额';
+  const on = el.dataset.done==='1'; el.innerHTML='';
+  [...txt].forEach((ch,i)=>{ const sp=document.createElement('span'); sp.textContent=ch; sp.style.transitionDelay=(i*0.13)+'s'; el.appendChild(sp); if(on) sp.classList.add('on'); });
+}
+let titleTimers=[];
+function clearTitleTimers(){ titleTimers.forEach(clearTimeout); titleTimers=[]; }
+function playTitlePoem(){ clearTitleTimers(); $('#titlePoem').classList.add('on'); $('#tp1').classList.add('on'); titleTimers.push(setTimeout(()=>$('#tp2').classList.add('on'),1500)); titleTimers.push(setTimeout(()=>{ $('#titlePoem').classList.remove('on'); $('#tp1').classList.remove('on'); $('#tp2').classList.remove('on'); },5200)); titleTimers.push(setTimeout(showTitleMain,5800)); }
+function showTitleMain(){ clearTitleTimers(); $('#titlePoem').classList.remove('on'); $('#titleMain').classList.add('on'); const el=$('#tVert'); el.dataset.done='1'; [...el.children].forEach((sp,i)=> setTimeout(()=> sp.classList.add('on'), 120+i*110)); titleTimers.push(setTimeout(()=>{ $('#tSeal').classList.add('stamp'); Snd.thud(); },1200)); titleTimers.push(setTimeout(()=>{ $('#titlePrompt').classList.add('on'); },1800)); }
+function startTitle(){ titleRun=true; requestAnimationFrame(titleLoop); renderTitleChars(); playTitlePoem(); }
+$('#skipPoem').addEventListener('click', e=>{ e.stopPropagation(); showTitleMain(); });
+$('#scrTitle').addEventListener('click', e=>{ if(e.target.closest('#startBtn,#skipPoem,.tools')) return; if(!$('#titleMain').classList.contains('on')) showTitleMain(); });
+$('#startBtn').addEventListener('click', ()=>{ Snd.init(); Amb.ensure(); Snd.chime(); startPrologue(); });
+
+/* =========================================================
+   序言：两页
+   ========================================================= */
+let proPage=0, proTimers=[];
+function refreshProPage(){
+  const btn=$('#proBtn'), hint=$('#proHint');
+  if(!btn || !hint) return;
+  if(proPage===0){
+    btn.textContent = LANG==='t'?'然 後 呢 ▶':'然 后 呢 ▶';
+    hint.innerHTML = LANG==='t'?'點 擊 繼 續 <b>▼</b>':'点 击 继 续 <b>▼</b>';
+  } else {
+    btn.textContent = LANG==='t'?'入 園':'入 园';
+    hint.innerHTML = LANG==='t'?'點 擊 入 園 <b>▼</b>':'点 击 入 园 <b>▼</b>';
+  }
+}
+function proReveal(page){
+  const root = $(`.pro-page[data-page="${page}"]`);
+  if(!root) return;
+  $$('.pro-page').forEach(p=> p.classList.toggle('on', p===root));
+  $$('#scrPrologue .reveal').forEach(el=> el.classList.remove('on'));
+  proTimers.forEach(clearTimeout); proTimers=[];
+  [...root.querySelectorAll('.reveal')].forEach((el,i)=>{
+    proTimers.push(setTimeout(()=> el.classList.add('on'), 160+i*320));
+  });
+  refreshProPage();
+  $('#proBody').scrollTop=0;
+  setTimeout(()=>{ $$('#scrPrologue .pro-text, #scrPrologue .pro-quote').forEach(el=>{ unrichifyEl(el); richifyEl(el); }); }, 40);
+}
+function startPrologue(){
+  titleRun=false; showScreen(scrPro); proPage=0; proReveal(0);
+  Amb.start('wind+birds');
+}
+function skipPrologueAnim(){ proTimers.forEach(clearTimeout); $$('.pro-page.on .reveal').forEach(el=> el.classList.add('on')); }
+$('#proBody').addEventListener('click', skipPrologueAnim);
+$('#proBtn').addEventListener('click', ()=>{
+  Snd.click();
+  if(proPage===0){ proPage=1; proReveal(1); }
+  else { openIntro(); }
+});
+function openIntro(){ enterChapter('intro'); }
+
+function setCharImg(el, actorKey, emo){
+  const a = CAST[actorKey]; if(!a){ el.style.visibility = 'hidden'; return; }
+  const file = (a.emos && a.emos[emo]) || a.img;
+  if(el.dataset.key === file && el.style.visibility === 'visible') return;
+  el.dataset.key = file; el.style.visibility = 'hidden';
+  el.onload  = ()=>{ el.style.visibility = 'visible'; };
+  el.onerror = ()=>{
+    /* 缺图时回退到该角色的默认立绘，避免整张立绘不显示 */
+    if(el.dataset.fb || !a.img || a.img === file){ el.style.visibility = 'hidden'; return; }
+    el.dataset.fb = '1'; el.dataset.key = a.img; el.src = ASSETS + a.img;
+  };
+  el.dataset.fb = '';
+  el.src = ASSETS + file;
+}
+function clearChars(){ ['#charL','#charR'].forEach(s=>{ const el=$(s); el.className = 'rpg-char ' + (s==='#charL' ? 'left' : 'right'); el.dataset.key = ''; el.dataset.fb = ''; el.style.visibility = ''; el.removeAttribute('src'); }); }
+
+const shownCards = new Set();
+let cardWait = false, cardCb = null;
+function maybeIntro(who, cb){
+  const a = CAST[who]; if(!a || !a.role){ cb(); return; }
+  if(shownCards.has(who)){ cb(); return; }
+  shownCards.add(who);
+  const ic=$('#icImg'); if(ic) ic.style.display='none';
+  $('#icName').textContent = T(a.name); $('#icRole').textContent = T(a.role); $('#icDesc').textContent = T(a.desc||'');
+  $('#introCard').classList.add('show'); cardWait = true; cardCb = cb; Snd.tone(520,.12,'sine',.03);
+}
+function closeIntro(){ if(!cardWait) return; cardWait=false; $('#introCard').classList.remove('show'); const cb=cardCb; cardCb=null; if(cb) setTimeout(cb,120); }
+$('#introCard').addEventListener('click', e=>{ e.stopPropagation(); closeIntro(); });
+
+let mapVisible=false, mapStarted=false, mapTimers=[];
+const placard=$('#placard'), dialog=$('#dialog');
+const elNo=$('#cno'), elName=$('#cname'), elPlaque=$('#cplaque'), elText=$('#ctext'),
+      elStep=$('#cstep'), elHint=$('#chint'), enterBtn=$('#enterBtn'), elDots=$('#dots');
+const pno=$('#pno'), pname=$('#pname');
+function stationData(i){ const s = stations[i]; return { no:s.no, name:s.name, plaque:s.plaque, text:s.text, sub:s.sub }; }
+function showPanel(){
+  const s = stationData(M.idx);
+  elNo.textContent = s.no; elName.textContent = T(s.name); elPlaque.textContent = T(s.plaque);
+  elText.textContent = T(s.text); unrichifyEl(elText); richifyEl(elText); bindTerms(elText);
+  elStep.textContent = NUM_CN[M.idx] + ' / 九';
+  const unlocked = M.idx <= maxUnlocked();
+  const done = PROG.done.has(M.idx);
+  elHint.textContent = done ? (LANG==='t'?'已題　可重遊':'已题　可重游') : (unlocked ? (LANG==='t'?'可進入此景':'可进入此景') : (LANG==='t'?'尚未到此':'尚未到此'));
+  enterBtn.textContent = done ? (LANG==='t'?'重 遊 此 景 ▶':'重 游 此 景 ▶') : (LANG==='t'?'進 入 此 景 ▶':'进 入 此 景 ▶');
+  enterBtn.disabled = !unlocked; enterBtn.style.opacity = unlocked?'1':'.35';
+  dialog.classList.remove('hide'); void dialog.offsetWidth; dialog.classList.add('show','enterable');
+  $('#mpiNo').textContent = s.no; $('#mpiName').textContent = T(s.name); $('#mpiStep').textContent = NUM_CN[M.idx] + ' / 九';
+  $('#mpiPlaque').textContent = T(s.plaque);
+  const mt = $('#mpiText'); mt.textContent = T(s.text); unrichifyEl(mt); richifyEl(mt); bindTerms(mt);
+  $('#mpiBtn').textContent = done ? (LANG==='t'?'重 遊 此 景 ▶':'重 游 此 景 ▶') : (LANG==='t'?'進 入 此 景 ▶':'进 入 此 景 ▶');
+  $('#mpiBtn').disabled = !unlocked; $('#mpiBtn').style.opacity = unlocked?'1':'.4';
+}
+function hidePanel(){ dialog.classList.remove('show','enterable'); dialog.classList.add('hide'); }
+function onArriveMap(){
+  const s = stationData(M.idx);
+  placard.classList.remove('show','hide'); pno.textContent = s.no; pname.textContent = T(s.name);
+  void placard.offsetWidth; placard.classList.add('show');
+  mapTimers.forEach(clearTimeout); mapTimers=[];
+  mapTimers.push(setTimeout(()=>{ placard.classList.remove('show'); placard.classList.add('hide'); },1100));
+  mapTimers.push(setTimeout(showPanel,1250));
+}
+function refreshMapText(){ if(mapStarted){ showPanel(); updateMapUI(); } }
+function updateMapUI(){
+  [...elDots.children].forEach((d,k)=>{ d.className='dot'; if(k===M.idx) d.classList.add('on'); else if(PROG.done.has(k)) d.classList.add('done'); if(k>maxUnlocked()) d.classList.add('lock'); d.title = T(stations[k].name) + (PROG.done.has(k)?(LANG==='t'?' · 已題':' · 已题'):''); });
+  $('#mapProg').innerHTML = (LANG==='t'?'已題 <b>':'已题 <b>') + PROG.done.size + '</b> / 9';
+  $('#finalBtn').style.display = allDone() && !PROG.finalDone ? 'block' : 'none';
+  $('#mapSub').textContent = allDone() ? (LANG==='t'?'九景已遍 · 靜待貴妃歸':'九景已遍 · 静待贵妃归') : (LANG==='t'?'遊園路線 · 第十七回':'游园路线 · 第十七回');
+  $('#mapTitle').textContent = LANG==='t'?'大觀園試才題對額':'大观园试才题对额';
+  $('#reviewBtn').textContent = LANG==='t'?'溫 故 · 小 考':'温 故 · 小 考';
+  const fb=$('#freeBtn');
+  if(fb){ fb.textContent = FREE_MODE ? (LANG==='t'?'自由模式 · 開':'自由模式 · 开') : (LANG==='t'?'自由模式':'自由模式'); fb.classList.toggle('on', FREE_MODE); }
+  $('#finalBtn').textContent = LANG==='t'?'終 章 ▶':'终 章 ▶';
+}
+function setStation(i, instant){
+  M.idx = clamp(i,0,8);
+  mapTimers.forEach(clearTimeout); mapTimers=[];
+  placard.classList.remove('show','hide'); hidePanel(); updateMapUI();
+  const s = stations[M.idx];
+  if(instant || Math.abs(s.x-M.charX) < 3){ M.charX=s.x; M.walking=false; setTimeout(onArriveMap,380); }
+  else { M.walking=true; }
+}
+let unrolled=false;
+function unrollMap(){
+  const paper=$('#paper'), rodL=$('#rodL'), rodR=$('#rodR');
+  if(unrolled){ paper.style.clipPath='inset(0 0 0 0)'; rodL.style.left='0%'; rodR.style.left='100%'; return; }
+  const dur=1400, t0=performance.now(), ease=x=>1-Math.pow(1-x,3);
+  function step(now){ const p=Math.min(1,(now-t0)/dur), e=ease(p), half=50*(1-e); paper.style.clipPath=`inset(0 ${half}% 0 ${half}%)`; rodL.style.left=half+'%'; rodR.style.left=(100-half)+'%'; if(p<1) requestAnimationFrame(step); else unrolled=true; }
+  requestAnimationFrame(step);
+}
+function startMap(){ showScreen(scrMap); mapVisible=true; if(!mapStarted){ mapStarted=true; unrollMap(); } updateMapUI(); Amb.start('wind+birds'); setTimeout(()=> setStation(Math.min(maxUnlocked(),8)),600); }
+stations.forEach((s,i)=>{
+  const b=document.createElement('button'); b.className='dot';
+  b.addEventListener('click',()=>{ if(i>maxUnlocked()){ toast(LANG==='t'?'尚未到此':'尚未到此'); Snd.bad(); return; } Snd.click(); setStation(i); });
+  elDots.appendChild(b);
+});
+enterBtn.addEventListener('click', ()=>{ if(M.idx>maxUnlocked()){ toast('尚未到此'); return; } Snd.click(); enterChapter('s'+M.idx); });
+$('#mpiBtn').addEventListener('click', ()=>{ if(M.idx>maxUnlocked()){ toast('尚未到此'); return; } Snd.click(); enterChapter('s'+M.idx); });
+$('#finalBtn').addEventListener('click', ()=>{ Snd.click(); enterChapter('final'); });
+$('#reviewBtn').addEventListener('click', ()=>{ Snd.click(); Game.open('match'); });
+$('#freeBtn').addEventListener('click', ()=>{
+  FREE_MODE = !FREE_MODE; updateMapUI(); showPanel();
+  toast(FREE_MODE ? (LANG==='t'?'自由模式：九處景致任意進出':'自由模式：九处景致任意进出') : (LANG==='t'?'順序模式：按順序解鎖':'顺序模式：按顺序解锁'));
+  Snd.click();
+});
+
+/* =========================================================
+   RPG 引擎
+   ========================================================= */
+const rpgChoices=$('#rpgChoices'), rpgText=$('#rpgText'), rpgName=$('#rpgName'),
+      rpgNext=$('#rpgNext'), rpgDialog=$('#rpgDialog'), charL=$('#charL'), charR=$('#charR');
+let rpgOn=false;
+let currentGlossKey = null;
+const RP = { id:null, ch:null, script:[], labels:{}, pc:0, typing:false, full:'', timer:null, choiceOpen:false, ended:false, lastNpc:null, lastEmo:'normal', lastWho:null, choiceCmd:null, choiceOrder:null };
+
+function paintRpgBg(ch){ const cv = $('#rpgBg'); cv.classList.toggle('night', !!ch.night); cv.classList.remove('fallback'); cv.style.backgroundImage = `url("${ASSETS + ch.bg}")`; }
+
+function renderRich(sText){
+  let out='', i=0; const text = String(sText);
+  while(i < text.length){
+    let hit=null;
+    for(const k of GLOSS_KEYS){ if(text.startsWith(k,i)){ hit=k; break; } }
+    if(hit){ out += `<span class="term" data-k="${esc(hit)}">${esc(T(hit))}</span>`; i += hit.length; }
+    else { let j=i+1, next=null; while(j<text.length){ let f=false; for(const k of GLOSS_KEYS){ if(text.startsWith(k,j)){ f=true; break; } } if(f){ next=j; break; } j++; } const seg = text.slice(i, next===null? text.length : next); out += esc(T(seg)).replace(/\n/g,'<br>'); i += seg.length; }
+  }
+  return out;
+}
+function setRich(sText){ rpgText.innerHTML = renderRich(sText); bindTerms(rpgText); }
+
+function typeText(text){
+  clearInterval(RP.timer); RP.full = text; RP.typing = true;
+  const shown = T(text); rpgText.textContent=''; rpgNext.style.display='none';
+  let i=0;
+  RP.timer = setInterval(()=>{ if(i<shown.length){ rpgText.textContent = shown.slice(0,++i); if(i===shown.length){ clearInterval(RP.timer); RP.typing=false; setRich(text); rpgNext.style.display='block'; } } }, 26);
+}
+function completeTyping(){ clearInterval(RP.timer); RP.typing=false; setRich(RP.full); rpgNext.style.display='block'; }
+
+function doSay(cmd){
+  const who = cmd.who || 'narr';
+  RP.lastWho = who;
+  rpgName.textContent = T((CAST[who]||{}).name || '旁白');
+  RP.lastEmo = cmd.emo || 'normal';
+  if(who==='narr'){ charL.classList.remove('speaking'); charR.classList.remove('speaking'); }
+  else if(who==='player'){ setCharImg(charR,'player',cmd.emo); charR.classList.add('active','speaking'); charL.classList.remove('speaking'); if(charL.src) charL.classList.add('active'); }
+  else { setCharImg(charL, who, cmd.emo); charL.classList.add('active','speaking'); charR.classList.remove('speaking'); if(charR.src) charR.classList.add('active'); }
+  const after = ()=> typeText(cmd.text);
+  if(who!=='narr' && !shownCards.has(who)){ rpgText.textContent=''; rpgNext.style.display='none'; maybeIntro(who, after); }
+  else after();
+}
+
+/* 选项：乱序一次，之后语言切换只重绘文案，不再重洗 */
+function showChoices(cmd){
+  RP.choiceOpen = true;
+  RP.choiceCmd = cmd;
+  RP.choiceOrder = [...cmd.opts];
+  for (let i = RP.choiceOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [RP.choiceOrder[i], RP.choiceOrder[j]] = [RP.choiceOrder[j], RP.choiceOrder[i]];
+  }
+  rpgNext.style.display = 'none';
+  renderChoices();
+}
+function renderChoices(){
+  rpgChoices.innerHTML = '';
+  RP.choiceOrder.forEach((o, k) => {
+    const b = document.createElement('button');
+    b.className = 'rpg-choice';
+    b.style.animationDelay = (k * 0.07) + 's';
+    const ck = document.createElement('span'); ck.className = 'ck'; ck.textContent = 'ABCD'[k];
+    const tx = document.createElement('span'); tx.textContent = T(o.text);
+    b.append(ck, tx);
+    b.addEventListener('click', e => {
+      e.stopPropagation(); Snd.click();
+      rpgChoices.classList.remove('show');
+      rpgChoices.innerHTML = '';
+      RP.choiceOpen = false;
+      RP.choiceOrder = null;
+      RP.choiceCmd = null;
+      const tgt = RP.labels[o.goto];
+      RP.pc = (tgt === undefined ? RP.script.length : tgt);
+      runCmd();
+    });
+    rpgChoices.appendChild(b);
+  });
+  rpgChoices.classList.add('show');
+}
+
+function runCmd(){
+  if(RP.pc >= RP.script.length){ finishChapter('success'); return; }
+  const cmd=RP.script[RP.pc];
+  switch(cmd.t){
+    case 'label': RP.pc++; runCmd(); break;
+    case 'jump': { const t=RP.labels[cmd.to]; RP.pc=(t===undefined?RP.script.length:t); runCmd(); break; }
+    case 'say': doSay(cmd); break;
+    case 'choice': showChoices(cmd); break;
+    case 'lesson': openLesson(cmd.id); break;
+    case 'end': finishChapter(cmd.r, cmd.text); break;
+    default: RP.pc++; runCmd();
+  }
+}
+function advance(){
+  if(!rpgOn || RP.ended) return;
+  if(cardWait){ closeIntro(); return; }
+  if(RP.choiceOpen) return;
+  if(RP.typing){ completeTyping(); return; }
+  RP.pc++; runCmd();
+}
+rpgDialog.addEventListener('click', advance);
+$('#scrRpg').addEventListener('click', e=>{ if(e.target.closest('.rpg-choice,#rpgDialog,#introCard,.term,.tools')) return; advance(); });
+
+function enterChapter(id){
+  const ch = CHAPTERS[id]; if(!ch) return;
+  mapVisible=false; rpgOn=true;
+  RP.id=id; RP.ch=ch; RP.script=ch.script; RP.labels={};
+  ch.script.forEach((c,k)=>{ if(c.t==='label') RP.labels[c.n]=k; });
+  RP.pc=0; RP.ended=false; RP.choiceOpen=false; RP.typing=false;
+  RP.choiceOrder = null; RP.choiceCmd = null; RP.lastWho = null; RP.full = '';
+  clearInterval(RP.timer); rpgTips();
+  $('#rpgNo').textContent = ch.no; $('#rpgTitle').textContent = T(ch.title); $('#rpgSub').textContent = T(ch.sub);
+  paintRpgBg(ch); rpgName.textContent = T('旁白'); rpgText.textContent=''; rpgNext.style.display='none';
+  rpgChoices.classList.remove('show'); rpgChoices.innerHTML='';
+  clearChars(); $('#introCard').classList.remove('show'); cardWait=false;
+  Amb.start(ch.final ? 'water+night' : (['s1','s4','s7'].includes(id) ? 'water+birds' : (id==='s2' ? 'wind+birds' : 'wind+birds')));
+  scrRpg.classList.remove('ending'); showScreen(scrRpg);
+  setTimeout(runCmd, 260);
+}
+function rpgTips(){ const tip=$('#rpgTip'); tip.classList.add('on'); clearTimeout(tip._t); tip._t=setTimeout(()=>tip.classList.remove('on'), 6000); }
+function backToMap(){ RP.ended=true; rpgOn=false; clearInterval(RP.timer); rpgChoices.classList.remove('show'); showScreen(scrMap); mapVisible=true; updateMapUI(); }
+
+let lessonId=null;
+function openLesson(id){
+  const L=LESSONS[id]; if(!L){ finishChapter('lesson'); return; }
+  lessonId=id;
+  $('#lsKind').textContent = T(L.kind); $('#lsTitle').textContent = T(L.title); $('#lsBy').textContent = T(L.by);
+  const ex=$('#lsExplain'); ex.textContent = T(L.explain); unrichifyEl(ex); richifyEl(ex); bindTerms(ex);
+  $('#lsTip').textContent = T(L.tip);
+  const poem=$('#lsPoem'); poem.innerHTML='';
+  L.cols.forEach(c=>{ const d=document.createElement('div'); d.className='lsp-col'+(c.hi?' lsp-hi':''); d.textContent=T(c.text); poem.appendChild(d); });
+  const gl=$('#lsGloss'); gl.innerHTML='';
+  L.gloss.forEach(g=>{ const li=document.createElement('li'); const b=document.createElement('b'); b.textContent=T(g.w); const py=document.createElement('i'); py.style.cssText='font-style:normal;color:#8a6c42;font-size:11px;margin-right:2px'; py.textContent = g.py||''; const s=document.createElement('span'); s.textContent=T(g.d); li.append(b,py,s); gl.appendChild(li); });
+  const why=$('#lsWhy'); why.innerHTML = '<b>'+(LANG==='t'?'爲何是它 · ':'为何是它 · ')+'</b>' + esc(T(L.why));
+  const link=$('#lsLink'); link.innerHTML = '<b>'+(LANG==='t'?'詞 · 景 · 題 · ':'词 · 景 · 题 · ')+'</b>' + esc(T(L.link||''));
+  $('#ovLesson').classList.add('on'); Snd.thud();
+}
+$('#lsBtn').addEventListener('click', ()=>{ Snd.ok(); $('#ovLesson').classList.remove('on'); finishChapter('lesson'); });
+
+function finishChapter(result, text){
+  RP.ended=true; clearInterval(RP.timer);
+  rpgChoices.classList.remove('show'); rpgChoices.innerHTML='';
+  if(result==='intro'){ rpgOn=false; startMap(); return; }
+  if(result==='success'){
+    const i=parseInt(String(RP.id).replace('s',''),10);
+    PROG.done.add(i); Snd.ok(); backToMap();
+    setTimeout(()=>{ setStation(nextStationAfter(i)); updateMapUI(); toast(allDone() ? (LANG==='t'?'九處景致已遍 · 可入終章':'九处景致已遍 · 可入终章') : (FREE_MODE ? ('「'+T(CHAPTERS[RP.id].title)+'」'+(LANG==='t'?'已題 · 可續遊':'已题 · 可续游')) : ('「'+T(CHAPTERS[RP.id].title)+'」'+(LANG==='t'?'已題 · 前往下一景':'已题 · 前往下一景')))); },320);
+    return;
+  }
+  if(result==='lesson'){
+    const i=parseInt(String(RP.id).replace('s',''),10);
+    PROG.done.add(i); PROG.lessons.add(i); Snd.bad(); backToMap();
+    setTimeout(()=>{ setStation(nextStationAfter(i)); updateMapUI(); toast(allDone() ? (LANG==='t'?'補學完畢 · 九景已遍，可入終章':'补学完毕 · 九景已遍，可入终章') : (LANG==='t'?'補學完畢 · 本輪作罷，繼續前行':'补学完毕 · 本轮作罢，继续前行')); Game.open('fill', lessonId); },380);
+    return;
+  }
+  if(result==='perfect'){
+    PROG.finalDone=true; updateMapUI(); Snd.chime();
+    showEnding({ kicker: LANG==='t'?'第 十 七 回 · 終':'第 十 七 回 · 终', title: LANG==='t'?'圓 滿 結 局':'圆 满 结 局', seal:'圓', text: T(text||'游园考验顺利完成，我的才情得到众人认可；大观园一切就绪，静待贵妃归来。') + '\n\n' + T('匾额对联已然拟定，梨香院收拾停当，妙玉的帖子也备下了。只等那一天，贵妃归省，园门大开。'), stats:[[LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],[LANG==='t'?'補學次數':'补学次数', PROG.lessons.size+(LANG==='t'?' 次':' 次')],[LANG==='t'?'小考得分':'小考得分', QUIZ.right+' / '+QUIZ.total]], buttons:[[LANG==='t'?'再 遊 一 次':'再 游 一 次', ()=> location.reload()],[LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=> closeEnding()]] });
+    return;
+  }
+  const isFail = result==='fail'; Snd.bad();
+  showEnding({ kicker: isFail ? (LANG==='t'?'本 輪 作 罷':'本 轮 作 罢') : (LANG==='t'?'草 草 收 場':'草 草 收 场'), title: isFail ? (LANG==='t'?'小 失 敗':'小 失 败') : (LANG==='t'?'普 通 結 局':'普 通 结 局'), seal: isFail?'敗':'止', text: T(text||'这一处终究没有题成。'), stats:[[LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],[LANG==='t'?'本站':'本站', T(CHAPTERS[RP.id].title)]], buttons:[[LANG==='t'?'重 來 此 景':'重 来 此 景', ()=>{ closeEnding(); enterChapter(RP.id); }],[LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=>{ closeEnding(); backToMap(); }]] });
+}
+function showEnding(o){
+  scrRpg.classList.add('ending');
+  $('#enKicker').textContent=o.kicker; $('#enTitle').textContent=o.title; $('#enText').textContent=o.text; $('#enSeal').textContent=o.seal;
+  const st=$('#enStats'); st.innerHTML=''; o.stats.forEach(([k,v])=>{ const d=document.createElement('div'); d.innerHTML=`${k} <b>${v}</b>`; st.appendChild(d); });
+  const btns=$('#ovEnd').querySelectorAll('.en-btns button');
+  btns[0].textContent=o.buttons[0][0]; btns[1].textContent=o.buttons[1][0];
+  btns[0].onclick=e=>{ e.stopPropagation(); Snd.click(); o.buttons[0][1](); };
+  btns[1].onclick=e=>{ e.stopPropagation(); Snd.click(); o.buttons[1][1](); };
+  $('#ovEnd').classList.add('on');
+}
+function closeEnding(){ $('#ovEnd').classList.remove('on'); scrRpg.classList.remove('ending'); }
+
+function showGloss(key){
+  const g=GLOSS[key]; if(!g) return;
+  currentGlossKey = key;
+  $('#glW').textContent = T(key);
+  $('#glPy').textContent = g.py;
+  $('#glCat').textContent = CAT_LABEL[g.cat]||g.cat;
+  $('#glD').textContent = T(g.d);
+  const sc=$('#glScene');
+  if(g.scene){ sc.style.display='block'; sc.innerHTML = '<b>'+(LANG==='t'?'在本回 · ':'在本回 · ')+'</b>' + esc(T(g.scene)); }
+  else sc.style.display='none';
+  $('#glTip').textContent = LANG==='t'?'點空白處關閉':'点空白处关闭';
+  $('#gloss').classList.add('on');
+}
+function hideGloss(){ $('#gloss').classList.remove('on'); }
+$('#glossX').addEventListener('click', hideGloss);
+document.addEventListener('click', e=>{ if(!e.target.closest('.term,#gloss')) hideGloss(); });
+
+/* =========================================================
+   字词面板
+   ========================================================= */
+const WP = { q:'', open: new Set(GLOSS_CATS) };
+function openWords(){
+  $('#gBadge').textContent='词';
+  $('#gTitle').textContent = LANG==='t'?'本 回 字 詞':'本 回 字 词';
+  $('#gSub').textContent = LANG==='t'?'按類分列 · 可搜索 · 點開看解釋':'按类分列 · 可搜索 · 点开看解释';
+  $('#gBody').innerHTML = `
+    <div class="wp-search">
+      <input id="wpInput" type="text" autocomplete="off" placeholder="${LANG==='t'?'搜索詞、拼音、釋義…':'搜索词、拼音、释义…'}">
+      <button class="wp-clear" id="wpClear" title="${LANG==='t'?'清除':'清除'}">✕</button>
+    </div>
+    <div class="wp-list" id="wpList"></div>`;
+  $('#gScore').textContent='';
+  $('#gNext').textContent = LANG==='t'?'關 閉':'关 闭';
+  $('#gNext').disabled = false;
+  $('#gNext').onclick = ()=>{ $('#ovGame').classList.remove('on'); };
+  $('#ovGame').classList.add('on');
+  renderWordList();
+  const inp = $('#wpInput');
+  inp.value = WP.q;
+  inp.addEventListener('input', ()=>{ WP.q = inp.value.trim(); renderWordList(); });
+  $('#wpClear').addEventListener('click', ()=>{ WP.q=''; inp.value=''; renderWordList(); inp.focus(); });
+  setTimeout(()=>{ if(window.innerWidth>820) inp.focus(); }, 80);
+}
+function renderWordList(){
+  const q = WP.q.toLowerCase();
+  const searching = !!q;
+  let html = '';
+  let total = 0;
+  GLOSS_CATS.forEach(cat=>{
+    const keys = GLOSS_KEYS.filter(k=>{
+      const g = GLOSS[k];
+      if(g.cat !== cat) return false;
+      if(!searching) return true;
+      const hay = (k+' '+T(k)+' '+(g.py||'')+' '+(g.d||'')+' '+(g.scene||'')).toLowerCase();
+      return hay.includes(q);
+    });
+    if(!keys.length) return;
+    total += keys.length;
+    const open = searching || WP.open.has(cat);
+    html += `<div class="wp-cat${open?' open':''}${searching?' force-open':''}" data-cat="${cat}">
+      <button class="wp-cat-h" type="button">
+        <span class="wp-cat-arrow">▸</span>
+        <span class="wp-cat-t">${CAT_LABEL[cat]||cat}</span>
+        <span class="wp-cat-n">${keys.length}</span>
+      </button>
+      <div class="wp-cat-body">
+        ${keys.map(k=>{
+          const g = GLOSS[k];
+          return `<div class="gloss-item" data-k="${esc(k)}">
+            <div class="gi-head"><b>${esc(T(k))}</b><span class="py">${g.py||''}</span><span class="gi-more">＋</span></div>
+            <div class="gi-body">
+              <div class="gi-d">${esc(T(g.d))}</div>
+              ${g.scene?`<div class="gi-scene"><b>${LANG==='t'?'在本回':'在本回'}</b>${esc(T(g.scene))}</div>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  if(!total) html = `<div class="wp-empty">${LANG==='t'?'沒有找到：「'+esc(WP.q)+'」':'没有找到：「'+esc(WP.q)+'」'}</div>`;
+  $('#wpList').innerHTML = html;
+  $$('#wpList .wp-cat-h').forEach(h=>{
+    h.addEventListener('click', ()=>{
+      if(WP.q) return;
+      const wrapEl = h.parentElement;
+      const cat = wrapEl.dataset.cat;
+      if(WP.open.has(cat)) WP.open.delete(cat); else WP.open.add(cat);
+      wrapEl.classList.toggle('open');
+      Snd.click();
+    });
+  });
+  $$('#wpList .gloss-item').forEach(el=>{
+    el.addEventListener('click', ()=>{ el.classList.toggle('open'); Snd.click(); });
+  });
+}
+$('#btnWords').addEventListener('click', ()=>{ Snd.click(); openWords(); });
+
+/* =========================================================
+   小游戏
+   ========================================================= */
+const QUIZ = { right:0, total:0 };
+const Game = {
+  mode:null, idx:0, score:0, total:0, items:[], locked:false,
+  open(mode, lesson){
+    this.mode=mode; this.score=0; this.total=0; this.locked=false;
+    $('#ovGame').classList.add('on');
+    if(mode==='fill'){
+      this.items = (lesson==='duilian' ? [FILL_ITEMS[4],FILL_ITEMS[5]] : [FILL_ITEMS[0],FILL_ITEMS[1],FILL_ITEMS[2]]);
+      this.idx=0; this.total=this.items.length;
+      $('#gBadge').textContent='考'; $('#gTitle').textContent = LANG==='t'?'補 字 填 空':'补 字 填 空';
+      $('#gSub').textContent = LANG==='t'?'父親說：既抄過了，我且考你一考。':'父亲说：既抄过了，我且考你一考。';
+      this.renderFill();
+    } else if(mode==='meaning'){
+      this.items = [...MEANING_ITEMS].sort(()=>Math.random()-.5).slice(0,3);
+      this.idx=0; this.total=this.items.length;
+      $('#gBadge').textContent='义'; $('#gTitle').textContent = LANG==='t'?'詞 義 選 擇':'词 义 选 择';
+      $('#gSub').textContent = LANG==='t'?'考一考：這些詞，你懂不懂？':'考一考：这些词，你懂不懂？';
+      this.renderMeaning();
+    } else {
+      this.renderMatch();
+    }
+  },
+  renderFill(){
+    this.locked=false;
+    const it=this.items[this.idx];
+    const parts = T(it.line).split('__');
+    $('#gBody').innerHTML = `<div class="g-q no-term">${esc(parts[0]||'')}<span class="blank">　</span>${esc(parts[1]||'')}</div>
+      <div class="g-qs">${LANG==='t'?'選一個字填進去':'选一个字填进去'}</div>
+      <div class="g-opts">${it.opts.map(o=>`<button class="g-opt" data-o="${esc(o)}">${esc(T(o))}</button>`).join('')}</div>
+      <div class="g-fb" id="gFb"></div>`;
+    $$('#gBody .g-opt').forEach(b=> b.addEventListener('click', ()=>{
+      if(this.locked) return; this.locked=true;
+      const ok = b.dataset.o===it.ans;
+      b.classList.add(ok?'right':'wrong');
+      if(!ok) $$('#gBody .g-opt').forEach(x=>{ if(x.dataset.o===it.ans) x.classList.add('right'); });
+      if(ok){ this.score++; QUIZ.right++; Snd.ok(); } else Snd.bad();
+      QUIZ.total++;
+      $('#gFb').innerHTML = (ok?'<b>'+(LANG==='t'?'答對了！':'答对了！')+'</b> ':'<b>'+(LANG==='t'?'再想想：':'再想想：')+'</b> ') + esc(T(it.tip));
+      $('#gNext').disabled=false;
+    }));
+    $('#gNext').disabled=true;
+    $('#gNext').textContent = (this.idx+1>=this.total) ? (LANG==='t'?'看 結 果':'看 结 果') : (LANG==='t'?'下 一 題 ▶':'下 一 题 ▶');
+    $('#gNext').onclick = ()=>{ if(this.idx+1>=this.total){ this.finish(); } else { this.idx++; this.renderFill(); } };
+    this.updateScore();
+  },
+  renderMeaning(){
+    this.locked=false;
+    const it=this.items[this.idx];
+    $('#gBody').innerHTML = `<div class="g-q no-term" style="font-size:clamp(16px,2.4vh,21px);letter-spacing:.04em">${esc(T(it.q))}</div>
+      <div class="g-qs">${LANG==='t'?'選一個最貼切的解釋':'选一个最贴切的解释'}</div>
+      <div class="g-opts" style="grid-template-columns:1fr">${it.opts.map((o,i)=>`<button class="g-opt long" data-i="${i}">${'ABC'[i]}　${esc(T(o))}</button>`).join('')}</div>
+      <div class="g-fb" id="gFb"></div>`;
+    $$('#gBody .g-opt').forEach(b=> b.addEventListener('click', ()=>{
+      if(this.locked) return; this.locked=true;
+      const ok = parseInt(b.dataset.i,10)===it.ans;
+      b.classList.add(ok?'right':'wrong');
+      if(!ok){ $$('#gBody .g-opt').forEach(x=>{ if(parseInt(x.dataset.i,10)===it.ans) x.classList.add('right'); }); }
+      if(ok){ this.score++; QUIZ.right++; Snd.ok(); } else Snd.bad();
+      QUIZ.total++;
+      $('#gFb').innerHTML = (ok?'<b>'+(LANG==='t'?'答對了！':'答对了！')+'</b> ':'<b>'+(LANG==='t'?'再想想：':'再想想：')+'</b> ') + esc(T(it.tip));
+      $('#gNext').disabled=false;
+    }));
+    $('#gNext').disabled=true;
+    $('#gNext').textContent = (this.idx+1>=this.total) ? (LANG==='t'?'看 結 果':'看 结 果') : (LANG==='t'?'下 一 題 ▶':'下 一 题 ▶');
+    $('#gNext').onclick = ()=>{ if(this.idx+1>=this.total){ this.finishMeaning(); } else { this.idx++; this.renderMeaning(); } };
+    this.updateScore();
+  },
+  renderMatch(){
+    const pick = [...MATCH_ITEMS].sort(()=>Math.random()-.5).slice(0,4);
+    this.left = pick.map((p,i)=>({k:'p'+i, text:p.plaque, pair:i}));
+    this.right = pick.map((p,i)=>({k:'r'+i, text:p.place, pair:i}));
+    this.right.sort(()=>Math.random()-.5);
+    this.sel=null; this.matched=0; this.total=4; this.score=0; QUIZ.total+=4;
+    $('#gBadge').textContent='联'; $('#gTitle').textContent = LANG==='t'?'匾 額 歸 位':'匾 额 归 位';
+    $('#gSub').textContent = LANG==='t'?'先點匾額，再點它所在的景致。':'先点匾额，再点它所在的景致。';
+    $('#gBody').innerHTML = `<div class="match-board">
+      <div class="m-col"><div class="m-col-t">${LANG==='t'?'匾 額':'匾 额'}</div>
+        ${this.left.map(o=>`<button class="m-card" data-side="l" data-k="${o.k}" data-pair="${o.pair}">${esc(T(o.text))}</button>`).join('')}
+      </div>
+      <div class="m-col"><div class="m-col-t">${LANG==='t'?'景 致':'景 致'}</div>
+        ${this.right.map(o=>`<button class="m-card" data-side="r" data-k="${o.k}" data-pair="${o.pair}">${esc(T(o.text))}</button>`).join('')}
+      </div></div>
+      <div class="g-fb" id="gFb">${LANG==='t'?'共 4 對，全對有獎。':'共 4 对，全对有奖。'}</div>`;
+    $$('#gBody .m-card').forEach(b=> b.addEventListener('click', ()=>{
+      if(b.classList.contains('done')) return;
+      const side=b.dataset.side;
+      if(side==='l'){ $$('#gBody .m-card[data-side="l"]').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); this.sel=b; Snd.click(); return; }
+      if(!this.sel){ $('#gFb').textContent = LANG==='t'?'先選左邊的匾額。':'先选左边的匾额。'; return; }
+      if(this.sel.dataset.pair===b.dataset.pair){
+        this.sel.classList.add('done'); b.classList.add('done'); this.sel.classList.remove('sel');
+        this.sel=null; this.matched++; this.score++; QUIZ.right++; Snd.ok();
+        $('#gFb').innerHTML = '<b>'+(LANG==='t'?'對了！':'对了！')+'</b> ' + T('匾额要题得贴合眼前的景，才不算白题。');
+        if(this.matched===4){ $('#gFb').innerHTML='<b>'+(LANG==='t'?'全 對！':'全 对！')+'</b> ' + T('四块匾都归了位——这一回的景，你记住了。'); this.finish(); }
+      } else {
+        b.classList.add('err'); this.sel.classList.add('err'); Snd.bad();
+        const a=this.sel; this.sel=null;
+        setTimeout(()=>{ b.classList.remove('err'); a.classList.remove('err','sel'); },380);
+        $('#gFb').textContent = LANG==='t'?'不對哦，再看看這處景的名字。':'不对哦，再看看这处景的名字。';
+      }
+    }));
+    $('#gScore').textContent = '';
+    $('#gNext').textContent = LANG==='t'?'關 閉':'关 闭';
+    $('#gNext').disabled=false;
+    $('#gNext').onclick = ()=>{ $('#ovGame').classList.remove('on'); };
+  },
+  updateScore(){ $('#gScore').innerHTML = (LANG==='t'?'答對 ':'答对 ') + '<b>'+this.score+'</b> / '+this.total; },
+  finish(){
+    this.locked=true;
+    $('#gFb').innerHTML = '<b>'+(LANG==='t'?'小 考 結 束':'小 考 结 束')+'</b>　' + (this.score===this.total ? T('全对！匾额都归了位。再考一考词义？') : T('错了几处，回去把词义再抄一遍。'));
+    if(this.score===this.total){
+      $('#gNext').textContent = LANG==='t'?'再 考 詞 義 ▶':'再 考 词 义 ▶';
+      $('#gNext').onclick = ()=>{ $('#ovGame').classList.remove('on'); setTimeout(()=>Game.open('meaning'), 200); };
+    } else {
+      $('#gNext').textContent = LANG==='t'?'收 起 卷 子':'收 起 卷 子';
+      $('#gNext').onclick = ()=>{ $('#ovGame').classList.remove('on'); };
+    }
+  },
+  finishMeaning(){
+    this.locked=true;
+    $('#gFb').innerHTML = '<b>'+(LANG==='t'?'詞 義 考 完':'词 义 考 完')+'</b>　' + (this.score===this.total ? T('全对！这些词，你是真懂了。') : T('错了几处，回去把词条再点开看看。'));
+    $('#gNext').textContent = LANG==='t'?'收 起 卷 子':'收 起 卷 子';
+    $('#gNext').onclick = ()=>{ $('#ovGame').classList.remove('on'); };
+  }
+};
+
+$('#btnAudio').addEventListener('click', ()=>{
+  Snd.on = !Snd.on; Amb.on = Snd.on; Amb.applyVolume();
+  if(Snd.on){ Snd.init(); Amb.ensure(); const k = Amb.key; Amb.key=''; if(k) Amb.start(k); }
+  $('#btnAudio').classList.toggle('on', Snd.on);
+  $('#btnAudio').textContent = Snd.on ? (LANG==='t'?'♪ 聲音':'♪ 声音') : (LANG==='t'?'♪ 靜音':'♪ 静音');
+  if(Snd.on) Snd.ok();
+});
+
+window.addEventListener('keydown', e=>{
+  if(e.key===' '||e.key==='Enter'){
+    if($('#ovEnd').classList.contains('on')) return;
+    if($('#ovGame').classList.contains('on')){ if(e.target && e.target.tagName==='INPUT') return; return; }
+    if($('#ovLesson').classList.contains('on')){ e.preventDefault(); $('#lsBtn').click(); return; }
+    if(scrRpg.classList.contains('on')){ e.preventDefault(); advance(); return; }
+    if(scrTitle.classList.contains('on')){ e.preventDefault(); $('#startBtn').click(); return; }
+    if(scrPro.classList.contains('on')){ e.preventDefault(); $('#proBtn').click(); return; }
+  }
+  if(scrMap.classList.contains('on')){
+    if(e.key==='ArrowRight') setStation(Math.min(M.idx+1,maxUnlocked()));
+    if(e.key==='ArrowLeft') setStation(Math.max(M.idx-1,0));
+  }
+  if(scrRpg.classList.contains('on') && RP.choiceOpen){
+    const n=parseInt(e.key,10);
+    if(n>=1&&n<=4){ const b=rpgChoices.children[n-1]; if(b) b.click(); }
+  }
+});
+
+/* =========================================================
+   后台回溯：结构化变更表
+   ========================================================= */
+window.__CHANGELOG = [
+  {id:'2026-10-22-a', area:'title',    msg:'开篇动画：夜 → 晨（天空/朝阳/远山/亭子/花瓣）'},
+  {id:'2026-10-22-b', area:'prologue', msg:'序言：一页 → 两页（叙事 / 玩法）'},
+  {id:'2026-10-22-c', area:'choice',   msg:'选项内移除词条链接，避免提前露答案'},
+  {id:'2026-10-22-d', area:'words',    msg:'字词 + 必知合并；加搜索、分类折叠'},
+  {id:'2026-10-22-e', area:'dev',      msg:'后台回溯：CHANGELOG + @chg 标记 + 控制台表'},
+  {id:'2026-10-22-f', area:'i18n',     msg:'简繁切换：内置字表 + 词组优先 + 只翻文本节点 + 动态重绘'},
+  {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'}
+];
+document.addEventListener('keydown', e=>{
+  if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='l'){
+    if(console.table) console.table(window.__CHANGELOG);
+    else console.log(window.__CHANGELOG);
+  }
+});
+
+applyStaticLang();
+refreshDynamicLang();
+startTitle();
+if(!Snd.on) $('#btnAudio').click();
+
+/* 注册离线缓存：回访用户可直接从本地读取，秒开 */
+(function regSW(){
+  if(!('serviceWorker' in navigator)) return;
+  const h = location.hostname;
+  if(location.protocol !== 'https:' && h !== 'localhost' && h !== '127.0.0.1') return;
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+})();
+
+/* 依次预热后续资源：先立绘（互动时才显示，等待感更强），再逐张背景 */
+(function warmAssets(){
+  const chars = [];
+  Object.values(CAST).forEach(a=>{
+    if(a.img) chars.push(a.img);
+    if(a.emos) Object.values(a.emos).forEach(f=>chars.push(f));
+  });
+  const bgs = Object.values(CHAPTERS).map(c=>c.bg).filter(Boolean);
+  const queue = [...new Set(chars)].concat([...new Set(bgs)]);
+  let i = 0;
+  const idle = window.requestIdleCallback || (fn => setTimeout(fn, 200));
+  function next(){
+    if(i >= queue.length) return;
+    const url = ASSETS + queue[i++];
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = img.onerror = ()=> idle(next, {timeout:1500});
+    img.src = url;
+  }
+  // 首屏先让预加载的几张跑完，再开始排队
+  setTimeout(()=> idle(next, {timeout:2000}), 1200);
+})();
+
+window.__game = {
+  chapter:(id)=>{ closeEnding(); enterChapter(id); },
+  lesson:(id)=> openLesson(id),
+  ending:(r)=> finishChapter(r),
+  map:()=>{ closeEnding(); startMap(); },
+  intro:()=>{ closeEnding(); openIntro(); },
+  game:(m)=> Game.open(m),
+  words:()=> openWords(),
+  changelog:()=> window.__CHANGELOG,
+  state:()=> ({id:RP.id, pc:RP.pc, done:[...PROG.done], lang:LANG}),
+  s2t:(str)=> s2t(str)   /* 调试用：在控制台测试简繁转换 */
+};
+</script>
+</body>
+</html>
