@@ -105,7 +105,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 .mt-seal{width:30px;height:30px;border:1px solid #9b3a30;border-radius:3px;color:#c25a4a;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1.1;box-shadow:inset 0 0 10px rgba(180,60,40,.25)}
 .mt-t{font-size:clamp(13px,1.9vh,18px);letter-spacing:.3em;color:#e3cf9c;text-shadow:0 0 18px rgba(200,160,70,.35)}
 .mt-s{font-size:9.5px;letter-spacing:.22em;color:#7d7b6c;margin-top:3px}
-.scroll{position:relative;width:min(94vw,1240px,calc(64vh * 1.7778));aspect-ratio:16/9;filter:drop-shadow(0 24px 60px rgba(0,0,0,.9));flex:none}
+.scroll{position:relative;width:min(94vw,1240px,calc(64vh * 1.7778));aspect-ratio:16/9;filter:drop-shadow(0 24px 60px rgba(0,0,0,.9));flex:none;transition:filter .9s ease,transform 1s cubic-bezier(.4,0,.2,1)}
+.scroll.closing{filter:drop-shadow(0 24px 60px rgba(0,0,0,.9)) brightness(.7);transform:scale(.985)}
 .paper{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 50% 0 50%);background:#c9d8e0;border-radius:2px}
 .paper::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse 62% 52% at 72% 20%,rgba(255,238,190,.18),transparent 72%),radial-gradient(ellipse at 50% 52%,transparent 52%,rgba(45,32,14,.5) 100%);box-shadow:inset 0 0 70px rgba(30,20,5,.55)}
 .paper::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background-image:repeating-linear-gradient(0deg,rgba(120,90,50,.045) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(120,90,50,.032) 0 1px,transparent 1px 4px);mix-blend-mode:multiply}
@@ -1249,7 +1250,7 @@ const CHAPTERS = {
     {t:'label',n:'ask'},
     {t:'choice',opts:[
       {text:'题「红香绿玉」，兼顾芭蕉之绿、海棠之红',goto:'a'},
-      {text:'直接用「崇光泛彩」',goto:'b'}
+      {t:'直接用「崇光泛彩」',goto:'b'}
     ]},
     {t:'label',n:'a'},
     {t:'say',who:'player',emo:'recite',text:'芭蕉为绿，海棠为红。题「红香绿玉」，两处景物都兼顾到了。'},
@@ -1790,6 +1791,60 @@ $('#freeBtn').addEventListener('click', ()=>{
 });
 
 /* =========================================================
+   闭卷：卷轴从两侧合拢 —— 结局前的收束仪式
+   ========================================================= */
+let scrollClosing = false;
+
+function closeScroll(cb){
+  const paper = $('#paper'), rodL = $('#rodL'), rodR = $('#rodR'), scroll = $('#scroll');
+  if(!paper || !rodL || !rodR || !scroll){ if(cb) cb(); return; }
+  hidePanel();
+  placard.classList.remove('show','hide');
+  mapTimers.forEach(clearTimeout); mapTimers = [];
+
+  scrollClosing = true;
+  scroll.classList.add('closing');
+  Snd.tone(220,.7,'sine',.025,-90);          /* 起卷的低鸣 */
+
+  const dur = 1050, t0 = performance.now();
+  const ease = x => x*x;                     /* 起手缓，收尾利落 */
+
+  function step(now){
+    const p = Math.min(1,(now - t0)/dur), e = ease(p), half = 50*e;
+    paper.style.clipPath = `inset(0 ${half}% 0 ${half}%)`;
+    rodL.style.left = half + '%';
+    rodR.style.left = (100 - half) + '%';
+    if(p < 1) requestAnimationFrame(step);
+    else {
+      unrolled = false;
+      scrollClosing = false;
+      scroll.classList.remove('closing');
+      Snd.thud();                            /* 两根轴碰上，一声闷响 */
+      if(cb) cb();
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+/* 结局前：先回卷轴、合卷，再出结局面板 */
+function finishWithScroll(cb){
+  RP.ended = true; rpgOn = false;
+  clearInterval(RP.timer);
+  rpgChoices.classList.remove('show'); rpgChoices.innerHTML = '';
+  $('#introCard').classList.remove('show'); cardWait = false;
+  scrRpg.classList.remove('ending');
+
+  showScreen(scrMap);
+  mapVisible = true;
+  updateMapUI();
+
+  setTimeout(() => {
+    if(!unrolled){ cb(); return; }           /* 本来就没展开，直接出结局 */
+    closeScroll(cb);
+  }, 520);
+}
+
+/* =========================================================
    RPG 引擎
    ========================================================= */
 const rpgChoices=$('#rpgChoices'), rpgText=$('#rpgText'), rpgName=$('#rpgName'),
@@ -1917,6 +1972,7 @@ function backToMap(){
   scrRpg.classList.remove('ending');
   showScreen(scrMap);
   mapVisible=true;
+  unrollMap();
   updateMapUI();
 }
 
@@ -1955,7 +2011,7 @@ function finishChapter(result, text){
   }
   if(result==='perfect'){
     PROG.finalDone=true; updateMapUI(); Snd.chime();
-    showEnding({
+    const endingData = {
       kicker: LANG==='t'?'第 十 七 回 · 終':'第 十 七 回 · 终',
       title:  LANG==='t'?'圓 滿 結 局':'圆 满 结 局',
       seal:'圓',
@@ -1969,7 +2025,8 @@ function finishChapter(result, text){
         [LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=>{ closeEnding(); backToMap(); }],
         [LANG==='t'?'重 新 開 始':'重 新 开 始', ()=> location.reload()]
       ]
-    });
+    };
+    finishWithScroll(()=> showEnding(endingData));
     return;
   }
   const isFail = result==='fail'; Snd.bad();
@@ -2274,7 +2331,8 @@ window.__CHANGELOG = [
   {id:'2026-10-22-e', area:'dev',      msg:'后台回溯：CHANGELOG + @chg 标记 + 控制台表'},
   {id:'2026-10-22-f', area:'i18n',     msg:'简繁切换：内置字表 + 词组优先 + 只翻文本节点 + 动态重绘'},
   {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'},
-  {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'}
+  {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'},
+  {id:'2026-10-23-a', area:'ending',   msg:'闭卷动画：终章结局前卷轴从两侧合拢，回卷轴时自动重新展开'}
 ];
 document.addEventListener('keydown', e=>{
   if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='l'){
