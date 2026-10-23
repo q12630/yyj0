@@ -1910,7 +1910,15 @@ function enterChapter(id){
   setTimeout(runCmd, 260);
 }
 function rpgTips(){ const tip=$('#rpgTip'); tip.classList.add('on'); clearTimeout(tip._t); tip._t=setTimeout(()=>tip.classList.remove('on'), 6000); }
-function backToMap(){ RP.ended=true; rpgOn=false; clearInterval(RP.timer); rpgChoices.classList.remove('show'); showScreen(scrMap); mapVisible=true; updateMapUI(); }
+function backToMap(){
+  RP.ended=true; rpgOn=false;
+  clearInterval(RP.timer);
+  rpgChoices.classList.remove('show');
+  scrRpg.classList.remove('ending');
+  showScreen(scrMap);
+  mapVisible=true;
+  updateMapUI();
+}
 
 let lessonId=null;
 function openLesson(id){
@@ -1947,20 +1955,58 @@ function finishChapter(result, text){
   }
   if(result==='perfect'){
     PROG.finalDone=true; updateMapUI(); Snd.chime();
-    showEnding({ kicker: LANG==='t'?'第 十 七 回 · 終':'第 十 七 回 · 终', title: LANG==='t'?'圓 滿 結 局':'圆 满 结 局', seal:'圓', text: T(text||'游园考验顺利完成，我的才情得到众人认可；大观园一切就绪，静待贵妃归来。') + '\n\n' + T('匾额对联已然拟定，梨香院收拾停当，妙玉的帖子也备下了。只等那一天，贵妃归省，园门大开。'), stats:[[LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],[LANG==='t'?'補學次數':'补学次数', PROG.lessons.size+(LANG==='t'?' 次':' 次')],[LANG==='t'?'小考得分':'小考得分', QUIZ.right+' / '+QUIZ.total]], buttons:[[LANG==='t'?'再 遊 一 次':'再 游 一 次', ()=> location.reload()],[LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=> closeEnding()]] });
+    showEnding({
+      kicker: LANG==='t'?'第 十 七 回 · 終':'第 十 七 回 · 终',
+      title:  LANG==='t'?'圓 滿 結 局':'圆 满 结 局',
+      seal:'圓',
+      text: T(text||'游园考验顺利完成，我的才情得到众人认可；大观园一切就绪，静待贵妃归来。') + '\n\n' + T('匾额对联已然拟定，梨香院收拾停当，妙玉的帖子也备下了。只等那一天，贵妃归省，园门大开。'),
+      stats:[
+        [LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],
+        [LANG==='t'?'補學次數':'补学次数', PROG.lessons.size+(LANG==='t'?' 次':' 次')],
+        [LANG==='t'?'小考得分':'小考得分', QUIZ.right+' / '+QUIZ.total]
+      ],
+      buttons:[
+        [LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=>{ closeEnding(); backToMap(); }],
+        [LANG==='t'?'重 新 開 始':'重 新 开 始', ()=> location.reload()]
+      ]
+    });
     return;
   }
   const isFail = result==='fail'; Snd.bad();
-  showEnding({ kicker: isFail ? (LANG==='t'?'本 輪 作 罷':'本 轮 作 罢') : (LANG==='t'?'草 草 收 場':'草 草 收 场'), title: isFail ? (LANG==='t'?'小 失 敗':'小 失 败') : (LANG==='t'?'普 通 結 局':'普 通 结 局'), seal: isFail?'敗':'止', text: T(text||'这一处终究没有题成。'), stats:[[LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],[LANG==='t'?'本站':'本站', T(CHAPTERS[RP.id].title)]], buttons:[[LANG==='t'?'重 來 此 景':'重 来 此 景', ()=>{ closeEnding(); enterChapter(RP.id); }],[LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=>{ closeEnding(); backToMap(); }]] });
+  showEnding({
+    kicker: isFail ? (LANG==='t'?'本 輪 作 罷':'本 轮 作 罢') : (LANG==='t'?'草 草 收 場':'草 草 收 场'),
+    title:  isFail ? (LANG==='t'?'小 失 敗':'小 失 败') : (LANG==='t'?'普 通 結 局':'普 通 结 局'),
+    seal: isFail?'敗':'止',
+    text: T(text||'这一处终究没有题成。'),
+    stats:[
+      [LANG==='t'?'已題匾額':'已题匾额', PROG.done.size+' / 9'],
+      [LANG==='t'?'本站':'本站', T(CHAPTERS[RP.id].title)]
+    ],
+    buttons:[
+      [LANG==='t'?'重 來 此 景':'重 来 此 景', ()=>{ const id=RP.id; closeEnding(); enterChapter(id); }],
+      [LANG==='t'?'回 到 卷 軸':'回 到 卷 轴', ()=>{ closeEnding(); backToMap(); }],
+      [LANG==='t'?'重 新 開 始':'重 新 开 始', ()=> location.reload()]
+    ]
+  });
 }
 function showEnding(o){
   scrRpg.classList.add('ending');
-  $('#enKicker').textContent=o.kicker; $('#enTitle').textContent=o.title; $('#enText').textContent=o.text; $('#enSeal').textContent=o.seal;
-  const st=$('#enStats'); st.innerHTML=''; o.stats.forEach(([k,v])=>{ const d=document.createElement('div'); d.innerHTML=`${k} <b>${v}</b>`; st.appendChild(d); });
-  const btns=$('#ovEnd').querySelectorAll('.en-btns button');
-  btns[0].textContent=o.buttons[0][0]; btns[1].textContent=o.buttons[1][0];
-  btns[0].onclick=e=>{ e.stopPropagation(); Snd.click(); o.buttons[0][1](); };
-  btns[1].onclick=e=>{ e.stopPropagation(); Snd.click(); o.buttons[1][1](); };
+  $('#enKicker').textContent=o.kicker;
+  $('#enTitle').textContent=o.title;
+  $('#enText').textContent=o.text;
+  $('#enSeal').textContent=o.seal;
+  const st=$('#enStats'); st.innerHTML='';
+  o.stats.forEach(([k,v])=>{ const d=document.createElement('div'); d.innerHTML=`${k} <b>${v}</b>`; st.appendChild(d); });
+  const wrap=$('#ovEnd').querySelector('.en-btns');
+  wrap.innerHTML='';
+  const list=o.buttons||[];
+  list.forEach(([label,fn],i)=>{
+    const b=document.createElement('button');
+    b.className=(i===list.length-1)?'btn-main':'btn-ghost';
+    b.textContent=label;
+    b.addEventListener('click', e=>{ e.stopPropagation(); Snd.click(); fn(); });
+    wrap.appendChild(b);
+  });
   $('#ovEnd').classList.add('on');
 }
 function closeEnding(){ $('#ovEnd').classList.remove('on'); scrRpg.classList.remove('ending'); }
@@ -2227,7 +2273,8 @@ window.__CHANGELOG = [
   {id:'2026-10-22-d', area:'words',    msg:'字词 + 必知合并；加搜索、分类折叠'},
   {id:'2026-10-22-e', area:'dev',      msg:'后台回溯：CHANGELOG + @chg 标记 + 控制台表'},
   {id:'2026-10-22-f', area:'i18n',     msg:'简繁切换：内置字表 + 词组优先 + 只翻文本节点 + 动态重绘'},
-  {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'}
+  {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'},
+  {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'}
 ];
 document.addEventListener('keydown', e=>{
   if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='l'){
