@@ -408,7 +408,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <button class="tool" id="btnWords">字词</button>
 </div>
 
-<!-- ==================== 开场（宣纸题签） ==================== -->
 <div class="screen on" id="scrTitle">
   <div class="backdrop"><div class="ink-glow"></div></div>
   <div class="paper-texture"></div>
@@ -437,7 +436,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <button class="skip" id="skipBtn">跳 过</button>
 </div>
 
-<!-- ==================== 序 ==================== -->
 <div class="screen" id="scrPrologue">
   <div class="pro">
     <div class="pro-head">
@@ -483,7 +481,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   </div>
 </div>
 
-<!-- ==================== 卷轴路线 ==================== -->
 <div class="screen" id="scrMap">
   <div class="map-wrap">
     <div class="map-top">
@@ -547,7 +544,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   </div>
 </div>
 
-<!-- ==================== RPG ==================== -->
 <div class="screen" id="scrRpg">
   <div class="rpg-bg" id="rpgBg"></div>
   <div class="rpg-chars">
@@ -583,7 +579,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   </div>
 </div>
 
-<!-- ==================== 词条卡 ==================== -->
 <div class="gloss" id="gloss">
   <button class="gloss-x" id="glossX">✕</button>
   <div class="gloss-w"><span id="glW"></span><span class="gloss-py" id="glPy"></span><span class="gloss-cat" id="glCat"></span></div>
@@ -592,7 +587,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <div class="gloss-tip" id="glTip"></div>
 </div>
 
-<!-- ==================== 学习惩罚 ==================== -->
 <div class="ov" id="ovLesson">
   <div class="lesson-panel">
     <div class="ls-head">
@@ -624,7 +618,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   </div>
 </div>
 
-<!-- ==================== 小游戏 / 字词面板 ==================== -->
 <div class="ov" id="ovGame">
   <div class="game-panel">
     <div class="g-head">
@@ -642,7 +635,6 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   </div>
 </div>
 
-<!-- ==================== 结局 ==================== -->
 <div class="ov" id="ovEnd">
   <div class="ending-panel">
     <div class="en-kicker" id="enKicker">第 十 七 回 · 终</div>
@@ -957,75 +949,74 @@ const CAST = {
   zhen:{name:'贾珍',role:'宁府管事',desc:'年纪比我大，却得叫我「二叔」；见了我父亲就慌。',img:'npc3.webp',emos:{panic:'npc3_panic.webp'}}
 };
 
-/* =========================================================
-   词条：scene 只讲"景与典"，不写"谁选的 / 对不对"
-   —— 卖点（在本回的注释）保留，但不再提前泄底
-   ========================================================= */
+/* 词条分工：
+   - d  = 字面义 / 出处 / 用法
+   - scene = 本回里的具体画面（不重复释义，也不泄题） */
 const GLOSS = {
-  '秦钟':{cat:'人物',py:'qín zhōng',d:'贾宝玉的好友，秦可卿的弟弟。',scene:'序言「秦钟新丧」，说的正是他。'},
-  '贾政':{cat:'人物',py:'jiǎ zhèng',d:'贾宝玉的父亲，荣国府二老爷。',scene:'本回「试才」的主考官。'},
-  '贾珍':{cat:'人物',py:'jiǎ zhēn',d:'宁国府的管事，论辈分是宝玉的侄辈。',scene:'开篇慌慌张张跑来报信「老爷往这边来了」，见贾政就慌。'},
-  '元春':{cat:'人物',py:'yuán chūn',d:'贾宝玉的姐姐，被皇帝封为贤德妃。',scene:'大观园就是为她回家省亲修的。'},
-  '妙玉':{cat:'人物',py:'miào yù',d:'大观园栊翠庵里的女尼，才貌出众。',scene:'终章提到府里下帖请她进园，为后文埋线。'},
-  '清客':{cat:'人物',py:'qīng kè',d:'住在富贵人家、陪主人读书聊天的门客。',scene:'本回随贾政游园，一路替各处景致拟名。'},
-  '相公':{cat:'人物',py:'xiàng gong',d:'旧时对读书人的尊称。',scene:'序言「一众清客相公齐齐看向我」，就是这群门客。'},
-  '丫鬟':{cat:'人物',py:'yā huan',d:'有钱人家雇来伺候人的女孩子。',scene:'大观园里将来会住进许多丫鬟。'},
-  '贾府':{cat:'人物',py:'jiǎ fǔ',d:'贾宝玉家，是书里最有权势的大家族。',scene:'大观园是贾府为迎贵妃修的园子。'},
-  '老爷':{cat:'称谓',py:'lǎo ye',d:'旧时仆人对主人的称呼，这里指贾政。',scene:'贾珍喊「老爷往这边来了」，宝玉一听就紧张。'},
-  '二叔':{cat:'称谓',py:'èr shū',d:'排行第二的叔父，这里指宝玉。',scene:'贾珍年纪比宝玉大，却得叫他「二叔」，见出贾府辈分严。'},
-  '晚生':{cat:'称谓',py:'wǎn shēng',d:'旧时读书人对前辈的自称（谦辞）。',scene:'清客说「依晚生愚见」，是门客对主人的客气话。'},
-  '愚见':{cat:'称谓',py:'yú jiàn',d:'自己的看法（谦辞）。',scene:'清客「依晚生愚见」，先谦后夸，是门客的说话套路。'},
-  '省亲':{cat:'称谓',py:'xǐng qīn',d:'出嫁的女儿回娘家看望父母。',scene:'大观园就是为贵妃元春回家省亲修的。'},
-  '贵妃':{cat:'称谓',py:'guì fēi',d:'皇帝的高级妃子。',scene:'元春被封贤德妃。'},
-  '颂圣':{cat:'称谓',py:'sòng shèng',d:'歌颂皇帝、皇家的功德。',scene:'旧时题匾写联，常要顾及这一层。'},
-  '八股':{cat:'科举',py:'bā gǔ',d:'明清科举规定的一种文章格式，规矩很多、很死板。',scene:'序言说宝玉「不好八股经书」，偏在诗词对联上有才情——这正是本回他能「试才」的底子。'},
-  '经书':{cat:'科举',py:'jīng shū',d:'古代读书人必读的经典，如《四书》《五经》。',scene:'与「八股」连用，指科举正途的学问。'},
-  '大观园':{cat:'园林',py:'dà guān yuán',d:'贾府为迎贵妃贾元春回家省亲修的园子。',scene:'本回就是游这座园子，一处处题匾拟联。'},
-  '匾额':{cat:'园林',py:'biǎn é',d:'挂在门或墙上方、写着名字或赞语的长方形木牌。',scene:'本回每处景致都要题一块匾。'},
-  '对联':{cat:'园林',py:'duì lián',d:'挂在门两边、字数一样、意思相对的两句话。',scene:'题匾之后还要拟联，是本回考较的重点。'},
-  '题额':{cat:'园林',py:'tí é',d:'在匾额上题字。',scene:'「试才题对额」的「题额」，就是指这件事。'},
-  '对仗':{cat:'园林',py:'duì zhàng',d:'对联上下两句，字数相同，词性相对。比如「柳」对「花」，「翠」对「香」。',scene:'沁芳亭联「绕堤柳借三篙翠，隔岸花分一脉香」，就是工整的对仗。'},
-  '翠嶂':{cat:'园林',py:'cuì zhàng',d:'翠是绿色，嶂是像屏风一样立着的山。',scene:'进门第一景，把满园景致藏在山后。'},
-  '镜面白石':{cat:'园林',py:'jìng miàn bái shí',d:'平整光滑如镜的白石，专供题字用。',scene:'山顶一块平整如镜的白石，专留题字。'},
-  '苔藓':{cat:'园林',py:'tái xiǎn',d:'长在石头、墙根上的绿色小植物。',scene:'园中老石上常见，添几分古意。'},
-  '藤萝':{cat:'园林',py:'téng luó',d:'爬在石头或架子上、会垂下来的藤。',scene:'石洞口藤萝垂挂，落花浮在水面。'},
-  '翼然':{cat:'园林',py:'yì rán',d:'像鸟张开翅膀的样子。',scene:'出自欧阳修《醉翁亭记》「有亭翼然临于泉上者」。'},
-  '泻玉':{cat:'园林',py:'xiè yù',d:'泻是水直冲而下，玉是形容水光。',scene:'「泻」写水势直冲，「玉」形容水光，二字直白有力。'},
-  '沁芳':{cat:'园林',py:'qìn fāng',d:'沁是渗进去，芳是花香。水把花香带着走。',scene:'桥下溪水从花木深处流出，落花浮在水面。'},
-  '三篙':{cat:'园林',py:'sān gāo',d:'撑船用的竹篙，这里形容水之深。',scene:'「绕堤柳借三篙翠」，写柳色借水深而更翠。'},
-  '一脉':{cat:'园林',py:'yī mài',d:'一条、一缕。',scene:'「隔岸花分一脉香」，写花香分一缕飘到对岸。'},
-  '有凤来仪':{cat:'园林',py:'yǒu fèng lái yí',d:'凤凰飞来，吉祥之兆。出自《尚书》。',scene:'出自《尚书·益稷》「箫韶九成，凤皇来仪」，凤凰来舞，吉祥之兆。凤凰非竹实不食、非梧桐不栖。'},
-  '杏帘在望':{cat:'园林',py:'xìng lián zài wàng',d:'杏花如帘，远远在望。',scene:'化自杜牧「借问酒家何处有，牧童遥指杏花村」。杏帘，酒旗。'},
-  '稻香村':{cat:'园林',py:'dào xiāng cūn',d:'这处田庄的名字。',scene:'黄泥矮墙、茅屋菜地，几百株杏花开得如火——一派田园气象。'},
-  '蓼汀花溆':{cat:'园林',py:'liǎo tīng huā xù',d:'蓼是水边小草，汀是水边平地，溆是水边。',scene:'石洞流泉，藤萝垂挂，落花浮水，正合此景。'},
-  '蘅芷':{cat:'园林',py:'héng zhǐ',d:'蘅和芷都是香草的名字。',scene:'蘅（杜蘅）、芷（白芷），都是香草。蘅芜苑满院香草，清芬袭人。'},
-  '蘅芜苑':{cat:'园林',py:'héng wú yuàn',d:'这处院子的名字。',scene:'院中无大树，遍地奇花异草，香气幽幽。'},
-  '玉石牌坊':{cat:'园林',py:'yù shí pái fāng',d:'玉石做的牌坊，立在省亲正殿前。',scene:'省亲正殿前的牌坊，白玉雕龙，巍峨庄严。'},
-  '天仙宝境':{cat:'园林',py:'tiān xiān bǎo jìng',d:'四字写殿宇的华美。',scene:'「天仙宝境」四字，写殿宇的华美。'},
-  '沁芳闸':{cat:'园林',py:'qìn fāng zhá',d:'全园的水闸。',scene:'桥下奔涌如帘，是园中水系的咽喉。'},
-  '红香绿玉':{cat:'园林',py:'hóng xiāng lǜ yù',d:'兼顾芭蕉之绿、海棠之红。',scene:'「红」指海棠，「绿」指芭蕉；「香」是海棠之香，「玉」是芭蕉之润。'},
-  '怡红快绿':{cat:'园林',py:'yí hóng kuài lǜ',d:'省亲时改的匾名。',scene:'「怡」取海棠之红，「快」取芭蕉之绿。'},
-  '崇光泛彩':{cat:'园林',py:'chóng guāng fàn cǎi',d:'写海棠之色。',scene:'「崇光」出自苏轼《海棠》「东风袅袅泛崇光」，写海棠在月光下的光泽。'},
-  '栊翠庵':{cat:'园林',py:'lóng cuì ān',d:'大观园里的一座庵堂。',scene:'妙玉后来住在这里。'},
-  '梨香院':{cat:'园林',py:'lí xiāng yuàn',d:'贾府里的一处院落。',scene:'终章提到收拾梨香院，给唱戏的女孩子住。'},
-  '曲径通幽处':{cat:'典故',py:'qū jìng tōng yōu chù',d:'弯曲的小路通向幽静深处。出自常建《题破山寺后禅院》。',scene:'出自常建《题破山寺后禅院》「曲径通幽处，禅房花木深」。弯曲的小路通向幽静深处，花木繁茂，把庭院遮住。'},
-  '淇水遗风':{cat:'典故',py:'qí shuǐ yí fēng',d:'《诗经》里咏竹的典故，指高雅遗风。',scene:'《诗经·卫风·淇奥》以淇水绿竹起兴，咏君子之德。后人以「淇水遗风」指咏竹的高雅遗风。'},
-  '睢园雅迹':{cat:'典故',py:'suī yuán yǎ jì',d:'西汉梁孝王的睢园，文人雅集之地。',scene:'西汉梁孝王的睢园，是文人雅集之地，司马相如等曾在此赋诗。'},
-  '浣葛':{cat:'典故',py:'huàn gé',d:'洗葛布，指田园生活。',scene:'「新涨绿添浣葛处」，写春水上涨、村妇浣葛。'},
-  '采芹':{cat:'典故',py:'cǎi qín',d:'采摘水芹，指读书人入学。',scene:'「好云香护采芹人」，写田园中也有读书种子。'},
-  '武陵源':{cat:'典故',py:'wǔ líng yuán',d:'陶渊明《桃花源记》里的世外桃源。',scene:'陶渊明《桃花源记》里渔人误入的世外桃源，是避乱隐居之地。'},
-  '秦人旧舍':{cat:'典故',py:'qín rén jiù shè',d:'桃花源里避乱的秦人旧居。',scene:'《桃花源记》中避乱的秦人旧居。与「武陵源」同出一典。'},
-  '豆蔻':{cat:'典故',py:'dòu kòu',d:'一种香草。后比喻十三四岁的少女。',scene:'初夏开花的香草。杜牧「娉娉袅袅十三余，豆蔻梢头二月初」，后用以比青春年少。'},
-  '荼蘼':{cat:'典故',py:'tú mí',d:'暮春最后开的花。它一开，春天就结束了。',scene:'暮春最后开放的花。苏轼「开到荼蘼花事了」——它一开，春天就到头了。'},
-  '拾人牙慧':{cat:'典故',py:'shí rén yá huì',d:'捡别人说过的话当自己的，没有新意。',scene:'出自《世说新语》，指捡别人说过的话当自己的，没有新意。'},
-  '凤凰非梧桐不栖':{cat:'典故',py:'fèng huáng fēi wú tóng bù qī',d:'凤凰只落在梧桐上。出自《庄子》。',scene:'出自《庄子·秋水》，凤凰只栖在梧桐上。'},
-  '非竹实不食':{cat:'典故',py:'fēi zhú shí bù shí',d:'凤凰不吃别的，只吃竹实。',scene:'凤凰只吃竹实。与「非梧桐不栖」同出凤凰典故。'},
-  '叉出去':{cat:'动作',py:'chā chū qù',d:'把人赶出去。',scene:'把人赶出去。旧时主人家呵斥仆从、子弟的话。'},
-  '拂袖':{cat:'动作',py:'fú xiù',d:'一甩袖子，表示生气。',scene:'一甩袖子，表示生气。'},
-  '讪讪':{cat:'动作',py:'shàn shàn',d:'难为情、不自然的样子。',scene:'难为情、不自然的样子。'},
-  '缄口':{cat:'动作',py:'jiān kǒu',d:'闭着嘴不说话。',scene:'闭着嘴不说话。'},
-  '卖弄':{cat:'动作',py:'mài nòng',d:'故意显示、炫耀。',scene:'故意显示、炫耀。'},
-  '限日补作':{cat:'动作',py:'xiàn rì bǔ zuò',d:'限定日期补写。',scene:'限定日期补写。'}
+  '秦钟':{cat:'人物',py:'qín zhōng',d:'贾宝玉的好友，秦可卿的弟弟。',scene:'序言第一句「秦钟新丧」，是一句丧讯，压得宝玉笑不出来。'},
+  '贾政':{cat:'人物',py:'jiǎ zhèng',d:'贾宝玉的父亲，荣国府二老爷。',scene:'本回一路板着脸考较宝玉的，就是这位父亲。'},
+  '贾珍':{cat:'人物',py:'jiǎ zhēn',d:'宁国府的管事，论辈分是宝玉的侄辈。',scene:'开篇他一路跑来喊「老爷往这边来了」，脚下都带着慌。'},
+  '元春':{cat:'人物',py:'yuán chūn',d:'贾宝玉的姐姐，被皇帝封为贤德妃。',scene:'省亲那日要回来的，就是这位贵妃姐姐。'},
+  '妙玉':{cat:'人物',py:'miào yù',d:'大观园栊翠庵里的女尼，才貌出众。',scene:'终章提到府里下帖子请她进园，人还没露面。'},
+  '清客':{cat:'人物',py:'qīng kè',d:'住在富贵人家、陪主人读书聊天的门客。',scene:'本回一路跟着贾政，每处景致都抢着先拟一个名。'},
+  '相公':{cat:'人物',py:'xiàng gong',d:'旧时对读书人的尊称。',scene:'序言「一众清客相公齐齐看向我」，说的就是这群人。'},
+  '丫鬟':{cat:'人物',py:'yā huan',d:'有钱人家雇来伺候人的女孩子。',scene:'园里各处院落修好，将来都配着丫鬟使唤。'},
+  '贾府':{cat:'人物',py:'jiǎ fǔ',d:'贾宝玉家，是书里最有权势的大家族。',scene:'这一回里，上上下下都在为省亲的事忙碌。'},
+  '老爷':{cat:'称谓',py:'lǎo ye',d:'旧时仆人对主人的称呼，这里指贾政。',scene:'贾珍喊「老爷往这边来了」，宝玉一听就缩了脖子。'},
+  '二叔':{cat:'称谓',py:'èr shū',d:'排行第二的叔父，这里指宝玉。',scene:'贾珍比宝玉年长，却得恭恭敬敬叫他一声「二叔」。'},
+  '晚生':{cat:'称谓',py:'wǎn shēng',d:'旧时读书人对前辈的自称（谦辞）。',scene:'清客开口必称「依晚生愚见」，先自谦，再说话。'},
+  '愚见':{cat:'称谓',py:'yú jiàn',d:'自己的看法（谦辞）。',scene:'清客一句「依晚生愚见」，后头往往跟着一串奉承。'},
+  '省亲':{cat:'称谓',py:'xǐng qīn',d:'出嫁的女儿回娘家看望父母。',scene:'园子修成后一直空着，满府忙的，就是这一件大事。'},
+  '贵妃':{cat:'称谓',py:'guì fēi',d:'皇帝的高级妃子。',scene:'元春封了贤德妃，园中正殿便是为她而设。'},
+  '颂圣':{cat:'称谓',py:'sòng shèng',d:'歌颂皇帝、皇家的功德。',scene:'题园中匾联，若沾着皇家，笔底下就得留这一层。'},
+  '八股':{cat:'科举',py:'bā gǔ',d:'明清科举规定的一种文章格式，规矩很多、很死板。',scene:'序言说宝玉「不好八股经书」，这日偏被考的是诗词对联。'},
+  '经书':{cat:'科举',py:'jīng shū',d:'古代读书人必读的经典，如《四书》《五经》。',scene:'宝玉平日躲的，就是这些书；父亲偏偏拿这个压他。'},
+  '大观园':{cat:'园林',py:'dà guān yuán',d:'贾府为迎贵妃贾元春回家省亲修的园子。',scene:'这一回整整一日，都在园中一处处走、一处处题。'},
+  '匾额':{cat:'园林',py:'biǎn é',d:'挂在门或墙上方、写着名字或赞语的长方形木牌。',scene:'园中每处景致，都留着一块待题的空白。'},
+  '对联':{cat:'园林',py:'duì lián',d:'挂在门两边、字数一样、意思相对的两句话。',scene:'匾题完了还不算，父亲往往还要再考一副联。'},
+  '题额':{cat:'园林',py:'tí é',d:'在匾额上题字。',scene:'这一回的题目「试才题对额」，考的就是这桩事。'},
+  '对仗':{cat:'园林',py:'duì zhàng',d:'对联上下两句，字数相同，词性相对。比如「柳」对「花」，「翠」对「香」。',scene:'沁芳亭那一联「绕堤柳借三篙翠，隔岸花分一脉香」，上下字字相对。'},
+  '翠嶂':{cat:'园林',py:'cuì zhàng',d:'翠是绿色，嶂是像屏风一样立着的山。',scene:'进门第一眼，满园景致全被它挡在后面。'},
+  '镜面白石':{cat:'园林',py:'jìng miàn bái shí',d:'平整光滑如镜的白石，专供题字用。',scene:'山顶那块石头平平整整，像专等着人落笔。'},
+  '苔藓':{cat:'园林',py:'tái xiǎn',d:'长在石头、墙根上的绿色小植物。',scene:'假山石上斑斑点点，绿得发暗，添了几分古意。'},
+  '藤萝':{cat:'园林',py:'téng luó',d:'爬在石头或架子上、会垂下来的藤。',scene:'石洞口垂下一片藤萝，风一吹，轻轻晃。'},
+  '翼然':{cat:'园林',py:'yì rán',d:'像鸟张开翅膀的样子。',scene:'欧阳修写醉翁亭，用的正是这两个字。'},
+  '泻玉':{cat:'园林',py:'xiè yù',d:'泻是水直冲而下，玉是形容水光。',scene:'沁芳亭压水而成，桥下溪水奔流，正合这一个「泻」字。'},
+  '沁芳':{cat:'园林',py:'qìn fāng',d:'沁是渗进去，芳是花香。水把花香带着走。',scene:'桥下溪水从花木深处流出，落花浮在水面上打转。'},
+  '三篙':{cat:'园林',py:'sān gāo',d:'撑船用的竹篙，这里形容水之深。',scene:'「绕堤柳借三篙翠」——堤边柳色，借的是这一泓深水。'},
+  '一脉':{cat:'园林',py:'yī mài',d:'一条、一缕。',scene:'「隔岸花分一脉香」——花香隔着水，只匀过一缕来。'},
+  '有凤来仪':{cat:'园林',py:'yǒu fèng lái yí',d:'凤凰飞来，吉祥之兆。出自《尚书》。',scene:'满院翠竹遮天，风过处沙沙作响，最宜凤凰来栖。'},
+  '杏帘在望':{cat:'园林',py:'xìng lián zài wàng',d:'杏花如帘，远远在望。',scene:'黄泥墙头挑出一面酒旗，远远望去，正是这四个字的光景。'},
+  '稻香村':{cat:'园林',py:'dào xiāng cūn',d:'这处田庄的名字。',scene:'黄泥矮墙、茅屋菜地，几百株杏花开得如火。'},
+  '蓼汀花溆':{cat:'园林',py:'liǎo tīng huā xù',d:'蓼是水边小草，汀是水边平地，溆是水边。',scene:'石洞流泉，藤萝垂挂，落花浮在水面缓缓漂出。'},
+  '蘅芷':{cat:'园林',py:'héng zhǐ',d:'蘅和芷都是香草的名字。',scene:'满院藤蔓缠着山石廊柱，香气幽幽地漫过来。'},
+  '蘅芜苑':{cat:'园林',py:'héng wú yuàn',d:'这处院子的名字。',scene:'院中不见一株大树，遍地是叫不出名的花草。'},
+  '玉石牌坊':{cat:'园林',py:'yù shí pái fāng',d:'玉石做的牌坊，立在省亲正殿前。',scene:'白玉雕龙，巍巍然立在正殿之前，压得人不敢高声。'},
+  '天仙宝境':{cat:'园林',py:'tiān xiān bǎo jìng',d:'四字写殿宇的华美。',scene:'殿宇一层层高上去，真像神仙住的地方。'},
+  '沁芳闸':{cat:'园林',py:'qìn fāng zhá',d:'全园的水闸。',scene:'桥下奔涌如帘，全园的水都从这里过。'},
+  '红香绿玉':{cat:'园林',py:'hóng xiāng lǜ yù',d:'兼顾芭蕉之绿、海棠之红。',scene:'院里一边芭蕉，一边西府海棠，红绿相映。'},
+  '怡红快绿':{cat:'园林',py:'yí hóng kuài lǜ',d:'省亲时改的匾名。',scene:'省亲那日，匾上的字换了一换，意思仍落在红与绿上。'},
+  '崇光泛彩':{cat:'园林',py:'chóng guāng fàn cǎi',d:'写海棠之色。',scene:'苏轼写海棠「东风袅袅泛崇光」，正是月下花光。'},
+  '栊翠庵':{cat:'园林',py:'lóng cuì ān',d:'大观园里的一座庵堂。',scene:'园中一角清静地，后来妙玉便住在这里。'},
+  '梨香院':{cat:'园林',py:'lí xiāng yuàn',d:'贾府里的一处院落。',scene:'终章里收拾出来，给买回的女孩子住。'},
+  '曲径通幽处':{cat:'典故',py:'qū jìng tōng yōu chù',d:'弯曲的小路通向幽静深处。出自常建《题破山寺后禅院》。',scene:'山口一径曲折，走进去才见天光，满园景色都藏在后头。'},
+  '淇水遗风':{cat:'典故',py:'qí shuǐ yí fēng',d:'《诗经》里咏竹的典故，指高雅遗风。',scene:'《诗经·卫风·淇奥》以淇水绿竹起兴，咏的是君子之德。'},
+  '睢园雅迹':{cat:'典故',py:'suī yuán yǎ jì',d:'西汉梁孝王的睢园，文人雅集之地。',scene:'司马相如等曾在此赋诗，后人提起便是风雅二字。'},
+  '浣葛':{cat:'典故',py:'huàn gé',d:'洗葛布，指田园生活。',scene:'「新涨绿添浣葛处」——春水初涨，村妇在溪边浣洗。'},
+  '采芹':{cat:'典故',py:'cǎi qín',d:'采摘水芹，指读书人入学。',scene:'「好云香护采芹人」——田园里也护着读书的种子。'},
+  '武陵源':{cat:'典故',py:'wǔ líng yuán',d:'陶渊明《桃花源记》里的世外桃源。',scene:'渔人误入桃花源，出来后再也找不着路。'},
+  '秦人旧舍':{cat:'典故',py:'qín rén jiù shè',d:'桃花源里避乱的秦人旧居。',scene:'桃花源里那群避乱的秦人，一住就是几百年。'},
+  '豆蔻':{cat:'典故',py:'dòu kòu',d:'一种香草。后比喻十三四岁的少女。',scene:'杜牧写「豆蔻梢头二月初」，说的是十三四岁的年纪。'},
+  '荼蘼':{cat:'典故',py:'tú mí',d:'暮春最后开的花。它一开，春天就结束了。',scene:'苏轼说「开到荼蘼花事了」，它一开，春就尽了。'},
+  '拾人牙慧':{cat:'典故',py:'shí rén yá huì',d:'捡别人说过的话当自己的，没有新意。',scene:'《世说新语》里的话，说的是没有自己的见解。'},
+  '凤凰非梧桐不栖':{cat:'典故',py:'fèng huáng fēi wú tóng bù qī',d:'凤凰只落在梧桐上。出自《庄子》。',scene:'《庄子·秋水》里，凤凰只肯落在梧桐上。'},
+  '非竹实不食':{cat:'典故',py:'fēi zhú shí bù shí',d:'凤凰不吃别的，只吃竹实。',scene:'凤凰不食人间烟火，单吃竹实。'},
+  '叉出去':{cat:'动作',py:'chā chū qù',d:'把人赶出去。',scene:'旧时主人家动了怒，一声令下，人就被架出门去。'},
+  '拂袖':{cat:'动作',py:'fú xiù',d:'一甩袖子，表示生气。',scene:'袖子一甩，转身便走，是不愿再多说一句的意思。'},
+  '讪讪':{cat:'动作',py:'shàn shàn',d:'难为情、不自然的样子。',scene:'脸上挂不住，嘴里还要应着，那副样子便是。'},
+  '缄口':{cat:'动作',py:'jiān kǒu',d:'闭着嘴不说话。',scene:'满屋子人都不出声，只听得见风声。'},
+  '卖弄':{cat:'动作',py:'mài nòng',d:'故意显示、炫耀。',scene:'多念两句、多说几个典故，生怕别人不知道自己有学问。'},
+  '限日补作':{cat:'动作',py:'xiàn rì bǔ zuò',d:'限定日期补写。',scene:'父亲丢下一句期限，转身走了，留下的还得自己补上。'}
 };
 const GLOSS_KEYS = Object.keys(GLOSS).sort((a,b)=> b.length-a.length);
 const GLOSS_CATS = ['人物','称谓','科举','园林','典故','动作'];
@@ -1048,7 +1039,7 @@ const LESSONS = {
       {w:'花木深',py:'huā mù shēn',d:'花木繁茂幽深，把院子遮住了。'}
     ],
     why:'大观园进门这座翠嶂，正把满园景致藏在山后；一径曲折进去，才见天光——与「曲径通幽处」的意境分毫不差。题匾先看景，再想诗；景与诗对得上，字才有根。',
-    link:'「曲径通幽处」不只是背诗：翠嶂假山一径曲折、藏尽园景，正是这五个字的实景。题匾先看景，再想诗——景、诗、字对得上，才不算白题。',
+    link:'常建这四句，前两句写「入」，后两句写「空」。宝玉只取了中间一联——取的是那个「曲」与「幽」：园门一进去，先曲后幽、先藏后露，走的正是这条路子。',
     tip:'—— 父命：抄二十遍，明日背来。'
   },
   duilian:{
@@ -1063,7 +1054,7 @@ const LESSONS = {
       {w:'荼蘼',py:'tú mí',d:'暮春最后开放的花。苏轼「开到荼蘼花事了」——它一开，春天就到头了。'}
     ],
     why:'这副对联专为蘅芜苑而设：满院香草清雅，少年才情灵动，一联之内，人与景都写到了。抄来的句子是别人的；懂得它好在哪里，才是自己的。',
-    link:'「豆蔻」「荼蘼」不只是两个香草名：一个写少年才情，一个写暮春花香。宝玉把满院香草与自己的年纪、眼前的景串成一副联——这才是「试才」要考的心思。',
+    link:'这副联的妙处在对仗：「吟成」对「睡足」，「豆蔻」对「荼蘼」，「才犹艳」对「梦也香」——一醒一眠，一浓一淡，字字咬合。',
     tip:'—— 父命：把词义抄明白，再讲给我听。'
   }
 };
@@ -1328,67 +1319,15 @@ const MEANING_ITEMS = [
 
 <script>
 /* =========================================================
-   6. 引擎（含新开幕 K2 + 简繁适配）
+   6. 引擎（含 K2 开幕 + 简繁适配）
    ========================================================= */
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 let LANG = (()=>{ try{ return localStorage.getItem('hlm_lang') || 's'; }catch(e){ return 's'; } })();
 
-/* 简 → 繁 字表 */
-const S2T_PAIRS = `
-满滿 纸紙 泪淚 谁誰 红紅 楼樓 梦夢 观觀 试試 题題 对對 额額 园園 点點 击擊 标標
-约約 钟鐘 过過 游遊 险險 处處 场場 较較 时時 亲親 传傳 话話 后後 压壓 块塊 头頭
-来來 这這 个個 着著 别別 样樣 当當 众眾 齐齊 贾賈 贵貴 为為 归歸 书書 经經 几幾
-么麼 许許 闹鬧 叹嘆 错錯 罚罰 诗詩 认認 词詞 带帶 线線 类類 择擇 运運 脸臉 乱亂
-应應 学學 会會 轮輪 静靜 简簡 繁繁 换換 体體 叠疊 声聲 听聽 见見 风風 鸟鳥 继繼
-续續 温溫 终終 进進 径徑 绕繞 脉脈 凤鳳 仪儀 潇瀟 馆館 宝寶 闲閒 烟煙 绿綠
-罢罷 犹猶 凉涼 帘簾 涨漲 护護 采採 溆漵 旧舊 艳豔 宁寧 离離 怀懷 忆憶 怜憐 总總
-恋戀 惊驚 惧懼 惨慘 愿願 戏戲 战戰 报報 担擔 拟擬 拥擁 挂掛 挡擋 挤擠 挥揮 据據
-摆擺 摇搖 撑撐 数數 断斷 无無 显顯 术術 机機 杀殺 杂雜 权權 条條 杨楊 极極 构構
-栋棟 栏欄 树樹 桥橋 检檢 横橫 欢歡 欧歐 残殘 毕畢 气氣 汉漢 汤湯 沟溝 没沒 泻瀉
-泽澤 洁潔 洒灑 浅淺 浆漿 浇澆 浊濁 测測 济濟 浑渾 浓濃 涛濤 润潤 渊淵 涧澗 渔漁
-渗滲 湾灣 湿濕 溃潰 滚滾 滤濾 滥濫 滨濱 滩灘 潜潛 澜瀾 灭滅 灯燈 灵靈 炼煉 烂爛
-烦煩 烧燒 热熱 爱愛 爷爺 牵牽 状狀 狭狹 独獨 猎獵 献獻 环環 现現 玛瑪 电電 画畫
-畅暢 疗療 痴癡 盏盞 盐鹽 监監 盖蓋 盘盤 睁睜 瞒瞞 矫矯 矿礦 码碼 砖磚 础礎 确確
-碍礙 礼禮 祸禍 禄祿 禅禪 种種 积積 称稱 稳穩 穷窮 窃竊 窝窩 竞競 笔筆 笼籠 筑築
-筹籌 签簽 篮籃 篱籬 粮糧 紧緊 级級 纪紀 纯純 纲綱 纳納 纵縱 纷紛 纹紋 纺紡 练練
-组組 细細 织織 绍紹 绑綁 结結 绘繪 给給 络絡 绝絕 统統 绢絹 绣繡 绩績 绪緒 绮綺
-绳繩 维維 绵綿 绸綢 综綜 绽綻 缀綴 缆纜 缓緩 缔締 缕縷 编編 缘緣 缚縛 缝縫 缠纏
-缩縮 缴繳 网網 罗羅 联聯 聪聰 肃肅 肠腸 肤膚 肾腎 肿腫 胀脹 胁脅 胆膽 胜勝 胶膠
-脏臟 脑腦 脚腳 脱脫 腊臘 腻膩 腾騰 舍捨 舰艦 舱艙 艰艱 艺藝 节節 芜蕪 苇葦 苍蒼
-苏蘇 苹蘋 茎莖 荐薦 荚莢 荞蕎 荡蕩 荣榮 荤葷 荧熒 荫蔭 药藥 莲蓮 获獲 莹瑩 莺鶯
-萝蘿 萤螢 营營 萧蕭 萨薩 蒋蔣 蓝藍 蓟薊 蔷薔 蔼藹 蕴蘊 藓蘚 虏虜 虑慮 虚虛 虫蟲
-虽雖 虾蝦 蚀蝕 蚁蟻 蚂螞 蚕蠶 蛮蠻 蛰蟄 蜗蝸 蝇蠅 蝉蟬 蝼螻 衅釁 衔銜 补補 袄襖
-装裝 裤褲 规規 视視 览覽 觉覺 觊覬 触觸 订訂 计計 讥譏 讨討 让讓 训訓 议議 讯訊
-记記 讲講 讳諱 讶訝 论論 讼訟 讽諷 设設 访訪 诀訣 证證 评評 识識 诈詐 诉訴 诊診
-译譯 诚誠 诞誕 诡詭 询詢 该該 详詳 语語 误誤 诱誘 说說 诵誦 请請 诸諸 诺諾 读讀
-课課 调調 谅諒 谈談 谊誼 谋謀 谎謊 谐諧 谓謂 谕諭 谚諺 谜謎 谢謝 谣謠 谦謙 谨謹
-谬謬 谭譚 谱譜 谴譴 谷穀 贝貝 贞貞 负負 贡貢 财財 责責 贤賢 败敗 账賬 货貨 质質
-贩販 贪貪 贫貧 贬貶 购購 贮貯 贯貫 贰貳 贱賤 贴貼 贷貸 贸貿 费費 贺賀 贼賊 贿賄
-赁賃 赂賂 赃贓 资資 赈賑 赊賒 赋賦 赌賭 赎贖 赏賞 赐賜 赔賠 赖賴 赚賺 赛賽 赞贊
-赠贈 赡贍 赢贏 赵趙 赶趕 趋趨 跃躍 践踐 跻躋 踊踴 踌躊 踪蹤 蹑躡 蹒蹣 躯軀 车車
-轧軋 轨軌 轩軒 转轉 软軟 轰轟 轴軸 轶軼 轻輕 载載 轿轎 辅輔 辆輛 辈輩 辉輝 辍輟
-辐輻 辑輯 输輸 辔轡 辕轅 辖轄 辗輾 辘轆 辙轍 辞辭 辩辯 辫辮 边邊 辽遼 达達 迁遷
-迈邁 还還 远遠 违違 连連 迟遲 迹跡 适適 选選 逊遜 递遞 逻邏 遗遺 遥遙 邓鄧 邮郵
-邹鄒 邻鄰 郁鬱 郑鄭 酝醞 酱醬 酿釀 释釋 鉴鑑 针針 钉釘 钓釣 钙鈣 钝鈍 钞鈔
-钠鈉 钢鋼 钥鑰 钦欽 钧鈞 钩鉤 钮鈕 钱錢 钳鉗 钻鑽 铁鐵 铃鈴 铅鉛 铐銬 铜銅 铝鋁
-铭銘 银銀 铸鑄 铺鋪 链鏈 销銷 锁鎖 锄鋤 锅鍋 锋鋒 锐銳 锡錫 锣鑼 锤錘 锥錐 锦錦
-键鍵 锯鋸 锰錳 锹鍬 锻鍛 镀鍍 镁鎂 镂鏤 镇鎮 镊鑷 镐鎬 镑鎊 镖鏢 镜鏡 镣鐐 镬鑊
-镰鐮 镶鑲 长長 门門 闪閃 闭閉 问問 闯闖 闰閏 间間 闷悶 闸閘 闺閨 闻聞 闽閩 阀閥
-阁閣 阂閡 阅閱 阉閹 阎閻 阐闡 阑闌 阔闊 阖闔 阙闕 队隊 阳陽 阴陰 阵陣 阶階 际際
-陆陸 陇隴 陈陳 陕陝 陨隕 险險 随隨 隐隱 隶隸 难難 雏雛 雾霧 霁霽 霉黴 韦韋 韧韌
-韩韓 韬韜 韵韻 页頁 顶頂 顷頃 项項 顺順 须須 顽頑 顾顧 顿頓 颁頒 颂頌 预預 颅顱
-领領 颇頗 颈頸 颊頰 颌頜 频頻 颓頹 颖穎 颗顆 颜顏 颠顛 颤顫 飒颯 飘飄 飞飛 飨饗
-饥飢 饭飯 饮飲 饰飾 饱飽 饲飼 饵餌 饶饒 饺餃 饼餅 饿餓 馅餡 馈饋 馋饞 馒饅 马馬
-驭馭 驮馱 驯馴 驰馳 驱驅 驳駁 驴驢 驶駛 驻駐 驼駝 驾駕 驿驛 骂罵 骄驕 骆駱 骇駭
-验驗 骏駿 骑騎 骗騙 骚騷 骡騾 骤驟 骥驥 髅髏 鬓鬢 鱼魚 鲁魯 鲍鮑 鲜鮮 鲤鯉 鲨鯊
-鲫鯽 鲸鯨 鳖鱉 鳗鰻 鳞鱗 鸠鳩 鸡雞 鸣鳴 鸥鷗 鸦鴉 鸭鴨 鸯鴦 鸳鴛 鸽鴿 鸾鸞 鸿鴻
-鹅鵝 鹉鵡 鹊鵲 鹏鵬 鹤鶴 鹦鸚 鹰鷹 麦麥 黄黃 齿齒 龄齡 龙龍 龚龔 龟龜
-`.trim().split(/\s+/);
+const S2T_PAIRS = `满滿 纸紙 泪淚 谁誰 红紅 楼樓 梦夢 观觀 试試 题題 对對 额額 园園 点點 击擊 标標 约約 钟鐘 过過 游遊 险險 处處 场場 较較 时時 亲親 传傳 话話 后後 压壓 块塊 头頭 来來 这這 个個 着著 别別 样樣 当當 众眾 齐齊 贾賈 贵貴 为為 归歸 书書 经經 几幾 么麼 许許 闹鬧 叹嘆 错錯 罚罰 诗詩 认認 词詞 带帶 线線 类類 择擇 运運 脸臉 乱亂 应應 学學 会會 轮輪 静靜 简簡 繁繁 换換 体體 叠疊 声聲 听聽 见見 风風 鸟鳥 继繼 续續 温溫 终終 进進 径徑 绕繞 脉脈 凤鳳 仪儀 潇瀟 馆館 宝寶 闲閒 烟煙 绿綠 罢罷 犹猶 凉涼 帘簾 涨漲 护護 采採 溆漵 旧舊 艳豔 宁寧 离離 怀懷 忆憶 怜憐 总總 恋戀 惊驚 惧懼 惨慘 愿願 戏戲 战戰 报報 担擔 拟擬 拥擁 挂掛 挡擋 挤擠 挥揮 据據 摆擺 摇搖 撑撐 数數 断斷 无無 显顯 术術 机機 杀殺 杂雜 权權 条條 杨楊 极極 构構 栋棟 栏欄 树樹 桥橋 检檢 横橫 欢歡 欧歐 残殘 毕畢 气氣 汉漢 汤湯 沟溝 没沒 泻瀉 泽澤 洁潔 洒灑 浅淺 浆漿 浇澆 浊濁 测測 济濟 浑渾 浓濃 涛濤 润潤 渊淵 涧澗 渔漁 渗滲 湾灣 湿濕 溃潰 滚滾 滤濾 滥濫 滨濱 滩灘 潜潛 澜瀾 灭滅 灯燈 灵靈 炼煉 烂爛 烦煩 烧燒 热熱 爱愛 爷爺 牵牽 状狀 狭狹 独獨 猎獵 献獻 环環 现現 玛瑪 电電 画畫 畅暢 疗療 痴癡 盏盞 盐鹽 监監 盖蓋 盘盤 睁睜 瞒瞞 矫矯 矿礦 码碼 砖磚 础礎 确確 碍礙 礼禮 祸禍 禄祿 禅禪 种種 积積 称稱 稳穩 穷窮 窃竊 窝窩 竞競 笔筆 笼籠 筑築 筹籌 签簽 篮籃 篱籬 粮糧 紧緊 级級 纪紀 纯純 纲綱 纳納 纵縱 纷紛 纹紋 纺紡 练練 组組 细細 织織 绍紹 绑綁 结結 绘繪 给給 络絡 绝絕 统統 绢絹 绣繡 绩績 绪緒 绮綺 绳繩 维維 绵綿 绸綢 综綜 绽綻 缀綴 缆纜 缓緩 缔締 缕縷 编編 缘緣 缚縛 缝縫 缠纏 缩縮 缴繳 网網 罗羅 联聯 聪聰 肃肅 肠腸 肤膚 肾腎 肿腫 胀脹 胁脅 胆膽 胜勝 胶膠 脏臟 脑腦 脚腳 脱脫 腊臘 腻膩 腾騰 舍捨 舰艦 舱艙 艰艱 艺藝 节節 芜蕪 苇葦 苍蒼 苏蘇 苹蘋 茎莖 荐薦 荚莢 荞蕎 荡蕩 荣榮 荤葷 荧熒 荫蔭 药藥 莲蓮 获獲 莹瑩 莺鶯 萝蘿 萤螢 营營 萧蕭 萨薩 蒋蔣 蓝藍 蓟薊 蔷薔 蔼藹 蕴蘊 藓蘚 虏虜 虑慮 虚虛 虫蟲 虽雖 虾蝦 蚀蝕 蚁蟻 蚂螞 蚕蠶 蛮蠻 蛰蟄 蜗蝸 蝇蠅 蝉蟬 蝼螻 衅釁 衔銜 补補 袄襖 装裝 裤褲 规規 视視 览覽 觉覺 觊覬 触觸 订訂 计計 讥譏 讨討 让讓 训訓 议議 讯訊 记記 讲講 讳諱 讶訝 论論 讼訟 讽諷 设設 访訪 诀訣 证證 评評 识識 诈詐 诉訴 诊診 译譯 诚誠 诞誕 诡詭 询詢 该該 详詳 语語 误誤 诱誘 说說 诵誦 请請 诸諸 诺諾 读讀 课課 调調 谅諒 谈談 谊誼 谋謀 谎謊 谐諧 谓謂 谕諭 谚諺 谜謎 谢謝 谣謠 谦謙 谨謹 谬謬 谭譚 谱譜 谴譴 谷穀 贝貝 贞貞 负負 贡貢 财財 责責 贤賢 败敗 账賬 货貨 质質 贩販 贪貪 贫貧 贬貶 购購 贮貯 贯貫 贰貳 贱賤 贴貼 贷貸 贸貿 费費 贺賀 贼賊 贿賄 赁賃 赂賂 赃贓 资資 赈賑 赊賒 赋賦 赌賭 赎贖 赏賞 赐賜 赔賠 赖賴 赚賺 赛賽 赞贊 赠贈 赡贍 赢贏 赵趙 赶趕 趋趨 跃躍 践踐 跻躋 踊踴 踌躊 踪蹤 蹑躡 蹒蹣 躯軀 车車 轧軋 轨軌 轩軒 转轉 软軟 轰轟 轴軸 轶軼 轻輕 载載 轿轎 辅輔 辆輛 辈輩 辉輝 辍輟 辐輻 辑輯 输輸 辔轡 辕轅 辖轄 辗輾 辘轆 辙轍 辞辭 辩辯 辫辮 边邊 辽遼 达達 迁遷 迈邁 还還 远遠 违違 连連 迟遲 迹跡 适適 选選 逊遜 递遞 逻邏 遗遺 遥遙 邓鄧 邮郵 邹鄒 邻鄰 郁鬱 郑鄭 酝醞 酱醬 酿釀 释釋 鉴鑑 针針 钉釘 钓釣 钙鈣 钝鈍 钞鈔 钠鈉 钢鋼 钥鑰 钦欽 钧鈞 钩鉤 钮鈕 钱錢 钳鉗 钻鑽 铁鐵 铃鈴 铅鉛 铐銬 铜銅 铝鋁 铭銘 银銀 铸鑄 铺鋪 链鏈 销銷 锁鎖 锄鋤 锅鍋 锋鋒 锐銳 锡錫 锣鑼 锤錘 锥錐 锦錦 键鍵 锯鋸 锰錳 锹鍬 锻鍛 镀鍍 镁鎂 镂鏤 镇鎮 镊鑷 镐鎬 镑鎊 镖鏢 镜鏡 镣鐐 镬鑊 镰鐮 镶鑲 长長 门門 闪閃 闭閉 问問 闯闖 闰閏 间間 闷悶 闸閘 闺閨 闻聞 闽閩 阀閥 阁閣 阂閡 阅閱 阉閹 阎閻 阐闡 阑闌 阔闊 阖闔 阙闕 队隊 阳陽 阴陰 阵陣 阶階 际際 陆陸 陇隴 陈陳 陕陝 陨隕 险險 随隨 隐隱 隶隸 难難 雏雛 雾霧 霁霽 霉黴 韦韋 韧韌 韩韓 韬韜 韵韻 页頁 顶頂 顷頃 项項 顺順 须須 顽頑 顾顧 顿頓 颁頒 颂頌 预預 颅顱 领領 颇頗 颈頸 颊頰 颌頜 频頻 颓頹 颖穎 颗顆 颜顏 颠顛 颤顫 飒颯 飘飄 飞飛 飨饗 饥飢 饭飯 饮飲 饰飾 饱飽 饲飼 饵餌 饶饒 饺餃 饼餅 饿餓 馅餡 馈饋 馋饞 馒饅 马馬 驭馭 驮馱 驯馴 驰馳 驱驅 驳駁 驴驢 驶駛 驻駐 驼駝 驾駕 驿驛 骂罵 骄驕 骆駱 骇駭 验驗 骏駿 骑騎 骗騙 骚騷 骡騾 骤驟 骥驥 髅髏 鬓鬢 鱼魚 鲁魯 鲍鮑 鲜鮮 鲤鯉 鲨鯊 鲫鯽 鲸鯨 鳖鱉 鳗鰻 鳞鱗 鸠鳩 鸡雞 鸣鳴 鸥鷗 鸦鴉 鸭鴨 鸯鴦 鸳鴛 鸽鴿 鸾鸞 鸿鴻 鹅鵝 鹉鵡 鹊鵲 鹏鵬 鹤鶴 鹦鸚 鹰鷹 麦麥 黄黃 齿齒 龄齡 龙龍 龚龔 龟龜`.trim().split(/\s+/);
 
 const S2T_CHAR = Object.create(null);
-S2T_PAIRS.forEach(p => {
-  if (p.length === 2 && p[0] !== p[1]) S2T_CHAR[p[0]] = p[1];
-});
+S2T_PAIRS.forEach(p => { if (p.length === 2 && p[0] !== p[1]) S2T_CHAR[p[0]] = p[1]; });
 
 const S2T_WORDS = [
   ['后来','後來'],['后话','後話'],['身后','身後'],['之后','之後'],['最后','最後'],
@@ -1435,18 +1374,12 @@ const k2TitleBook = $('#titleBook'), k2TitleSub = $('#titleSub'), k2TitleMeta = 
 const k2Seal = $('#seal'), k2SkipBtn = $('#skipBtn'), k2TitleMetaTxt = $('#titleMetaTxt');
 
 const K2_POOL = [
-  '曲径通幽处','禅房花木深',
-  '绕堤柳借三篙翠','隔岸花分一脉香',
-  '宝鼎茶闲烟尚绿','幽窗棋罢指犹凉',
-  '新涨绿添浣葛处','好云香护采芹人',
-  '吟成豆蔻才犹艳','睡足荼蘼梦也香',
-  '有凤来仪','杏帘在望',
-  '蓼汀花溆','蘅芷清芬',
-  '红香绿玉','沁芳闸',
-  '潇湘馆','蘅芜苑','怡红院','大观园'
+  '曲径通幽处','禅房花木深','绕堤柳借三篙翠','隔岸花分一脉香',
+  '宝鼎茶闲烟尚绿','幽窗棋罢指犹凉','新涨绿添浣葛处','好云香护采芹人',
+  '吟成豆蔻才犹艳','睡足荼蘼梦也香','有凤来仪','杏帘在望',
+  '蓼汀花溆','蘅芷清芬','红香绿玉','沁芳闸','潇湘馆','蘅芜苑','怡红院','大观园'
 ];
 
-/* 主诗 / 标题：原始简体，切换繁简时由 s2t 转换 */
 const K2_TEXT = {
   col1: '满纸荒唐言　一把辛酸泪',
   col2: '都云作者痴　谁解其中味',
@@ -1462,10 +1395,7 @@ const K2_LABEL = {
 
 function k2Shuffle(arr){
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 const K2_LAYERS = [
@@ -1573,23 +1503,10 @@ function k2FlowLoop(now){
   }
   k2RafId = requestAnimationFrame(k2FlowLoop);
 }
-function k2StartFlow(){
-  if (k2RafId) cancelAnimationFrame(k2RafId);
-  k2LastTs = 0;
-  k2RafId = requestAnimationFrame(k2FlowLoop);
-}
-function k2StopFlow(){
-  if (k2RafId) cancelAnimationFrame(k2RafId);
-  k2RafId = null;
-}
-function k2BeginFadeOut(){
-  if (k2FlowState !== 'flowing') return;
-  k2FlowState = 'fading';
-  const now = performance.now();
-  for (const line of k2Lines) line.startFadeOut(now);
-}
+function k2StartFlow(){ if (k2RafId) cancelAnimationFrame(k2RafId); k2LastTs = 0; k2RafId = requestAnimationFrame(k2FlowLoop); }
+function k2StopFlow(){ if (k2RafId) cancelAnimationFrame(k2RafId); k2RafId = null; }
+function k2BeginFadeOut(){ if (k2FlowState !== 'flowing') return; k2FlowState = 'fading'; const now = performance.now(); for (const line of k2Lines) line.startFadeOut(now); }
 
-/* 用原始简体文本重建字符 span；若已有可见字符，保留可见数量 */
 function k2BuildSpans(el, rawText){
   const prevOn = [...el.querySelectorAll('span.on')].length;
   el.textContent = '';
@@ -1603,23 +1520,13 @@ function k2BuildSpans(el, rawText){
   el.dataset.built = '1';
 }
 function k2RevealSpans(el, startMs, perChar){
-  el.querySelectorAll('span').forEach((sp, i) => {
-    k2After(startMs + i * perChar, () => sp.classList.add('on'));
-  });
+  el.querySelectorAll('span').forEach((sp, i) => { k2After(startMs + i * perChar, () => sp.classList.add('on')); });
 }
 let k2Timers = [];
 let k2IsReady = false;
-function k2After(ms, fn){
-  const id = setTimeout(fn, ms);
-  k2Timers.push(id);
-  return id;
-}
-function k2ClearTimers(){
-  k2Timers.forEach(clearTimeout);
-  k2Timers = [];
-}
+function k2After(ms, fn){ const id = setTimeout(fn, ms); k2Timers.push(id); return id; }
+function k2ClearTimers(){ k2Timers.forEach(clearTimeout); k2Timers = []; }
 
-/* 更新所有静态文字（供初始化和切换语言时调用） */
 function k2ApplyStaticText(){
   if (k2TitleBook) k2TitleBook.textContent = T(K2_LABEL.book);
   if (k2TitleSub) k2TitleSub.textContent = T(K2_LABEL.sub);
@@ -1627,40 +1534,25 @@ function k2ApplyStaticText(){
   if (k2TitleMetaTxt) k2TitleMetaTxt.textContent = T(K2_LABEL.meta);
   if (k2SkipBtn) k2SkipBtn.textContent = T(K2_LABEL.skip);
 }
-/* 只更新已拆分的文字（保留 on 状态） */
 function k2RefreshTexts(){
   k2ApplyStaticText();
   if (k2Col1 && k2Col1.dataset.built === '1') k2BuildSpans(k2Col1, K2_TEXT.col1);
   if (k2Col2 && k2Col2.dataset.built === '1') k2BuildSpans(k2Col2, K2_TEXT.col2);
   if (k2TitleV && k2TitleV.dataset.built === '1') k2BuildSpans(k2TitleV, K2_TEXT.title);
 }
-/* 语言切换时全量刷新开幕（同时重建流动行） */
-function k2RefreshIntroOnLangChange(){
-  k2RefreshTexts();
-  if (k2FlowState === 'flowing') k2InitFlowingLines();
-}
+function k2RefreshIntroOnLangChange(){ k2RefreshTexts(); if (k2FlowState === 'flowing') k2InitFlowingLines(); }
 function k2ResetAll(){
-  k2ClearTimers();
-  k2StopFlow();
-  k2FlowState = 'idle';
-  k2IsReady = false;
-  k2StagePoem.classList.remove('show');
-  k2StageTitle.classList.remove('show');
-  k2TitleBook.classList.remove('show');
-  k2TitleSub.classList.remove('show');
-  k2TitleMeta.classList.remove('show');
-  k2Seal.classList.remove('stamp');
+  k2ClearTimers(); k2StopFlow(); k2FlowState = 'idle'; k2IsReady = false;
+  k2StagePoem.classList.remove('show'); k2StageTitle.classList.remove('show');
+  k2TitleBook.classList.remove('show'); k2TitleSub.classList.remove('show');
+  k2TitleMeta.classList.remove('show'); k2Seal.classList.remove('stamp');
   k2SkipBtn.classList.remove('show');
   document.querySelectorAll('#scrTitle .col span, #scrTitle .title-v span').forEach(sp => sp.classList.remove('on'));
 }
 function k2Play(){
-  k2ResetAll();
-  k2ApplyStaticText();
-  k2BuildSpans(k2Col1, K2_TEXT.col1);
-  k2BuildSpans(k2Col2, K2_TEXT.col2);
-  k2BuildSpans(k2TitleV, K2_TEXT.title);
-  k2InitFlowingLines();
-  k2StartFlow();
+  k2ResetAll(); k2ApplyStaticText();
+  k2BuildSpans(k2Col1, K2_TEXT.col1); k2BuildSpans(k2Col2, K2_TEXT.col2); k2BuildSpans(k2TitleV, K2_TEXT.title);
+  k2InitFlowingLines(); k2StartFlow();
   k2After(1200, () => k2SkipBtn.classList.add('show'));
   k2After(5500, () => k2BeginFadeOut());
   k2After(6800, () => { k2StagePoem.classList.add('show'); k2RevealSpans(k2Col1, 0, 180); });
@@ -1670,31 +1562,18 @@ function k2Play(){
   k2After(15000, () => k2RevealSpans(k2TitleV, 0, 220));
   k2After(17200, () => k2Seal.classList.add('stamp'));
   k2After(18000, () => k2TitleSub.classList.add('show'));
-  k2After(18800, () => {
-    k2TitleMeta.classList.add('show');
-    k2SkipBtn.classList.remove('show');
-    k2IsReady = true;
-  });
+  k2After(18800, () => { k2TitleMeta.classList.add('show'); k2SkipBtn.classList.remove('show'); k2IsReady = true; });
 }
 function k2SkipToEnd(){
-  k2ClearTimers();
-  k2StopFlow();
-  k2FlowState = 'gone';
+  k2ClearTimers(); k2StopFlow(); k2FlowState = 'gone';
   if (k2BgLayer) k2BgLayer.innerHTML = '';
-  k2StagePoem.classList.remove('show');
-  k2StageTitle.classList.add('show');
-  k2TitleBook.classList.add('show');
-  k2TitleSub.classList.add('show');
-  k2TitleMeta.classList.add('show');
-  k2Seal.classList.add('stamp');
-  k2SkipBtn.classList.remove('show');
+  k2StagePoem.classList.remove('show'); k2StageTitle.classList.add('show');
+  k2TitleBook.classList.add('show'); k2TitleSub.classList.add('show'); k2TitleMeta.classList.add('show');
+  k2Seal.classList.add('stamp'); k2SkipBtn.classList.remove('show');
   document.querySelectorAll('#scrTitle .col span, #scrTitle .title-v span').forEach(sp => sp.classList.add('on'));
   k2IsReady = true;
 }
 
-/* =========================================================
-   静态文本切换
-   ========================================================= */
 function applyStaticLang(){
   document.documentElement.lang = LANG === 't' ? 'zh-Hant' : 'zh-CN';
   $$('[data-i18n]').forEach(el => {
@@ -1714,11 +1593,8 @@ function applyStaticLang(){
   refreshLang();
 }
 function refreshLang(){
-  /* K2 开幕 */
   if (typeof k2RefreshIntroOnLangChange === 'function') k2RefreshIntroOnLangChange();
-  /* 地图 */
   if (mapStarted) { try { showPanel(); updateMapUI(); } catch(e){} }
-  /* RPG */
   if (rpgOn && RP.ch){
     $('#rpgTitle').textContent = T(RP.ch.title);
     $('#rpgSub').textContent = T(RP.ch.sub);
@@ -1747,12 +1623,7 @@ function refreshDynamicLang(){
   $('#btnAudio').textContent = Snd.on ? (LANG === 't' ? '♪ 聲音' : '♪ 声音') : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
   const tip = $('#rpgTip'); if (tip) tip.textContent = LANG === 't' ? '點虛線字，可查拼音和解釋' : '点带虚线的字，可查拼音和解释';
   const nx = $('#rpgNext'); if (nx) nx.textContent = LANG === 't' ? '▼ 點擊繼續' : '▼ 点击继续';
-  try {
-    if (RP.ch){
-      $('#rpgTitle').textContent = T(RP.ch.title);
-      $('#rpgSub').textContent = T(RP.ch.sub);
-    }
-  } catch(e){}
+  try { if (RP.ch){ $('#rpgTitle').textContent = T(RP.ch.title); $('#rpgSub').textContent = T(RP.ch.sub); } } catch(e){}
 }
 
 const Snd = {
@@ -1824,9 +1695,6 @@ function richifyEl(root){
 }
 function unrichifyEl(root){ if(!root) return; root.__richified=false; }
 
-/* =========================================================
-   序言
-   ========================================================= */
 let proPage=0, proTimers=[];
 function refreshProPage(){
   const btn=$('#proBtn'), hint=$('#proHint');
@@ -1845,24 +1713,15 @@ function proReveal(page){
   $$('.pro-page').forEach(p=> p.classList.toggle('on', p===root));
   $$('#scrPrologue .reveal').forEach(el=> el.classList.remove('on'));
   proTimers.forEach(clearTimeout); proTimers=[];
-  [...root.querySelectorAll('.reveal')].forEach((el,i)=>{
-    proTimers.push(setTimeout(()=> el.classList.add('on'), 160+i*320));
-  });
+  [...root.querySelectorAll('.reveal')].forEach((el,i)=>{ proTimers.push(setTimeout(()=> el.classList.add('on'), 160+i*320)); });
   refreshProPage();
   $('#proBody').scrollTop=0;
   setTimeout(()=>{ $$('#scrPrologue .pro-text, #scrPrologue .pro-quote').forEach(el=>{ unrichifyEl(el); richifyEl(el); }); }, 40);
 }
-function startPrologue(){
-  showScreen(scrPro); proPage=0; proReveal(0);
-  Amb.start('wind+birds');
-}
+function startPrologue(){ showScreen(scrPro); proPage=0; proReveal(0); Amb.start('wind+birds'); }
 function skipPrologueAnim(){ proTimers.forEach(clearTimeout); $$('.pro-page.on .reveal').forEach(el=> el.classList.add('on')); }
 $('#proBody').addEventListener('click', skipPrologueAnim);
-$('#proBtn').addEventListener('click', ()=>{
-  Snd.click();
-  if(proPage===0){ proPage=1; proReveal(1); }
-  else { openIntro(); }
-});
+$('#proBtn').addEventListener('click', ()=>{ Snd.click(); if(proPage===0){ proPage=1; proReveal(1); } else { openIntro(); } });
 function openIntro(){ enterChapter('intro'); }
 
 function setCharImg(el, actorKey, emo){
@@ -1871,10 +1730,7 @@ function setCharImg(el, actorKey, emo){
   if(el.dataset.key === file && el.style.visibility === 'visible') return;
   el.dataset.key = file; el.style.visibility = 'hidden';
   el.onload  = ()=>{ el.style.visibility = 'visible'; };
-  el.onerror = ()=>{
-    if(el.dataset.fb || !a.img || a.img === file){ el.style.visibility = 'hidden'; return; }
-    el.dataset.fb = '1'; el.dataset.key = a.img; el.src = ASSETS + a.img;
-  };
+  el.onerror = ()=>{ if(el.dataset.fb || !a.img || a.img === file){ el.style.visibility = 'hidden'; return; } el.dataset.fb = '1'; el.dataset.key = a.img; el.src = ASSETS + a.img; };
   el.dataset.fb = '';
   el.src = ASSETS + file;
 }
@@ -1972,34 +1828,24 @@ let scrollClosing = false;
 function closeScroll(cb){
   const paper = $('#paper'), rodL = $('#rodL'), rodR = $('#rodR'), scroll = $('#scroll');
   if(!paper || !rodL || !rodR || !scroll){ if(cb) cb(); return; }
-  hidePanel();
-  placard.classList.remove('show','hide');
+  hidePanel(); placard.classList.remove('show','hide');
   mapTimers.forEach(clearTimeout); mapTimers = [];
-  scrollClosing = true;
-  scroll.classList.add('closing');
+  scrollClosing = true; scroll.classList.add('closing');
   Snd.tone(220,.7,'sine',.025,-90);
-  const dur = 1050, t0 = performance.now();
-  const ease = x => x*x;
+  const dur = 1050, t0 = performance.now(), ease = x => x*x;
   function step(now){
     const p = Math.min(1,(now - t0)/dur), e = ease(p), half = 50*e;
     paper.style.clipPath = `inset(0 ${half}% 0 ${half}%)`;
-    rodL.style.left = half + '%';
-    rodR.style.left = (100 - half) + '%';
+    rodL.style.left = half + '%'; rodR.style.left = (100 - half) + '%';
     if(p < 1) requestAnimationFrame(step);
     else {
-      unrolled = false;
-      scrollClosing = false;
-      scroll.classList.remove('closing');
-      Snd.thud();
-      if(cb) cb();
+      unrolled = false; scrollClosing = false; scroll.classList.remove('closing');
+      Snd.thud(); if(cb) cb();
     }
   }
   requestAnimationFrame(step);
 }
 
-/* =========================================================
-   RPG 引擎
-   ========================================================= */
 const rpgChoices=$('#rpgChoices'), rpgText=$('#rpgText'), rpgName=$('#rpgName'),
       rpgNext=$('#rpgNext'), rpgDialog=$('#rpgDialog'), charL=$('#charL'), charR=$('#charR');
 let rpgOn=false;
@@ -2041,10 +1887,7 @@ function showChoices(cmd){
   RP.choiceOpen = true;
   RP.choiceCmd = cmd;
   RP.choiceOrder = [...cmd.opts];
-  for (let i = RP.choiceOrder.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [RP.choiceOrder[i], RP.choiceOrder[j]] = [RP.choiceOrder[j], RP.choiceOrder[i]];
-  }
+  for (let i = RP.choiceOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [RP.choiceOrder[i], RP.choiceOrder[j]] = [RP.choiceOrder[j], RP.choiceOrder[i]]; }
   rpgNext.style.display = 'none';
   renderChoices();
 }
@@ -2055,19 +1898,14 @@ function renderChoices(){
     const b = document.createElement('button');
     b.className = 'rpg-choice';
     const ck = document.createElement('span');
-    ck.className = 'ck';
-    ck.textContent = 'ABCD'[k];
+    ck.className = 'ck'; ck.textContent = 'ABCD'[k];
     const tx = document.createElement('span');
     tx.textContent = (o && o.text) ? T(o.text) : '……';
     b.append(ck, tx);
     b.addEventListener('click', e => {
-      e.stopPropagation();
-      Snd.click();
-      rpgChoices.classList.remove('show');
-      rpgChoices.innerHTML = '';
-      RP.choiceOpen = false;
-      RP.choiceOrder = null;
-      RP.choiceCmd = null;
+      e.stopPropagation(); Snd.click();
+      rpgChoices.classList.remove('show'); rpgChoices.innerHTML = '';
+      RP.choiceOpen = false; RP.choiceOrder = null; RP.choiceCmd = null;
       const tgt = (o && o.goto) ? RP.labels[o.goto] : undefined;
       RP.pc = (tgt === undefined ? RP.script.length : tgt);
       runCmd();
@@ -2138,7 +1976,7 @@ function openLesson(id){
   const gl=$('#lsGloss'); gl.innerHTML='';
   L.gloss.forEach(g=>{ const li=document.createElement('li'); const b=document.createElement('b'); b.textContent=T(g.w); const py=document.createElement('i'); py.style.cssText='font-style:normal;color:#8a6c42;font-size:11px;margin-right:2px'; py.textContent = g.py||''; const s=document.createElement('span'); s.textContent=T(g.d); li.append(b,py,s); gl.appendChild(li); });
   const why=$('#lsWhy'); why.innerHTML = '<b>'+(LANG==='t'?'爲何是它 · ':'为何是它 · ')+'</b>' + esc(T(L.why));
-  const link=$('#lsLink'); link.innerHTML = '<b>'+(LANG==='t'?'詞 · 景 · 題 · ':'词 · 景 · 题 · ')+'</b>' + esc(T(L.link||''));
+  const link=$('#lsLink'); link.innerHTML = '<b>'+(LANG==='t'?'再 深 一 層 · ':'再 深 一 层 · ')+'</b>' + esc(T(L.link||''));
   $('#ovLesson').classList.add('on'); Snd.thud();
 }
 $('#lsBtn').addEventListener('click', ()=>{ Snd.ok(); $('#ovLesson').classList.remove('on'); finishChapter('lesson'); });
@@ -2247,9 +2085,6 @@ function hideGloss(){ $('#gloss').classList.remove('on'); }
 $('#glossX').addEventListener('click', hideGloss);
 document.addEventListener('click', e=>{ if(!e.target.closest('.term,#gloss')) hideGloss(); });
 
-/* =========================================================
-   字词面板
-   ========================================================= */
 const WP = { q:'', open: new Set(GLOSS_CATS) };
 function openWords(){
   Game.mode = null;
@@ -2357,7 +2192,7 @@ const Game = {
     this.locked=false;
     const it=this.items[this.idx];
     const parts = T(it.line).split('__');
-    const opts = [...it.opts].sort(()=>Math.random()-.5);   /* ← 选项乱序，答案不再恒在首位 */
+    const opts = [...it.opts].sort(()=>Math.random()-.5);
     $('#gBody').innerHTML = `<div class="g-q no-term">${esc(parts[0]||'')}<span class="blank">　</span>${esc(parts[1]||'')}</div>
       <div class="g-qs">${LANG==='t'?'選一個字填進去':'选一个字填进去'}</div>
       <div class="g-opts">${opts.map(o=>`<button class="g-opt" data-o="${esc(o)}">${esc(T(o))}</button>`).join('')}</div>
@@ -2380,9 +2215,7 @@ const Game = {
   renderMeaning(){
     this.locked=false;
     const it=this.items[this.idx];
-    /* ← 连同"哪个正确"一起洗牌，再按新位置渲染 */
-    const opts = it.opts.map((text,i)=>({text, correct:i===it.ans}))
-                        .sort(()=>Math.random()-.5);
+    const opts = it.opts.map((text,i)=>({text, correct:i===it.ans})).sort(()=>Math.random()-.5);
     $('#gBody').innerHTML = `<div class="g-q no-term" style="font-size:clamp(16px,2.4vh,21px);letter-spacing:.04em">${esc(T(it.q))}</div>
       <div class="g-qs">${LANG==='t'?'選一個最貼切的解釋':'选一个最贴切的解释'}</div>
       <div class="g-opts" style="grid-template-columns:1fr">${opts.map((o,i)=>`<button class="g-opt long" data-correct="${o.correct?1:0}">${'ABC'[i]}　${esc(T(o.text))}</button>`).join('')}</div>
@@ -2474,11 +2307,7 @@ window.addEventListener('keydown', e=>{
     if($('#ovGame').classList.contains('on')){ if(e.target && e.target.tagName==='INPUT') return; return; }
     if($('#ovLesson').classList.contains('on')){ e.preventDefault(); $('#lsBtn').click(); return; }
     if(scrRpg.classList.contains('on')){ e.preventDefault(); advance(); return; }
-    if(scrTitle.classList.contains('on')){
-      e.preventDefault();
-      if (!k2IsReady) k2SkipToEnd(); else startPrologue();
-      return;
-    }
+    if(scrTitle.classList.contains('on')){ e.preventDefault(); if (!k2IsReady) k2SkipToEnd(); else startPrologue(); return; }
     if(scrPro.classList.contains('on')){ e.preventDefault(); $('#proBtn').click(); return; }
   }
   if(scrMap.classList.contains('on')){
@@ -2491,17 +2320,13 @@ window.addEventListener('keydown', e=>{
   }
 });
 
-/* 开场交互 */
 document.addEventListener('click', e => {
   if (!scrTitle.classList.contains('on')) return;
   if (e.target.closest('#skipBtn,.tools')) return;
   if (!k2IsReady) k2SkipToEnd();
   else startPrologue();
 });
-k2SkipBtn.addEventListener('click', e => {
-  e.stopPropagation();
-  if (!k2IsReady) k2SkipToEnd();
-});
+k2SkipBtn.addEventListener('click', e => { e.stopPropagation(); if (!k2IsReady) k2SkipToEnd(); });
 
 window.__CHANGELOG = [
   {id:'2026-10-22-a', area:'title',    msg:'开篇动画：夜 → 晨（天空/朝阳/远山/亭子/花瓣）'},
@@ -2513,29 +2338,28 @@ window.__CHANGELOG = [
   {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'},
   {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'},
   {id:'2026-10-23-a', area:'ending',   msg:'闭卷动画：终章结局前卷轴从两侧合拢，回卷轴时自动重新展开'},
-  {id:'2026-10-23-b', area:'choice',   msg:'修复只显示一个选项：移除 animationDelay（延迟期间 opacity:0），入场动画改 .14s ease'},
+  {id:'2026-10-23-b', area:'choice',   msg:'修复只显示一个选项：移除 animationDelay，入场动画改 .14s ease'},
   {id:'2026-10-25-a', area:'title',    msg:'开篇诗竖排改从右往左：两列右列先出、逐字浮现；标题主区未动'},
   {id:'2026-10-25-b', area:'title',    msg:'提升开篇可读性：veil 中心加墨晕压暗；诗与标题字改 1px 硬描边、字色提亮；副标题灰字提亮'},
   {id:'2026-10-25-c', area:'title',    msg:'再改开篇：像素晨景 → K2 宣纸题签，含流动词句、主诗、印章'},
   {id:'2026-10-25-d', area:'i18n',     msg:'开场动画适配简繁：主诗、标题、题签、印章、提示、跳过按钮、流动词句同步切换'},
   {id:'2026-10-26-a', area:'fix',      msg:'修复 CHANGELOG 数组缺逗号导致第三个 <script> 整体 SyntaxError（开篇动画不启动、按钮无反应的根因）'},
-  {id:'2026-10-26-b', area:'gloss',    msg:'词条 scene 改写：保留「在本回」注释，删去"这是答案/父亲嫌不好/清客起的"等指向性句子，改为写景与出处，卖点在但不泄底'},
-  {id:'2026-10-26-c', area:'quiz',     msg:'小考选项乱序：补字填空洗 opts；词义选择洗 {text,correct} 并按 data-correct 判定高亮'}
+  {id:'2026-10-26-b', area:'gloss',    msg:'词条 scene 改写：保留「在本回」注释，删去"这是答案/父亲嫌不好/清客起的"等指向性句子，改为写景与出处'},
+  {id:'2026-10-26-c', area:'quiz',     msg:'小考选项乱序：补字填空洗 opts；词义选择洗 {text,correct} 并按 data-correct 判定高亮'},
+  {id:'2026-10-26-d', area:'gloss',    msg:'词条去重：d 只写字面义/出处，scene 只写本回画面；不再同义反复'},
+  {id:'2026-10-26-e', area:'lesson',   msg:'学习页去重：link 改为「再深一层」讲对仗/结构，不再复述 why'}
 ];
 document.addEventListener('keydown', e=>{
   if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='l'){
-    if(console.table) console.table(window.__CHANGELOG);
-    else console.log(window.__CHANGELOG);
+    if(console.table) console.table(window.__CHANGELOG); else console.log(window.__CHANGELOG);
   }
 });
 
-/* 启动 */
 applyStaticLang();
 refreshDynamicLang();
 k2Play();
 if(!Snd.on) $('#btnAudio').click();
 
-/* SW 注册 */
 (function regSW(){
   if(!('serviceWorker' in navigator)) return;
   const h = location.hostname;
@@ -2543,7 +2367,6 @@ if(!Snd.on) $('#btnAudio').click();
   window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 })();
 
-/* 预热资源 */
 (function warmAssets(){
   const chars = [];
   Object.values(CAST).forEach(a=>{ if(a.img) chars.push(a.img); if(a.emos) Object.values(a.emos).forEach(f=>chars.push(f)); });
