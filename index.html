@@ -404,7 +404,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <div class="seg" id="segLang">
     <button data-lang="s" class="on">简</button><button data-lang="t">繁</button>
   </div>
-  <button class="tool" id="btnAudio">♪ 声音</button>
+  <button class="tool" id="btnSnd">♪ 音效</button>
+  <button class="tool" id="btnAmb">♫ 环境</button>
   <button class="tool" id="btnWords">字词</button>
 </div>
 
@@ -470,7 +471,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
         <div class="pro-tips reveal">
           <div class="tip" data-i18n><b>简 / 繁</b>　右上角切换繁体。</div>
           <div class="tip" data-i18n><b>字词</b>　生词、人物、典故都在一处，可折叠、可搜索。</div>
-          <div class="tip" data-i18n><b>声音</b>　能听见水声、风声和鸟叫。</div>
+          <div class="tip" data-i18n><b>声音</b>　音效与环境音可分别开关。</div>
         </div>
       </div>
     </div>
@@ -953,7 +954,7 @@ const CAST = {
    - d  = 字面义 / 出处 / 用法
    - scene = 本回里的具体画面（不重复释义，也不泄题） */
 const GLOSS = {
-  '秦钟':{cat:'人物',py:'qín zhōng',d:'贾宝玉的好友，秦可卿的弟弟，年纪与宝玉相仿，情分深厚。',scene:'本回开场「秦钟新丧」，宝玉还沉在他的丧事里笑不出来。'},
+  '秦钟':{cat:'人物',py:'qín zhōng',d:'贾宝玉的好友，秦可卿的弟弟，年纪与宝玉相仿，情分极厚。',scene:'本回开场，宝玉还沉在他的丧事里——好友新死，人前强撑着，笑不出来。'},
   '贾政':{cat:'人物',py:'jiǎ zhèng',d:'贾宝玉的父亲，荣国府二老爷。',scene:'本回一路板着脸考较宝玉的，就是这位父亲。'},
   '贾珍':{cat:'人物',py:'jiǎ zhēn',d:'宁国府的管事，论辈分是宝玉的侄辈。',scene:'开篇他一路跑来喊「老爷往这边来了」，脚下都带着慌。'},
   '元春':{cat:'人物',py:'yuán chūn',d:'贾宝玉的姐姐，被皇帝封为贤德妃。',scene:'省亲那日要回来的，就是这位贵妃姐姐。'},
@@ -1012,7 +1013,7 @@ const GLOSS = {
   '凤凰非梧桐不栖':{cat:'典故',py:'fèng huáng fēi wú tóng bù qī',d:'凤凰只落在梧桐上。出自《庄子》。',scene:'《庄子·秋水》里，凤凰只肯落在梧桐上。'},
   '非竹实不食':{cat:'典故',py:'fēi zhú shí bù shí',d:'凤凰不吃别的，只吃竹实。',scene:'凤凰不食人间烟火，单吃竹实。'},
   '叉出去':{cat:'动作',py:'chā chū qù',d:'把人赶出去。',scene:'旧时主人家动了怒，一声令下，人就被架出门去。'},
-  '拂袖':{cat:'动作',py:'fú xiù',d:'一甩袖子，表示生气。',scene:'袖子一甩，转身便走，不愿再多说一句的意思。'},
+  '拂袖':{cat:'动作',py:'fú xiù',d:'一甩袖子，表示生气。',scene:'袖子一甩，转身便走，是不愿再多说一句的意思。'},
   '讪讪':{cat:'动作',py:'shàn shàn',d:'难为情、不自然的样子。',scene:'脸上挂不住，嘴里还要应着，那副样子便是。'},
   '缄口':{cat:'动作',py:'jiān kǒu',d:'闭着嘴不说话。',scene:'满屋子人都不出声，只听得见风声。'},
   '卖弄':{cat:'动作',py:'mài nòng',d:'故意显示、炫耀。',scene:'多念两句、多说几个典故，生怕别人不知道自己有学问。'},
@@ -1319,7 +1320,7 @@ const MEANING_ITEMS = [
 
 <script>
 /* =========================================================
-   6. 引擎（含 K2 开幕 + 简繁适配）
+   6. 引擎（含 K2 开幕 + 简繁适配 + 音效/环境分离）
    ========================================================= */
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 let LANG = (()=>{ try{ return localStorage.getItem('hlm_lang') || 's'; }catch(e){ return 's'; } })();
@@ -1365,7 +1366,7 @@ function bindTerms(root){
 }
 
 /* =========================================================
-   K2 开幕动画（简繁适配）
+   K2 开幕动画
    ========================================================= */
 const k2BgLayer = $('#bgLayer');
 const k2StagePoem = $('#stagePoem'), k2StageTitle = $('#stageTitle');
@@ -1620,7 +1621,8 @@ $$('#segLang button').forEach(b => b.addEventListener('click', () => {
 
 function refreshDynamicLang(){
   $('#btnWords').textContent = LANG === 't' ? '字詞' : '字词';
-  $('#btnAudio').textContent = Snd.on ? (LANG === 't' ? '♪ 聲音' : '♪ 声音') : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
+  $('#btnSnd').textContent = Snd.on ? (LANG === 't' ? '♪ 音效' : '♪ 音效') : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
+  $('#btnAmb').textContent = Amb.on ? (LANG === 't' ? '♫ 環境' : '♫ 环境') : (LANG === 't' ? '♫ 靜音' : '♫ 静音');
   const tip = $('#rpgTip'); if (tip) tip.textContent = LANG === 't' ? '點虛線字，可查拼音和解釋' : '点带虚线的字，可查拼音和解释';
   const nx = $('#rpgNext'); if (nx) nx.textContent = LANG === 't' ? '▼ 點擊繼續' : '▼ 点击继续';
   try { if (RP.ch){ $('#rpgTitle').textContent = T(RP.ch.title); $('#rpgSub').textContent = T(RP.ch.sub); } } catch(e){}
@@ -1640,7 +1642,7 @@ const Amb = {
   on:true, ctx:null, master:null, nodes:[], timers:[], key:'', noiseBuf:null,
   ensure(){ if(this.ctx) { if(this.ctx.state==='suspended') this.ctx.resume(); return; } try{ this.ctx = new (window.AudioContext||window.webkitAudioContext)(); this.master = this.ctx.createGain(); this.master.gain.value = this.on ? .5 : 0; this.master.connect(this.ctx.destination); const len = this.ctx.sampleRate*2, buf = this.ctx.createBuffer(1,len,this.ctx.sampleRate); const d = buf.getChannelData(0); for(let i=0;i<len;i++) d[i] = Math.random()*2-1; this.noiseBuf = buf; }catch(e){} },
   noise(){ const s=this.ctx.createBufferSource(); s.buffer=this.noiseBuf; s.loop=true; return s; },
-  stopAll(){ this.nodes.forEach(n=>{ try{ n.stop?n.stop():n.disconnect(); }catch(e){} }); this.nodes=[]; this.timers.forEach(clearInterval); this.timers=[]; },
+  stopAll(clearKey){ this.nodes.forEach(n=>{ try{ n.stop?n.stop():n.disconnect(); }catch(e){} }); this.nodes=[]; this.timers.forEach(clearInterval); this.timers=[]; if(clearKey) this.key=''; },
   start(key){ this.ensure(); if(!this.ctx) return; if(this.key===key) return; this.key=key; this.stopAll(); const parts = key.split('+'); if(parts.includes('water')) this.water(); if(parts.includes('wind')) this.wind(); if(parts.includes('birds')) this.birds(); if(parts.includes('night')) this.night(); this.applyVolume(); },
   water(){ const s=this.noise(), f=this.ctx.createBiquadFilter(), g=this.ctx.createGain(); f.type='bandpass'; f.frequency.value=760; f.Q.value=.7; g.gain.value=.05; const lfo=this.ctx.createOscillator(), lg=this.ctx.createGain(); lfo.frequency.value=.18; lg.gain.value=180; lfo.connect(lg); lg.connect(f.frequency); s.connect(f); f.connect(g); g.connect(this.master); s.start(); lfo.start(); this.nodes.push(s,lfo,g,lg); },
   wind(){ const s=this.noise(), f=this.ctx.createBiquadFilter(), g=this.ctx.createGain(); f.type='lowpass'; f.frequency.value=380; g.gain.value=.028; const lfo=this.ctx.createOscillator(), lg=this.ctx.createGain(); lfo.frequency.value=.07; lg.gain.value=.018; lfo.connect(lg); lg.connect(g.gain); s.connect(f); f.connect(g); g.connect(this.master); s.start(); lfo.start(); this.nodes.push(s,lfo,g,lg); },
@@ -1718,7 +1720,7 @@ function proReveal(page){
   $('#proBody').scrollTop=0;
   setTimeout(()=>{ $$('#scrPrologue .pro-text, #scrPrologue .pro-quote').forEach(el=>{ unrichifyEl(el); richifyEl(el); }); }, 40);
 }
-function startPrologue(){ showScreen(scrPro); proPage=0; proReveal(0); Amb.start('wind+birds'); }
+function startPrologue(){ showScreen(scrPro); proPage=0; proReveal(0); Amb.stopAll(true); }
 function skipPrologueAnim(){ proTimers.forEach(clearTimeout); $$('.pro-page.on .reveal').forEach(el=> el.classList.add('on')); }
 $('#proBody').addEventListener('click', skipPrologueAnim);
 $('#proBtn').addEventListener('click', ()=>{ Snd.click(); if(proPage===0){ proPage=1; proReveal(1); } else { openIntro(); } });
@@ -1808,7 +1810,7 @@ function unrollMap(){
   function step(now){ const p=Math.min(1,(now-t0)/dur), e=ease(p), half=50*(1-e); paper.style.clipPath=`inset(0 ${half}% 0 ${half}%)`; rodL.style.left=half+'%'; rodR.style.left=(100-half)+'%'; if(p<1) requestAnimationFrame(step); else unrolled=true; }
   requestAnimationFrame(step);
 }
-function startMap(){ showScreen(scrMap); mapVisible=true; if(!mapStarted){ mapStarted=true; unrollMap(); } updateMapUI(); Amb.start('wind+birds'); setTimeout(()=> setStation(Math.min(maxUnlocked(),8)),600); }
+function startMap(){ showScreen(scrMap); mapVisible=true; if(!mapStarted){ mapStarted=true; unrollMap(); } updateMapUI(); Amb.stopAll(true); setTimeout(()=> setStation(Math.min(maxUnlocked(),8)),600); }
 stations.forEach((s,i)=>{
   const b=document.createElement('button'); b.className='dot';
   b.addEventListener('click',()=>{ if(i>maxUnlocked()){ toast(LANG==='t'?'尚未到此':'尚未到此'); Snd.bad(); return; } Snd.click(); setStation(i); });
@@ -1948,7 +1950,8 @@ function enterChapter(id){
   paintRpgBg(ch); rpgName.textContent = T('旁白'); rpgText.textContent=''; rpgNext.style.display='none';
   rpgChoices.classList.remove('show'); rpgChoices.innerHTML='';
   clearChars(); $('#introCard').classList.remove('show'); cardWait=false;
-  Amb.start(ch.final ? 'water+night' : (['s1','s4','s7'].includes(id) ? 'water+birds' : (id==='s2' ? 'wind+birds' : 'wind+birds')));
+  if(id === 'intro'){ Amb.stopAll(true); }
+  else { Amb.start(ch.final ? 'water+night' : (['s1','s4','s7'].includes(id) ? 'water+birds' : 'wind+birds')); }
   scrRpg.classList.remove('ending'); showScreen(scrRpg);
   setTimeout(runCmd, 260);
 }
@@ -1962,6 +1965,7 @@ function backToMap(){
   mapVisible=true;
   unrollMap();
   updateMapUI();
+  Amb.stopAll(true);
 }
 
 let lessonId=null;
@@ -1990,6 +1994,7 @@ function finishWithScroll(cb){
   showScreen(scrMap);
   mapVisible = true;
   updateMapUI();
+  Amb.stopAll(true);
   setTimeout(() => { if(!unrolled){ cb(); return; } closeScroll(cb); }, 520);
 }
 
@@ -2293,12 +2298,21 @@ const Game = {
   }
 };
 
-$('#btnAudio').addEventListener('click', ()=>{
-  Snd.on = !Snd.on; Amb.on = Snd.on; Amb.applyVolume();
-  if(Snd.on){ Snd.init(); Amb.ensure(); const k = Amb.key; Amb.key=''; if(k) Amb.start(k); }
-  $('#btnAudio').classList.toggle('on', Snd.on);
-  $('#btnAudio').textContent = Snd.on ? (LANG==='t'?'♪ 聲音':'♪ 声音') : (LANG==='t'?'♪ 靜音':'♪ 静音');
-  if(Snd.on) Snd.ok();
+/* 音效开关 */
+$('#btnSnd').addEventListener('click', ()=>{
+  Snd.on = !Snd.on;
+  if(Snd.on){ Snd.init(); Snd.ok(); }
+  $('#btnSnd').classList.toggle('on', Snd.on);
+  $('#btnSnd').textContent = Snd.on ? (LANG==='t'?'♪ 音效':'♪ 音效') : (LANG==='t'?'♪ 靜音':'♪ 静音');
+});
+/* 环境音开关 */
+$('#btnAmb').addEventListener('click', ()=>{
+  Amb.on = !Amb.on;
+  Amb.applyVolume();
+  if(Amb.on){ Amb.ensure(); const k = Amb.key; Amb.key=''; if(k) Amb.start(k); }
+  else { Amb.stopAll(); }
+  $('#btnAmb').classList.toggle('on', Amb.on);
+  $('#btnAmb').textContent = Amb.on ? (LANG==='t'?'♫ 環境':'♫ 环境') : (LANG==='t'?'♫ 靜音':'♫ 静音');
 });
 
 window.addEventListener('keydown', e=>{
@@ -2329,25 +2343,54 @@ document.addEventListener('click', e => {
 k2SkipBtn.addEventListener('click', e => { e.stopPropagation(); if (!k2IsReady) k2SkipToEnd(); });
 
 window.__CHANGELOG = [
+  /* ── 开篇 ───────────────────────────────────────────── */
   {id:'2026-10-22-a', area:'title',    msg:'开篇动画：夜 → 晨（天空/朝阳/远山/亭子/花瓣）'},
-  {id:'2026-10-22-b', area:'prologue', msg:'序言：一页 → 两页（叙事 / 玩法）'},
-  {id:'2026-10-22-c', area:'choice',   msg:'选项内移除词条链接，避免提前露答案'},
-  {id:'2026-10-22-d', area:'words',    msg:'字词 + 必知合并；加搜索、分类折叠'},
-  {id:'2026-10-22-e', area:'dev',      msg:'后台回溯：CHANGELOG + @chg 标记 + 控制台表'},
-  {id:'2026-10-22-f', area:'i18n',     msg:'简繁切换：内置字表 + 词组优先 + 只翻文本节点 + 动态重绘'},
-  {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'},
-  {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'},
-  {id:'2026-10-23-a', area:'ending',   msg:'闭卷动画：终章结局前卷轴从两侧合拢，回卷轴时自动重新展开'},
-  {id:'2026-10-23-b', area:'choice',   msg:'修复只显示一个选项：移除 animationDelay，入场动画改 .14s ease'},
   {id:'2026-10-25-a', area:'title',    msg:'开篇诗竖排改从右往左：两列右列先出、逐字浮现；标题主区未动'},
   {id:'2026-10-25-b', area:'title',    msg:'提升开篇可读性：veil 中心加墨晕压暗；诗与标题字改 1px 硬描边、字色提亮；副标题灰字提亮'},
   {id:'2026-10-25-c', area:'title',    msg:'再改开篇：像素晨景 → K2 宣纸题签，含流动词句、主诗、印章'},
   {id:'2026-10-25-d', area:'i18n',     msg:'开场动画适配简繁：主诗、标题、题签、印章、提示、跳过按钮、流动词句同步切换'},
+
+  /* ── 序言 ───────────────────────────────────────────── */
+  {id:'2026-10-22-b', area:'prologue', msg:'序言：一页 → 两页（叙事 / 玩法）'},
+
+  /* ── 选项 ───────────────────────────────────────────── */
+  {id:'2026-10-22-c', area:'choice',   msg:'选项内移除词条链接，避免提前露答案'},
+  {id:'2026-10-22-g', area:'choice',   msg:'选项：乱序一次缓存，切换语言不重洗'},
+  {id:'2026-10-23-b', area:'choice',   msg:'修复只显示一个选项：移除 animationDelay（延迟期间 opacity:0），入场动画改 .14s ease'},
+
+  /* ── 字词面板 ───────────────────────────────────────── */
+  {id:'2026-10-22-d', area:'words',    msg:'字词 + 必知合并；加搜索、分类折叠'},
+
+  /* ── 简繁 ───────────────────────────────────────────── */
+  {id:'2026-10-22-f', area:'i18n',     msg:'简繁切换：内置字表 + 词组优先 + 只翻文本节点 + 动态重绘'},
+
+  /* ── 结局 / 卷轴收合 ────────────────────────────────── */
+  {id:'2026-10-22-h', area:'ending',   msg:'结局修复：完美结局「回到卷轴」回到地图；所有结局增加「重新开始」；backToMap 清理 ending 状态'},
+  {id:'2026-10-23-a', area:'ending',   msg:'闭卷动画：终章结局前卷轴从两侧合拢，回卷轴时自动重新展开'},
+
+  /* ── 修 bug ─────────────────────────────────────────── */
   {id:'2026-10-26-a', area:'fix',      msg:'修复 CHANGELOG 数组缺逗号导致第三个 <script> 整体 SyntaxError（开篇动画不启动、按钮无反应的根因）'},
-  {id:'2026-10-26-b', area:'gloss',    msg:'词条 scene 改写：保留「在本回」注释，删去"这是答案/父亲嫌不好/清客起的"等指向性句子，改为写景与出处'},
-  {id:'2026-10-26-c', area:'quiz',     msg:'小考选项乱序：补字填空洗 opts；词义选择洗 {text,correct} 并按 data-correct 判定高亮'},
-  {id:'2026-10-26-d', area:'gloss',    msg:'词条去重：d 只写字面义/出处，scene 只写本回画面；不再同义反复'},
-  {id:'2026-10-26-e', area:'lesson',   msg:'学习页去重：link 改为「再深一层」讲对仗/结构，不再复述 why'}
+
+  /* ── 词条：先防泄题，再去同义反复 ──────────────────── */
+  {id:'2026-10-26-b', area:'gloss',    msg:'词条 scene 改写：保留「在本回」注释，删去"这是答案/父亲嫌不好/清客起的"等指向性句子，改为写景与出处，卖点在但不泄底'},
+  {id:'2026-10-26-d', area:'gloss',    msg:'词条去重：d 只写字面义 / 出处 / 用法，scene 只写本回画面；两格不再同义反复'},
+  {id:'2026-10-26-i', area:'gloss',    msg:'秦钟词条补「年纪相仿、情分极厚」，scene 改为写「宝玉还沉在丧事里」，不再复述序言原句'},
+
+  /* ── 学习惩罚页：link 改为「再深一层」 ──────────────── */
+  {id:'2026-10-26-e', area:'lesson',   msg:'学习页去重：link 改为「再深一层」讲对仗 / 结构，不再复述 why；label 同步改成「再 深 一 层」'},
+
+  /* ── 小考：选项乱序 ─────────────────────────────────── */
+  {id:'2026-10-26-c', area:'quiz',     msg:'小考选项乱序：补字填空洗 opts；词义选择洗 {text,correct} 并按 data-correct 判定高亮；匾额匹配洗 pick 与右列'},
+
+  /* ── 音频：先查清结构，再拆开关 ─────────────────────── */
+  {id:'2026-10-26-j', area:'audio',    msg:'音频梳理：Snd（5 个点击音效）与 Amb（water/wind/birds/night 四个环境声部）本就独立，原 #btnAudio 一键同开关'},
+  {id:'2026-10-26-f', area:'audio',    msg:'音效与环境音拆成两个独立开关（♪ 音效 / ♫ 环境），互不影响'},
+  {id:'2026-10-26-g', area:'audio',    msg:'序言、卷轴地图、序章（intro）默认无环境音，只留点击音；进入章节后按原配置（沁芳亭/蓼汀花溆/沁芳闸=water+birds，终章=water+night，其余=wind+birds）'},
+  {id:'2026-10-26-h', area:'audio',    msg:'Amb.stopAll(clearKey) 支持清 key；回地图 / 终章结局时停环境音，避免上章残留'},
+
+  /* ── 开发工具 ───────────────────────────────────────── */
+  {id:'2026-10-22-e', area:'dev',      msg:'后台回溯：CHANGELOG + @chg 标记 + 控制台表（Ctrl+Shift+L）'},
+  {id:'2026-10-26-k', area:'dev',      msg:'window.__game.audio() 返回 {snd, amb, ambKey}，便于控制台查音频状态'}
 ];
 document.addEventListener('keydown', e=>{
   if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='l'){
@@ -2358,7 +2401,6 @@ document.addEventListener('keydown', e=>{
 applyStaticLang();
 refreshDynamicLang();
 k2Play();
-if(!Snd.on) $('#btnAudio').click();
 
 (function regSW(){
   if(!('serviceWorker' in navigator)) return;
@@ -2388,7 +2430,8 @@ window.__game = {
   words:()=> openWords(),
   changelog:()=> window.__CHANGELOG,
   state:()=> ({id:RP.id, pc:RP.pc, done:[...PROG.done], lang:LANG, quizMode:Game.mode}),
-  s2t:(str)=> s2t(str)
+  s2t:(str)=> s2t(str),
+  audio:()=> ({snd:Snd.on, amb:Amb.on, ambKey:Amb.key})
 };
 </script>
 </body>
