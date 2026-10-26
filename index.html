@@ -1230,26 +1230,26 @@ const CHAPTERS = {
     {t:'lesson',id:'duilian'}
   ]},
   s6:{no:'柒',title:'省亲正殿',sub:'第七站 · 玉石牌坊',bg:'bg7.webp',script:[
-    {t:'say',who:'narr',text:'巍峨宏伟的省亲大殿，白玉栏杆一层层铺上去，一座玉石牌坊立在面前，上面雕着龙。'},
-    {t:'say',who:'narr',text:'我看见这牌坊，心头忽然一阵恍惚——仿佛在梦里见过这景象，却又想不起来。'},
-    {t:'say',who:'narr',text:'一时间，脑子里空空荡荡，一个字也想不出。'},
-    {t:'label',n:'ask'},
-    {t:'choice',opts:[
-      {t:'如实坦白：此刻想不出佳句，请限日补作',goto:'a'},
-      {t:'硬凑一段，胡乱编造',goto:'b'}
-    ]},
-    {t:'label',n:'a'},
-    {t:'say',who:'player',emo:'nervous',text:'父亲……儿子此刻实在没有好构思。'},
-    {t:'say',who:'qingke',emo:'worry',text:'（连忙劝解）二爷年纪还小，慢慢再想便是。'},
-    {t:'say',who:'jia',emo:'sneer',text:'（冷笑）想不到你也有想不出来的时候。限你一日之内补写完毕。'},
-    {t:'say',who:'narr',text:'我松了一口气，跟着众人往前走。心里却还惦记着那阵恍惚。'},
-    {t:'end',r:'success'},
-    {t:'label',n:'b'},
-    {t:'say',who:'player',emo:'nervous',text:'（硬凑）……题「天仙宝境」。'},
-    {t:'say',who:'jia',emo:'displeased',text:'越发胡闹了。罢了，罢了。'},
-    {t:'say',who:'narr',text:'父亲满脸失望，转身便走。游园草草收场。'},
-    {t:'end',r:'normal',text:'我在牌坊下站了很久。那阵恍惚像一层雾，怎么也抓不住。\n【普通结局】'}
+  {t:'say',who:'narr',text:'巍峨宏伟的省亲大殿，白玉栏杆一层层铺上去，一座玉石牌坊立在面前，上面雕着龙。'},
+  {t:'say',who:'narr',text:'我看见这牌坊，心头忽然一阵恍惚——仿佛在梦里见过这景象，却又想不起来。'},
+  {t:'say',who:'narr',text:'一时间，脑子里空空荡荡，一个字也想不出。'},
+  {t:'label',n:'ask'},
+  {t:'choice',opts:[
+    {text:'如实坦白：此刻想不出佳句，请限日补作',goto:'a'},
+    {text:'硬凑一段，胡乱编造',goto:'b'}
   ]},
+  {t:'label',n:'a'},
+  {t:'say',who:'player',emo:'nervous',text:'父亲……儿子此刻实在没有好构思。'},
+  {t:'say',who:'qingke',emo:'worry',text:'（连忙劝解）二爷年纪还小，慢慢再想便是。'},
+  {t:'say',who:'jia',emo:'sneer',text:'（冷笑）想不到你也有想不出来的时候。限你一日之内补写完毕。'},
+  {t:'say',who:'narr',text:'我松了一口气，跟着众人往前走。心里却还惦记着那阵恍惚。'},
+  {t:'end',r:'success'},
+  {t:'label',n:'b'},
+  {t:'say',who:'player',emo:'nervous',text:'（硬凑）……题「天仙宝境」。'},
+  {t:'say',who:'jia',emo:'displeased',text:'越发胡闹了。罢了，罢了。'},
+  {t:'say',who:'narr',text:'父亲满脸失望，转身便走。游园草草收场。'},
+  {t:'end',r:'normal',text:'我在牌坊下站了很久。那阵恍惚像一层雾，怎么也抓不住。\n【普通结局】'}
+]},
   s7:{no:'捌',title:'沁芳闸',sub:'第八站 · 水闸',bg:'bg8.webp',script:[
     {t:'say',who:'narr',text:'一座大桥横跨水面，水从桥下奔涌出来，像一挂帘子。这是全园的水闸。'},
     {t:'say',who:'jia',emo:'stern',text:'此处也该有个名字。'},
@@ -1619,10 +1619,15 @@ $$('#segLang button').forEach(b => b.addEventListener('click', () => {
   Snd.click();
 }));
 
-function refreshDynamicLang(){
+  function refreshDynamicLang(){
   $('#btnWords').textContent = LANG === 't' ? '字詞' : '字词';
-  $('#btnSnd').textContent = Snd.on ? (LANG === 't' ? '♪ 音效' : '♪ 音效') : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
+
+  $('#btnSnd').textContent = Snd.on ? '♪ 音效' : (LANG === 't' ? '♪ 靜音' : '♪ 静音');
+  $('#btnSnd').classList.toggle('on', Snd.on);
+
   $('#btnAmb').textContent = Amb.on ? (LANG === 't' ? '♫ 環境' : '♫ 环境') : (LANG === 't' ? '♫ 靜音' : '♫ 静音');
+  $('#btnAmb').classList.toggle('on', Amb.on);
+
   const tip = $('#rpgTip'); if (tip) tip.textContent = LANG === 't' ? '點虛線字，可查拼音和解釋' : '点带虚线的字，可查拼音和解释';
   const nx = $('#rpgNext'); if (nx) nx.textContent = LANG === 't' ? '▼ 點擊繼續' : '▼ 点击继续';
   try { if (RP.ch){ $('#rpgTitle').textContent = T(RP.ch.title); $('#rpgSub').textContent = T(RP.ch.sub); } } catch(e){}
